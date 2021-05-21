@@ -177,11 +177,11 @@
                           ><i class="fa fa-ellipsis-v"></i
                         ></a>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <router-link to="/admin/edit/"
+                          <!-- <router-link to="/admin/edit/"
                             ><a class="dropdown-item"
                               ><i class="fa fa-pencil m-r-5"></i> Edit</a
                             ></router-link
-                          >
+                          > -->
                           <a
                             v-if="clinique.statut === 'actif'"
                             class="dropdown-item "

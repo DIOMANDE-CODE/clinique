@@ -4,162 +4,94 @@
     <div class="page-wrapper">
       <div class="content">
         <div class="row">
-          <div class="col-sm-8">
-            <h4 class="page-title">Droit d'accès</h4>
+          <div class="col-sm-7 col-6">
+            <h4 class="page-title">Service(s)</h4>
           </div>
+
+          <!-- <div class="col-sm-5 col-6 text-right m-b-30">
+            <a
+              class="btn btn-primary btn-rounded"
+              style="color:white"
+              v-on:click="retourner"
+            >
+              Retour
+            </a>
+          </div> -->
         </div>
+        <div
+          v-if="success"
+          class="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
+          {{ message }}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div
+          v-if="errors"
+          class="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          {{ message }}
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
         <div class="row">
-          <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3">
-            <a class="btn btn-primary btn-block" style="color:white" v-on:click="retourner"
-                >Retour</a
-              >
-          </div>
-          <div class="col-sm-8 col-md-8 col-lg-8 col-xl-9">
-            <h6 class="card-title m-b-20">Acces au departement</h6>
-            <div class="m-b-30">
-              <ul class="list-group">
-                <li class="list-group-item">
-                  Employee
-                  <div class="material-switch float-right">
-                    <input id="staff_module" type="checkbox" />
-                    <label for="staff_module" class="badge-success"></label>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  Holidays
-                  <div class="material-switch float-right">
-                    <input id="holidays_module" type="checkbox" />
-                    <label for="holidays_module" class="badge-success"></label>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  Leave Request
-                  <div class="material-switch float-right">
-                    <input id="leave_module" type="checkbox" />
-                    <label for="leave_module" class="badge-success"></label>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  Events
-                  <div class="material-switch float-right">
-                    <input id="events_module" type="checkbox" />
-                    <label for="events_module" class="badge-success"></label>
-                  </div>
-                </li>
-                <li class="list-group-item">
-                  Chat
-                  <div class="material-switch float-right">
-                    <input id="chat_module" type="checkbox" />
-                    <label for="chat_module" class="badge-success"></label>
-                  </div>
-                </li>
-              </ul>
-            </div>
+          <div class="col-md-12">
             <div class="table-responsive">
-              <table class="table table-striped custom-table">
+              <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
-                    <th>Permissions</th>
-                    <th class="text-center">Lire</th>
-                    <th class="text-center">Ecrire</th>
-                    <th class="text-center">Creer</th>
-                    <th class="text-center">Effacer</th>
-                    <th class="text-center">Import</th>
-                    <th class="text-center">Export</th>
+                    <th>Nom du service</th>
+                    <th>Status</th>
+                    <th class="text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Employee</td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
+                  <tr v-for="depart in departements" v-bind:key="depart.id">
+                    <td>{{ depart.nom }}</td>
+                    <td>
+                      <span class="custom-badge status-green">{{
+                        depart.statut
+                      }}</span>
                     </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Holidays</td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Leave Request</td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Events</td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
-                    </td>
-                    <td class="text-center">
-                      <input type="checkbox" checked="" />
+                    <td class="text-right">
+                      <div class="dropdown dropdown-action">
+                        <a
+                          href="#"
+                          class="action-icon dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                          ><i class="fa fa-ellipsis-v"></i
+                        ></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_department"
+                            v-on:click="desactiver(depart.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i> desactiver</a
+                          >
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3">
-              <a class="btn btn-primary btn-block" style="color:white"
-                >Appliquer</a
-              >
             </div>
           </div>
         </div>
@@ -416,20 +348,89 @@
   </div>
 </template>
 <script>
-import loader from "../../../components/loader.vue"
+import loader from "../../loader.vue";
+import axios from "axios";
+import { chemin } from "../../../assets/js/chemin.js";
+import { identifiant } from "../../../assets/js/info.js";
+
 export default {
   data() {
     return {
       preloader: false,
-    }
+      success: false,
+      errors: false,
+      departements: [],
+      message: "",
+    };
   },
   components: {
-    loader
+    loader,
+  },
+  created() {
+    this.charge();
   },
   methods: {
-    retourner() {
-      window.history.back();
-    }
-  }
-}
+    charge: function() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(
+          chemin +
+            `/listeServicesDepartement/${identifiant.id}/${identifiant.id_departement}`
+        )
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.departements = response.data.data;
+          } else {
+            this.preloader = false;
+            this.success = true;
+            this.message = "La liste est vide";
+          }
+        });
+    },
+    desactiver(pk) {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverServicesDepartement", {
+          service_id: pk,
+          departement_id: identifiant.id_departement,
+          statut: "inactif",
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.charge();
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+  },
+  retourner() {
+    window.history.back();
+  },
+};
 </script>

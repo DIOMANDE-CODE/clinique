@@ -8,7 +8,7 @@
         </button>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Modifier l'employé</h4>
+            <h4 class="page-title">Modifier</h4>
           </div>
         </div>
         <div
@@ -554,7 +554,6 @@ export default {
             this.success = true
             this.message = 'Modification effectuée avec succès'
             console.log("modification réussie reussie");
-            // this.$router.push("/admin/employe");
           } else {
             this.preloader = false
             this.errors = true

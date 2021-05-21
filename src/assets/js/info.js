@@ -13,7 +13,9 @@ var info = {
 }
 
 var identifiant = {
-    id:''
+    id:'',
+    id_departement:'',
+    user_id:''
 }
 
 module.exports.info = info

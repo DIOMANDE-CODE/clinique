@@ -23,6 +23,7 @@ import code from '../views/bureautique/clinique/code.vue'
 import editclinique from '../views/bureautique/clinique/editclinique.vue'
 import addclinique from '../views/bureautique/clinique/addclinique.vue'
 import vclinique from '../views/bureautique/clinique/vclinique.vue'
+import vservice from '../views/bureautique/clinique/vservice.vue'
 
 // route de creer profil
 import creer from '../views/bureautique/specialite/creer.vue'
@@ -70,7 +71,7 @@ const routes = [
     component:addemploye
   },
   {
-    path:'/employe/profil',
+    path:'/employe/profil/:id',
     name:'profilemploye',
     component:profilemploye
   },
@@ -127,6 +128,11 @@ const routes = [
     path:'/clinique/ajouter',
     name:'ajoutclinique',
     component:addclinique
+  },
+  {
+    path:'/departement/service/:id',
+    name:'voirservice',
+    component:vservice
   },
   {
     path:'/clinique/voir/:id',

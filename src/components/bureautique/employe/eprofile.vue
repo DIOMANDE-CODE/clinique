@@ -1,18 +1,19 @@
 <template>
   <div>
+    <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
         <div class="row">
           <div class="col-sm-7 col-6">
-            <h4 class="page-title">My Profile</h4>
+            <h4 class="page-title">Profil</h4>
           </div>
 
           <div class="col-sm-5 col-6 text-right m-b-30">
-            <router-link to="/employe/edit"><a style="color:white" class="btn btn-primary btn-rounded"
-              ><i class="fa fa-plus"></i> Edit Profile</a
-            ></router-link>
-            <a style="color:white" class="btn btn-primary btn-rounded" v-on:click="retourner"
-              ><i class="fa fa-long-arrow-left " ></i> retour</a
+            <a
+              style="color:white"
+              class="btn btn-primary btn-rounded"
+              v-on:click="retourner"
+              ><i class="fa fa-long-arrow-left "></i> retour</a
             >
           </div>
         </div>
@@ -21,52 +22,60 @@
             <div class="col-md-12">
               <div class="profile-view">
                 <div class="profile-img-wrap">
-                  <div class="profile-img">
+                  <!-- <div class="profile-img">
                     <a href="#"
-                      ><img class="avatar" src="assets/img/doctor-03.jpg" alt=""
-                    /></a>
-                  </div>
+                      ><img
+                        class="avatar"
+                        src="assets/img/doctor-03.jpg"
+                        alt=""
+                      />
+                    </a>
+                  </div> -->
                 </div>
                 <div class="profile-basic">
                   <div class="row">
                     <div class="col-md-5">
                       <div class="profile-info-left">
-                        <h3 class="user-name m-t-0 mb-0">Cristina Groves</h3>
-                        <small class="text-muted">Gynecologist</small>
-                        <div class="staff-id">Employee ID : DR-0001</div>
+                        <h3 class="user-name m-t-0 mb-0">{{ nom }}</h3>
+                        <small class="text-muted">{{prenom}}</small>
                         <div class="staff-msg">
-                          <router-link to="/admin/permission"><a class="btn btn-primary" style="color:white"
-                            >Droit d'accès</a
-                          ></router-link>
+                          <router-link to="/admin/permission"
+                            ><a class="btn btn-primary" style="color:white"
+                              >Droit d'accès</a
+                            ></router-link
+                          >
                         </div>
                       </div>
                     </div>
                     <div class="col-md-7">
                       <ul class="personal-info">
                         <li>
-                          <span class="title">Phone:</span>
-                          <span class="text"><a href="#">770-889-6484</a></span>
+                          <span class="title">Telephone:</span>
+                          <span class="text">{{ telephone }}</span>
                         </li>
                         <li>
                           <span class="title">Email:</span>
-                          <span class="text"
-                            ><a href="#">cristinagroves@example.com</a></span
-                          >
+                          <span class="text">{{ email }}</span>
                         </li>
                         <li>
-                          <span class="title">Birthday:</span>
-                          <span class="text">3rd March</span>
+                          <span class="title">Né le:</span>
+                          <span class="text">{{ naissance }}</span>
                         </li>
                         <li>
-                          <span class="title">Address:</span>
-                          <span class="text"
-                            >714 Burwell Heights Road, Bridge City, TX,
-                            77611</span
-                          >
+                          <span class="title">Nationalité:</span>
+                          <span class="text">{{ nationnalite }}</span>
                         </li>
                         <li>
-                          <span class="title">Gender:</span>
-                          <span class="text">Female</span>
+                          <span class="title">Genre:</span>
+                          <span class="text">{{ genre }}</span>
+                        </li>
+                        <li>
+                          <span class="title">Addresse:</span>
+                          <span class="text">{{ adresse_domicile }}</span>
+                        </li>
+                        <li>
+                          <span class="title">Role:</span>
+                          <span class="text">{{ role }}</span>
                         </li>
                       </ul>
                     </div>
@@ -204,11 +213,71 @@
   </div>
 </template>
 <script>
+import { identifiant } from "../../../assets/js/info.js";
+import axios from "axios";
+// import chemin from "../../../assets/js/chemin.js"*
+import loader from "../../../components/loader.vue"
+
 export default {
   name: "profilemploye",
+  data() {
+    return {
+      nom: "",
+      telephone: "",
+      email: "",
+      naissance: "",
+      nationnalite: "",
+      genre: "",
+      role: "",
+      adresse_domicile: "",
+      prenom: "",
+      preloader: false,
+    };
+  },
+  components: {
+    loader
+  },
+  created() {
+    this.charger_info();
+  },
   methods: {
     retourner() {
-      window.history.back();
+      this.$router.push("/admin/employe");
+    },
+    charger_info() {
+      this.preloader = true
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(`http://192.168.1.8:8000/api/utilisateur/${identifiant.user_id}`)
+        .then((response) => {
+          this.preloader = false;
+          console.log(response.data.data);
+          if (response.data.state === true) {
+            this.nom = response.data.data.nom;
+            this.telephone = response.data.data.telephone;
+            this.email = response.data.data.email;
+            this.naissance = response.data.data.date_naissance;
+            this.nationnalite = response.data.data.nationalite,
+            this.genre = response.data.data.genre,
+            this.adresse_domicile = response.data.data.adresse_domicile
+            this.role = response.data.data.role
+            this.prenom = response.data.data.prenoms
+          } else {
+            this.preload = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preload = false;
+          console.log(err);
+        });
     },
   },
 };

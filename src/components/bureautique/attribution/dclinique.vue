@@ -11,9 +11,9 @@
         Retourner
       </button>
       <div class="content">
-        <br />
+        <br /><br>
         <h3 class="page-title">Attribution de departement(s) à clinique</h3>
-        <br /><br /><br /><br />
+        <br />
         <div
           v-if="success"
           class="alert alert-success alert-dismissible fade show"
@@ -173,6 +173,7 @@ export default {
         };
         send_data.push(data);
       });
+       console.log(send_data);
       axios
         .create({
           headers: {
@@ -192,6 +193,8 @@ export default {
             this.message = response.data.message;
             this.clinique = "";
             this.coche = [];
+            this.charge_cliniquet()
+            this.charge_departement()
           } else {
             this.preloader = false;
             this.errors = true;

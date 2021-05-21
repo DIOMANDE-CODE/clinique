@@ -7,10 +7,10 @@
           <button class="btn btn-primary" v-on:click="retourner">
             Retourner
           </button>
-        </div>
+        </div><br>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Ajouter l'employé</h4>
+            <h4 class="page-title">Ajouter un(e) employé(e)</h4>
           </div>
         </div>
         <div
@@ -50,22 +50,23 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Nom <span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" v-model="nom" />
+                    <input class="form-control" type="text" v-model="nom" required />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Prénom</label>
-                    <input class="form-control" type="text" v-model="prenom" />
+                    <label>Prénom <span class="text-danger">*</span></label>
+                    <input class="form-control" type="text" v-model="prenom" required />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Nationalité</label>
+                    <label>Nationalité <span class="text-danger">*</span> </label>
                     <input
                       class="form-control"
                       type="text"
                       v-model="nationnalite"
+                      required
                     />
                   </div>
                 </div>
@@ -76,6 +77,7 @@
                       class="form-control"
                       type="text"
                       v-model="telephone"
+                      required
                     />
                   </div>
                 </div>
@@ -83,7 +85,7 @@
                   <div class="form-group">
                     <label
                       >Date de naissance
-                      <span class="text-danger">*</span></label
+                     </label
                     >
                     <input type="date" class="form-control" v-model="date" />
                   </div>
@@ -99,7 +101,7 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Situation matrimoniale</label>
+                  <label class="display-block">Situation matrimoniale <span class="text-danger">*</span> </label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -108,6 +110,7 @@
                       id="employee_active"
                       value="mariee"
                       v-model="situation"
+                      required
                     />
                     <label class="form-check-label" for="employee_active">
                       Marié(e)
@@ -154,7 +157,7 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Genre</label>
+                  <label class="display-block">Genre <span class="text-danger">*</span> </label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -163,6 +166,7 @@
                       id="employee_active"
                       value="homme"
                       v-model="genre"
+                      required
                     />
                     <label class="form-check-label" for="employee_active">
                       H
@@ -195,11 +199,54 @@
                       class="form-control"
                       type="password"
                       v-model="code"
+                      required
                     />
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Profil</label>
+                  <label class="col-form-label ">Clinique <span class="text-danger">*</span> </label>
+                  <div class="col-md-12">
+                    <select class="form-control clinique" v-model="clinique" @change="charger_departement()" >
+                      <option value='0' disabled>Choisissez sa clinique</option>
+                      <option
+                        :value="clin.id"
+                        v-for="clin in cliniques"
+                        v-bind:key="clin.id"
+                        >{{ clin.nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="col-form-label ">Departement <span class="text-danger">*</span> </label>
+                  <div class="col-md-12">
+                    <select class="form-control" v-model="departement" @change="charger_service()">
+                      <option value='0' disabled>Choisissez son departement</option>
+                      <option
+                        :value="depart.id"
+                        v-for="depart in departements"
+                        v-bind:key="depart.id"
+                        >{{ depart.nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="col-form-label ">Service <span class="text-danger">*</span> </label>
+                  <div class="col-md-12">
+                    <select class="form-control" v-model="service">
+                      <option value='0' disabled>Choisissez son service</option>
+                      <option
+                        :value="serv.id"
+                        v-for="serv in services"
+                        v-bind:key="serv.id"
+                        >{{ serv.nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="display-block">Profil <span class="text-danger">*</span></label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -260,21 +307,74 @@ export default {
         genre: "",
         email: "",
         role: "",
-        code: "", 
+        code: "",
       },
       preloader: false,
       success: false,
       errors: false,
       message: "",
+      // chargement des données de la clinique, departement et services
+      cliniques: [],
+      clinique: "",
+      id_clinique: "",
+      departements: [],
+      departement: "",
+      services: [],
+      service: "",
+      selectedClinique:false
     };
   },
   components: {
     loader,
   },
+  created() {
+    this.charger_clinique();
+  },
   methods: {
     retourner() {
       this.$router.push("/admin/employe");
     },
+    // lieuTravail(){
+    //   axios
+    //     .create({
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: "Bearer " + localStorage.getItem("token"),
+    //         "Access-Control-Allow-Origin": "*",
+    //       },
+    //     })
+    //     .post(chemin + "/lieuDeTravail", {
+    //       clinique_id:this.clinique,
+    //       departement_id:this.departement,
+    //       service_id:this.service,
+    //     })
+    //     .then((response) => {
+    //       this.preloader = false;
+    //       if (response.data.state === true) {
+    //         this.success = true;
+    //         this.message = response.data.message;
+
+    //         this.nom = "";
+    //         this.prenom = "";
+    //         this.nationnalite = "";
+    //         this.telephone = "";
+    //         this.date = "";
+    //         this.addresse = "";
+    //         this.situation = "";
+    //         this.genre = "";
+    //         this.email = "";
+    //         this.code = "";
+    //         this.role = "";
+    //       } else {
+    //         this.message = response.data.message;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       this.preloader = false;
+    //       console.log(user.situation_matrimoniale);
+    //       console.log(err.response.data.errors);
+    //     });
+    // },
     inscrire() {
       this.preloader = true;
       var user = {
@@ -300,24 +400,24 @@ export default {
         })
         .post(chemin + "/inscription", user)
         .then((response) => {
+          console.log(response.data);
           this.preloader = false;
           if (response.data.state === true) {
             this.success = true;
             this.message = response.data.message;
 
-            this.nom = '';
-            this.prenom = '';
-            this.nationnalite = '';
-            this.telephone = '';
-            this.date = '';
-            this.addresse = '';
-            this.situation = '';
-            this.genre = '';
-            this.email = '';
-            this.code = '';
-            this.role = '';
-          } 
-          else {
+            this.nom = "";
+            this.prenom = "";
+            this.nationnalite = "";
+            this.telephone = "";
+            this.date = "";
+            this.addresse = "";
+            this.situation = "";
+            this.genre = "";
+            this.email = "";
+            this.code = "";
+            this.role = "";
+          } else {
             this.message = response.data.message;
           }
         })
@@ -327,6 +427,86 @@ export default {
           console.log(err.response.data.errors);
         });
     },
+    charger_clinique() {
+      console.log(" id de la clinique ",this.clinique);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listClinique")
+        .then((response) => {
+          this.preloader = false;
+          if (response.data.state === true) {
+            this.cliniques = response.data.data;
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_departement() {
+      console.log("departement clinique id ", this.clinique);
+      // this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/getDepartementsClinique/" + this.clinique)
+        .then((response) => {
+          console.log(response.data.data);
+          this.departements = response.data.data;
+          // if (response.data.state === true) {
+          //   this.preloader = false;
+          //   this.departements = response.data.data;
+          // } else {
+          //   this.preloader = false;
+          //   console.log("erreur de chargement");
+          // }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_service() {
+      console.log("service");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + `/listeServicesDepartement/${this.clinique}/${this.departement}`)
+        .then((response) => {
+          console.log(response.data);
+          this.services = response.data.data;
+          // if (response.data.state === true) {
+          //   this.preloader = false;
+          //   this.services = response.data.data;  
+          // } else {
+          //   this.preloader = false;
+          //   console.log("erreur de chargement");
+          // }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    selectClinique() {
+      console.log("##################################");
+    }
   },
 };
 </script>

@@ -139,16 +139,14 @@
                         <div class="dropdown-menu dropdown-menu-right">
                           <a
                             class="dropdown-item"
-                            style="color:black"
+                            style="color:black; cursor:pointer"
                             v-on:click="modifier(employe.id)"
                             v-bind:identifiant="identifiant"
-                            ><i class="fa fa-pencil m-r-5"></i> Edit</a
+                            ><i class="fa fa-pencil m-r-5" style="cursor:pointer"></i> Modifier</a
                           >
-                          <router-link to="/employe/profil"
-                            ><a class="dropdown-item" style="color:black"
-                              ><i class="fa fa-pencil m-r-5"></i>Profil</a
-                            ></router-link
-                          >
+                         <a class="dropdown-item" style="color:black; cursor:pointer" v-on:click="voir(employe.id)"
+                              ><i class="fa fa-user-md m-r-5"></i>Profil</a
+                            >
                           <a
                             v-if="employe.statut === 'actif'"
                             class="dropdown-item "
@@ -156,8 +154,8 @@
                             data-toggle="modal"
                             data-target="#delete_employee"
                             v-on:click="desactiver(employe.id)"
-                            ><i class="fa fa-user-md m-r-5"></i>desactiver le
-                            profil</a
+                            ><i class="fa fa-trash-o m-r-5"></i>desactiver le
+                            </a
                           >
                         </div>
                       </div>
@@ -424,6 +422,7 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import { info } from "../../../assets/js/info.js";
+import { identifiant } from '../../../assets/js/info.js'
 
 import loader from "../../../components/loader.vue";
 
@@ -468,6 +467,10 @@ export default {
             console.log("erreur de chargement");
           }
         });
+    },
+    voir(pk){
+      identifiant.user_id = pk
+      this.$router.push('/employe/profil/' + pk)
     },
     modifier(pk) {
       axios

@@ -11,9 +11,9 @@
         Retourner
       </button>
       <div class="content">
-        <br />
+        <br /><br>
         <h3 class="page-title">Attribution de service(s) à departement</h3>
-        <br /><br /><br /><br />
+        <br />
         <div
           v-if="success"
           class="alert alert-success alert-dismissible fade show"
@@ -173,7 +173,7 @@ export default {
         };
         send_data.push(data);
       });
-
+      console.log(send_data);
       axios
         .create({
           headers: {
@@ -193,6 +193,8 @@ export default {
             this.message = response.data.message;
             this.departements = "";
             this.coche = [];
+            this.charge_departement()
+            this.charge_service()
           } else {
             this.preloader = false;
             this.errors = true;
