@@ -1,0 +1,265 @@
+<template>
+  <div>
+    <loader v-if="preloader"></loader>
+    <div class="page-wrapper">
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <div
+              v-if="success"
+              class="alert alert-success alert-dismissible fade show"
+              role="alert"
+            >
+              {{ message }}
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div
+              v-if="errors"
+              class="alert alert-danger alert-dismissible fade show"
+              role="alert"
+            >
+              {{ message }}
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 col-7">
+            <h3>Liste des patients</h3>
+          </div>
+          <div class="col-sm-6 col-5 text-right m-b-20">
+            <router-link to="/employe/ajouter"
+              ><a
+                style="color:white"
+                class="btn btn-primary float-right btn-rounded"
+                ><i class="fa fa-plus"></i> Ajouter un patient</a
+              ></router-link
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-striped custom-table mb-0 datatable">
+                <thead>
+                  <tr>
+                    <th>N° identifiant</th>
+                    <th>Nom du patients</th>
+                    <th>Prenom du patient</th>
+                    <th class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="clinique in cliniques" v-bind:key="clinique.id">
+                    <td>{{ clinique.nom }}</td>
+                    <td>{{ clinique.numero_identifiant }}</td>
+                    <td>{{ clinique.telephone }}</td>
+                    <td class="text-right">
+                      <div class="dropdown dropdown-action">
+                        <a
+                          href="#"
+                          class="action-icon dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                          ><i class="fa fa-ellipsis-v"></i
+                        ></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <!-- <router-link to="/admin/edit/"
+                            ><a class="dropdown-item"
+                              ><i class="fa fa-pencil m-r-5"></i> Edit</a
+                            ></router-link
+                          > -->
+                          <a
+                            v-if="clinique.statut === 'actif'"
+                            class="dropdown-item "
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_employee"
+                            v-on:click="desactiver(clinique.id)"
+                            >Voir son dossier</a
+                          >
+                          <a
+                            v-if="clinique.statut === 'actif'"
+                            class="dropdown-item "
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_employee"
+                            v-on:click="Voir(clinique.id)"
+                            >Faire un constat</a
+                          >
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import axios from "axios";
+import { chemin } from "../../assets/js/chemin.js";
+import { identifiant } from "../../assets/js/info.js";
+import loader from "../../components/loader.vue";
+
+export default {
+  data() {
+    return {
+      cliniques: [],
+      preloader: false,
+      nom: "",
+      numero_identifiant: "",
+      email: "",
+      telephone: "",
+      telephone_urgence: "",
+      addresse_physique: "",
+      addresse_postale: "",
+      fax: "",
+      status: "",
+
+      message: "",
+      success: false,
+      errors: false,
+    };
+  },
+  components: {
+    loader,
+  },
+  created() {
+    this.charge();
+  },
+  methods: {
+    charge: function() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listClinique")
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.cliniques = response.data.data;
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    retourner() {
+      this.$router.push("/bureautique");
+    },
+
+    desactiver(pk) {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverClinique", {
+          id: pk,
+          statut: "inactif",
+        })
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preload = false;
+            this.success = true;
+            this.message = response.data.message;
+          } else {
+            this.preload = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preload = false;
+          console.log(err);
+        });
+    },
+
+    cliquer() {
+      this.preloader = true;
+      var clinique = {
+        numero_identifiant: this.numero_identifiant,
+        nom: this.nom,
+        email: this.email,
+        telephone: this.telephone,
+        telephone_urgence: this.telephone_urgence,
+        adresse_physique: this.addresse_physique,
+        adresse_postale: this.addresse_postale,
+        fax: this.fax,
+      };
+      console.log(clinique);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/creationClinique", clinique)
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            console.log("reussie");
+            this.charge();
+
+            this.numero_identifiant = "";
+            this.nom = "";
+            this.email = "";
+            this.telephone = "";
+            this.telephone_urgence = "";
+            this.addresse_physique = "";
+            this.addresse_postale = "";
+            this.fax = "";
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          this.errors = true;
+          console.log(err);
+        });
+    },
+    Voir(pk) {
+      identifiant.id = pk;
+      this.$router.push("/clinique/voir/" + pk);
+    },
+  },
+};
+</script>

@@ -27,9 +27,6 @@
                 <label>Mot de passe</label>
                 <input type="password" class="form-control" v-model="code" />
               </div>
-              <div class="form-group text-right">
-                <a href="forgot-password.html">Mot de passe oulié ?</a>
-              </div>
               <div class="form-group text-center">
                 <button
                   type="submit"
@@ -38,9 +35,6 @@
                 >
                   Se connecter
                 </button>
-              </div>
-              <div class="text-center register-link">
-                <a href="register.html">S'inscrire</a>
               </div>
             </form>
           </div>

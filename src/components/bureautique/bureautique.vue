@@ -63,7 +63,7 @@
               </div></router-link
             >
           </div>
-             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
             <router-link to="/attribution"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -71,6 +71,18 @@
                 ></span>
                 <div class="dash-widget-info text-right">
                   <span class="widget-title1">Attribution</span>
+                </div>
+              </div></router-link
+            >
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4">
+            <router-link to="/dossier"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-folder-open-h" aria-hidden="true"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1">Dossier médical</span>
                 </div>
               </div></router-link
             >

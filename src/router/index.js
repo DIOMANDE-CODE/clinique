@@ -33,6 +33,8 @@ import attribution from '../views/bureautique/attribution/attribution.vue'
 import dclinique from '../views/bureautique/attribution/dclinique.vue'
 import sdepartement from '../views/bureautique/attribution/sdepartement.vue'
 
+// route de dossier medical
+import dossier from '../views/dossier_medical/dossier.vue'
 
 const routes = [
   {
@@ -160,6 +162,12 @@ const routes = [
     path:'/service/departement',
     name:'attribuerService',
     component:sdepartement
+  },
+  // route de dossier médical
+  {
+    path:'/dossier',
+    name:'dossier',
+    component:dossier
   }
 ]
 

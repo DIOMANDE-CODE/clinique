@@ -254,7 +254,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(`http://192.168.1.8:8000/api/utilisateur/${identifiant.user_id}`)
+        .get(`http://192.168.1.3:8000/api/utilisateur/${identifiant.user_id}`)
         .then((response) => {
           this.preloader = false;
           console.log(response.data.data);
