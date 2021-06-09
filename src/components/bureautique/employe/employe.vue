@@ -35,19 +35,11 @@
         </div>
         <div class="row">
           <div class="col-sm-4 col-3">
-            <h4 class="page-title">Employés</h4>
+            <h4 class="page-title" style="color:black; font-weight:bold;">
+              EMPLOYES
+            </h4>
           </div>
-          <div class="col-sm-3 col-5 text-right m-b-20">
-            <router-link to="/change/code"
-              ><a
-                style="color:white"
-                class="btn btn-primary float-right btn-rounded"
-              >
-                Changer de mot de passe</a
-              ></router-link
-            >
-          </div>
-          <div class="col-sm-3 col-4 text-right m-b-20">
+          <div class="col-sm-8 col-4 text-right m-b-20">
             <router-link to="/employe/ajouter"
               ><a
                 style="color:white"
@@ -57,49 +49,19 @@
             >
           </div>
         </div>
-        <div class="row"></div>
-        <div class="row filter-row">
-          <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus">
-              <label class="focus-label">Employee ID</label>
-              <input type="text" class="form-control floating" />
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus">
-              <label class="focus-label">Employee Name</label>
-              <input type="text" class="form-control floating" />
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-3">
-            <div class="form-group form-focus select-focus">
-              <label class="focus-label">Role</label>
-              <select class="select floating">
-                <option>Select Role</option>
-                <option>Nurse</option>
-                <option>Pharmacist</option>
-                <option>Laboratorist</option>
-                <option>Accountant</option>
-                <option>Receptionist</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-6 col-md-3">
-            <a href="#" class="btn btn-success btn-block"> Search </a>
-          </div>
-        </div>
         <div class="row">
           <div class="col-md-12">
+          <p>{{ message }}</p>
             <div class="table-responsive">
               <table class="table table-striped custom-table">
                 <thead>
                   <tr>
-                    <th style="min-width:200px;">Nom</th>
-                    <th>Prenom</th>
-                    <th>Sexe</th>
-                    <th>Contact</th>
-                    <th>Profil</th>
-                    <th class="text-right">Action</th>
+                    <th style="min-width:200px;">Noms</th>
+                    <th>Prenoms</th>
+                    <th>Sexes</th>
+                    <th>Contacts</th>
+                    <th>Profils</th>
+                    <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -138,15 +100,24 @@
                         ></a>
                         <div class="dropdown-menu dropdown-menu-right">
                           <a
+                            v-if="employe.statut === 'actif'"
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
                             v-on:click="modifier(employe.id)"
                             v-bind:identifiant="identifiant"
-                            ><i class="fa fa-pencil m-r-5" style="cursor:pointer"></i> Modifier</a
+                            ><i
+                              class="fa fa-pencil m-r-5"
+                              style="cursor:pointer"
+                            ></i>
+                            Modifier</a
                           >
-                         <a class="dropdown-item" style="color:black; cursor:pointer" v-on:click="voir(employe.id)"
-                              ><i class="fa fa-user-md m-r-5"></i>Profil</a
-                            >
+                          <a
+                            v-if="employe.statut === 'actif'"
+                            class="dropdown-item"
+                            style="color:black; cursor:pointer"
+                            v-on:click="voir(employe.id)"
+                            ><i class="fa fa-user-md m-r-5"></i>Profil</a
+                          >
                           <a
                             v-if="employe.statut === 'actif'"
                             class="dropdown-item "
@@ -154,9 +125,19 @@
                             data-toggle="modal"
                             data-target="#delete_employee"
                             v-on:click="desactiver(employe.id)"
-                            ><i class="fa fa-trash-o m-r-5"></i>desactiver le
-                            </a
-                          >
+                            ><i class="fa fa-trash-o m-r-5"></i>Desactiver le
+                            profil
+                          </a>
+                          <a
+                            v-else-if="employe.statut === 'inactif'"
+                            class="dropdown-item "
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_employee"
+                            v-on:click="activer(employe.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i>Activer le
+                            profil
+                          </a>
                         </div>
                       </div>
                     </td>
@@ -422,7 +403,7 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import { info } from "../../../assets/js/info.js";
-import { identifiant } from '../../../assets/js/info.js'
+import { identifiant } from "../../../assets/js/info.js";
 
 import loader from "../../../components/loader.vue";
 
@@ -447,7 +428,7 @@ export default {
   },
   methods: {
     charge: function() {
-      this.preload = true
+      this.preload = true;
       axios
         .create({
           headers: {
@@ -460,17 +441,18 @@ export default {
         .then((response) => {
           console.log(response.data.data);
           if (response.data.state === true) {
-            this.preload = false
+            this.preload = false;
             this.employes = response.data.data;
           } else {
-            this.preload = false
+            this.preload = false;
+            this.message = "Aucun employés existants"
             console.log("erreur de chargement");
           }
         });
     },
-    voir(pk){
-      identifiant.user_id = pk
-      this.$router.push('/employe/profil/' + pk)
+    voir(pk) {
+      identifiant.user_id = pk;
+      this.$router.push("/employe/profil/" + pk);
     },
     modifier(pk) {
       axios
@@ -520,6 +502,37 @@ export default {
         .post(chemin + "/activerDesactiverUtilisateur/", {
           id: pk,
           statut: "inactif",
+        })
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preload = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.charge();
+          } else {
+            this.preload = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preload = false;
+          console.log(err);
+        });
+    },
+    activer(pk) {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverUtilisateur/", {
+          id: pk,
+          statut: "actif",
         })
         .then((response) => {
           if (response.data.state === true) {

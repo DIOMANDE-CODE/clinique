@@ -3,14 +3,17 @@
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
-        <div class="m-t-20 text-center">
-          <button class="btn btn-primary" v-on:click="retourner">
-            Retourner
+        <div class="m-t-15">
+          <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
         </div>
+        <br />
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Créer un departement</h4>
+            <h4 class="page-title" style="color:black; font-weight: bold;">
+              AJOUTER
+            </h4>
           </div>
         </div>
         <div
@@ -45,10 +48,10 @@
         </div>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <form >
+            <form>
               <div class="form-group">
                 <label>Nom du departement</label>
-                <input class="form-control" type="text" v-model="nom" />
+                <input class="form-control" type="text" v-model="nom" required />
               </div>
               <div class="form-group">
                 <label>Description</label>
@@ -59,9 +62,17 @@
                   v-model="description"
                 ></textarea>
               </div>
-              <div class="m-t-20 text-center" v-on:click="ajouter">
-                <button class="btn btn-primary submit-btn">
-                  Créer
+              <div class="m-t-20 text-center">
+                <button
+                  class="btn btn-danger submit-btn"
+                  v-on:click="renitialiser"
+                >
+                  Réinitialiser
+                </button>&nbsp;&nbsp;
+                <button 
+                  class="btn btn-success submit-btn"
+                  v-on:click="ajouter">
+                  creer
                 </button>
               </div>
             </form>
@@ -332,7 +343,6 @@ export default {
       errors: false,
       message: "",
       preloader: false,
-
       nom: "",
       description: "",
     };
@@ -341,8 +351,16 @@ export default {
     loader,
   },
   methods: {
+    renitialiser() {
+      (this.nom = ""), (this.description = "");
+    },
     ajouter() {
-      this.preloader = true;
+      if (this.nom === ""){
+        // this.errors = true
+        // this.message = "Veuillez saisir le nom du departement"
+      }
+      else {
+        this.preloader = true;
       var departement = {
         nom: this.nom,
         description: this.description,
@@ -371,7 +389,6 @@ export default {
             this.preloader = false;
             this.errors = true;
             this.message = response.data.message;
-
           }
         })
         .catch((err) => {
@@ -379,9 +396,10 @@ export default {
           this.errors = true;
           console.log(err);
         });
+      }
     },
     retourner() {
-      window.history.back();
+      this.$router.push("/admin/departement");
     },
   },
 };

@@ -5,7 +5,9 @@
       <div class="content">
         <div class="row">
           <div class="col-sm-5 col-5">
-            <h4 class="page-title">Departments</h4>
+            <h4 class="page-title" style="color:black; font-weight: bold;">
+              DEPARTEMENTS
+            </h4>
           </div>
           <div class="col-sm-7 col-7 text-right m-b-30">
             <router-link to="/departement/add"
@@ -53,16 +55,23 @@
               <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
-                    <th>Nom du departement</th>
+                    <th>Nom des departements</th>
+                    <th>Descriptions  </th>
                     <th>Status</th>
-                    <th class="text-right">Action</th>
+                    <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="depart in departements" v-bind:key="depart.id">
                     <td>{{ depart.nom }}</td>
-                    <td>
+                    <td>{{ depart.description }}</td>
+                    <td v-if="depart.statut==='actif'">
                       <span class="custom-badge status-green">{{
+                        depart.statut
+                      }}</span>
+                    </td>
+                    <td v-else>
+                      <span class="custom-badge status-red">{{
                         depart.statut
                       }}</span>
                     </td>
@@ -77,12 +86,35 @@
                         ></a>
                         <div class="dropdown-menu dropdown-menu-right">
                           <a
+                            v-if="depart.statut === 'actif'"
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_department"
+                            v-on:click="modifier(depart.id)"
+                            ><i
+                              class="fa fa-pencil m-r-5"
+                              style="cursor:pointer"
+                            ></i>
+                            Modifier</a
+                          >
+                          <a
+                            v-if="depart.statut === 'actif'"
                             class="dropdown-item"
                             href="#"
                             data-toggle="modal"
                             data-target="#delete_department"
                             v-on:click="desactiver(depart.id)"
-                            ><i class="fa fa-trash-o m-r-5"></i> desactiver</a
+                            ><i class="fa fa-trash-o m-r-5"></i> Désactiver</a
+                          >
+                           <a
+                            v-else-if="depart.statut === 'inactif'"
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_department"
+                            v-on:click="activer(depart.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i> Activer</a
                           >
                         </div>
                       </div>
@@ -349,6 +381,7 @@
 import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
+import {blog} from "../../../assets/js/info.js"
 
 export default {
   data() {
@@ -383,8 +416,37 @@ export default {
             this.preloader = false;
             this.departements = response.data.data;
           } else {
+            this.preloader = false
+            this.message = "Aucun departements existants"
             console.log("erreur de chargement");
           }
+        });
+    },
+    modifier(pk) {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/departement/" + pk)
+        .then((response) => {
+          console.log(response.data.data);
+          if (response.data.state === true) {
+            blog.id = response.data.data.id;
+            blog.nom = response.data.data.nom;
+            blog.description = response.data.data.description;
+            console.log(blog);
+
+            this.$router.push("/departement/modifier/" + blog.id);
+          } else {
+            console.log("erreur");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     desactiver(pk) {
@@ -406,7 +468,38 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
-            this.charge()
+            this.charge();
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    activer(pk) {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverDepartement", {
+          id: pk,
+          statut: "actif",
+        })
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.charge();
           } else {
             this.preloader = false;
             this.errors = true;

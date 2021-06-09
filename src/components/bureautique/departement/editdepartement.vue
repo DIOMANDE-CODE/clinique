@@ -3,17 +3,14 @@
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
-        <div class="m-t-15">
+      <div class="m-t-15">
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
-        </div>
-        <br />
+        </div><br>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title" style="color:black; font-weight: bold;">
-              AJOUTER
-            </h4>
+            <h4 class="page-title" style="color:black; font-weight: bold;">MODIFIER</h4>
           </div>
         </div>
         <div
@@ -48,10 +45,10 @@
         </div>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <form>
+            <form @submit.prevent="modifier">
               <div class="form-group">
-                <label>Nom du service</label>
-                <input class="form-control" type="text" v-model="nom" required />
+                <label>Nom du departement</label>
+                <input class="form-control" type="text" v-model="nom" />
               </div>
               <div class="form-group">
                 <label>Description</label>
@@ -63,14 +60,8 @@
                 ></textarea>
               </div>
               <div class="m-t-20 text-center">
-                <button
-                  class="btn btn-danger submit-btn"
-                  v-on:click="renitialiser"
-                >
-                  Réinitialiser
-                </button>
-                <button class="btn btn-success submit-btn" v-on:click="ajouter">
-                  creer
+                <button class="btn btn-primary submit-btn">
+                  modifier
                 </button>
               </div>
             </form>
@@ -329,32 +320,48 @@
   </div>
 </template>
 <script>
+import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import loader from "../../../components/loader.vue";
+import {blog} from "../../../assets/js/info.js"
 
 export default {
+  name: "ajoutdepartement",
   data() {
     return {
-      services: [],
-      preloader: false,
-      nom: "",
-      description: "",
-
-      message: "",
       success: false,
       errors: false,
+      message: "",
+      preloader: false,
+
+      nom: "",
+      description: "",
+      id:""
     };
   },
   components: {
     loader,
   },
   created() {
-    this.charge();
+    this.id = blog.id;
+    this.nom = blog.nom;
+    this.description = blog.description;
   },
   methods: {
-    charge: function() {
-      this.preloader = true;
+    retourner() {
+      this.$router.push("/admin/departement")
+    },
+    renitialiser(){
+        this.nom = '',
+        this.description = ''
+    },
+    modifier() {
+      this.preloader = true
+      var departement = {
+        nom: this.nom,
+        description: this.description,
+      };
+      console.log(departement);
       axios
         .create({
           headers: {
@@ -363,67 +370,22 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + "/listService")
+        .patch(chemin + "/modifierDepartement/" + this.id, departement)
         .then((response) => {
+            console.log(response.data);
           if (response.data.state === true) {
-            this.preloader = false;
-            this.services = response.data.data;
+            this.preloader = false
+            this.success = true
+            this.message = 'Modification effectuée avec succès'
+            console.log("modification réussie reussie");
           } else {
-            this.preloader = false;
-            console.log("erreur de chargement");
+            this.preloader = false
+            this.errors = true
+            this.message = response.data.message
+            console.log("erreur");
           }
-        })
-        .catch((err) => {
-          console.log(err);
         });
-    },
-
-    retourner() {
-      this.$router.push("/admin/specialite");
-    },
-    renitialiser() {
-      (this.nom = ""), (this.description = "");
-    },
-    ajouter() {
-      if (this.nom === "") {
-        // this.errors = true
-      } else {
-        this.preloader = true;
-        var service = {
-          nom: this.nom,
-          description: this.description,
-        };
-        console.log(service);
-        axios
-          .create({
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
-          .post(chemin + "/creationService", service)
-          .then((response) => {
-            if (response.data.state === true) {
-              this.preloader = false;
-              this.success = true;
-              this.message = response.data.message;
-              console.log("reussie");
-              this.nom = "";
-              this.description = "";
-            } else {
-              this.preloader = false;
-              this.errors = true;
-              this.message = response.data.message;
-            }
-          })
-          .catch((err) => {
-            this.preloader = false;
-            this.errors = true;
-            console.log(err);
-          });
-      }
-    },
-  },
+    }
+  }
 };
 </script>

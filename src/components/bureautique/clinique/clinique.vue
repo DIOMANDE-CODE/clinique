@@ -5,7 +5,6 @@
       <div class="content">
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h3 class="page-title">Ajouter une clinique</h3>
             <div
               v-if="success"
               class="alert alert-success alert-dismissible fade show"
@@ -36,124 +35,35 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form @submit.prevent="ajouter">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label
-                      >Numéro identifiant
-                      <span class="text-danger">*</span></label
-                    >
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="numero_identifiant"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label
-                      >Nom de la compagnie
-                      <span class="text-danger">*</span></label
-                    >
-                    <input class="form-control" type="text" v-model="nom" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Telephone</label>
-                    <input
-                      class="form-control "
-                      type="text"
-                      v-model="telephone"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input class="form-control" type="email" v-model="email" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Numero d'urgence</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="telephone_urgence"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Addresse physique</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="addresse_physique"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Addresse postale</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="addresse_postale"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Fax</label>
-                    <input class="form-control" type="text" v-model="fax" />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <button
-                  type="button"
-                  class="btn btn-primary submit-btn"
-                  v-on:click="cliquer"
-                >
-                  Creer la clinique
-                </button>
-              </div>
-            </form>
           </div>
         </div>
-        <br /><br /><br /><br />
-        <div class="row">
-          <div class="col-sm-5 col-5">
-            <h4 class="page-title">Liste des cliniques</h4>
+         <div class="row">
+          <div class="col-sm-4 col-3">
+            <h4 class="page-title" style="color:black; font-weight:bold;">CLINIQUES</h4>
           </div>
-          <!-- <div class="col-sm-7 col-7 text-right m-b-20">
+          <div class="col-sm-8 col-4 text-right m-b-20">
             <router-link to="/clinique/ajouter"
               ><a
                 style="color:white"
                 class="btn btn-primary float-right btn-rounded"
-                ><i class="fa fa-plus"></i> Ajouter un employé</a
+                ><i class="fa fa-plus"></i> Ajouter une clinique</a
               ></router-link
             >
-          </div> -->
+          </div>
         </div>
         <div class="row">
           <div class="col-md-12">
+            <p>{{message }}</p>
             <div class="table-responsive">
               <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
                     <th>Nom des cliniques</th>
-                    <th>identifiant</th>
-                    <th>telephone</th>
+                    <th>Identifiants</th>
+                    <th>Téléphones</th>
+                    <th>Urgences</th>
                     <th>Status</th>
-                    <th>urgence</th>
-                    <th class="text-right">Action</th>
+                    <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,12 +71,17 @@
                     <td>{{ clinique.nom }}</td>
                     <td>{{ clinique.numero_identifiant }}</td>
                     <td>{{ clinique.telephone }}</td>
-                    <td>
+                    <td>{{ clinique.telephone_urgence }}</td>
+                    <td v-if="clinique.statut === 'actif'">
                       <span class="custom-badge status-green">{{
                         clinique.statut
                       }}</span>
                     </td>
-                    <td>{{ clinique.telephone_urgence }}</td>
+                     <td v-else>
+                      <span class="custom-badge status-red">{{
+                        clinique.statut
+                      }}</span>
+                    </td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -188,9 +103,17 @@
                             href="#"
                             data-toggle="modal"
                             data-target="#delete_employee"
-                            v-on:click="desactiver(clinique.id)"
-                            ><i class="fa fa-user-md m-r-5"></i>desactiver le
-                            profil</a
+                            v-on:click="Voir(clinique.id)"
+                            >Voir +</a
+                          >
+                             <a
+                            v-if="clinique.statut === 'actif'"
+                            class="dropdown-item "
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_employee"
+                            v-on:click="modifier(clinique.id)"
+                            ><i class="fa fa-pencil m-r-5"></i>Modifier</a
                           >
                           <a
                             v-if="clinique.statut === 'actif'"
@@ -198,8 +121,19 @@
                             href="#"
                             data-toggle="modal"
                             data-target="#delete_employee"
-                            v-on:click="Voir(clinique.id)"
-                            >Voir +</a
+                            v-on:click="desactiver(clinique.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i>désactiver la
+                            clinique</a
+                          >
+                              <a
+                            v-if="clinique.statut === 'inactif'"
+                            class="dropdown-item "
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_employee"
+                            v-on:click="activer(clinique.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i>Activer la
+                            clinique</a
                           >
                         </div>
                       </div>
@@ -217,7 +151,8 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import { identifiant } from '../../../assets/js/info.js'
+import { clinique } from "../../../assets/js/info.js";
+import { identifiant } from "../../../assets/js/info.js";
 import loader from "../../../components/loader.vue";
 
 export default {
@@ -259,11 +194,13 @@ export default {
         })
         .get(chemin + "/listClinique")
         .then((response) => {
+          console.log(response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.cliniques = response.data.data;
           } else {
             this.preloader = false;
+            this.message = "Aucune cliniques existantes";
             console.log("erreur de chargement");
           }
         })
@@ -274,7 +211,39 @@ export default {
     retourner() {
       this.$router.push("/bureautique");
     },
+    modifier(pk) {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/clinique/" + pk)
+        .then((response) => {
+          console.log(response.data.data);
+          if (response.data.state === true) {
+            clinique.id = response.data.data.id;
+            clinique.nom = response.data.data.nom;
+            clinique.numero_identifiant = response.data.data.numero_identifiant;
+            clinique.email = response.data.data.email
+            clinique.addresse_physique = response.data.data.adresse_physique
+            clinique.addresse_postale = response.data.data.adresse_postale
+            clinique.telephone = response.data.data.telephone
+            clinique.telephone_urgence = response.data.data.telephone_urgence
+            clinique.fax = response.data.data.fax
+            console.log(clinique);
 
+            this.$router.push("/admin/modifier/" + clinique.id);
+          } else {
+            console.log("erreur");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     desactiver(pk) {
       this.preload = true;
       axios
@@ -294,6 +263,38 @@ export default {
             this.preload = false;
             this.success = true;
             this.message = response.data.message;
+            this.charge()
+          } else {
+            this.preload = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preload = false;
+          console.log(err);
+        });
+    },
+    activer(pk) {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverClinique", {
+          id: pk,
+          statut: "actif",
+        })
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preload = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.charge()
           } else {
             this.preload = false;
             this.errors = true;
@@ -356,10 +357,10 @@ export default {
           console.log(err);
         });
     },
-    Voir(pk){
-      identifiant.id = pk
-      this.$router.push('/clinique/voir/' + pk)
-    }
+    Voir(pk) {
+      identifiant.id = pk;
+      this.$router.push("/clinique/voir/" + pk);
+    },
   },
 };
 </script>

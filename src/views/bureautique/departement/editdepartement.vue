@@ -3,24 +3,23 @@
     <div class="main-wrapper">
         <Header/>
         <adminnavbar></adminnavbar>
-        <addclinique></addclinique>
+        <editdepartement></editdepartement>
       <div class="sidebar-overlay" data-reff=""></div>
     </div>
   </div>
 </template>
 
 <script>
-// import header from "../components/header.vue";
-import Header from '../../../components/header.vue'
+import Header from '../../../components/header.vue';
 import adminnavbar from '../../../components/bureautique/adminnavbar.vue'
-import addclinique from '../../../components/bureautique/clinique/addclinique.vue'
+import editdepartement from '../../../components/bureautique/departement/editdepartement.vue'
 
 export default {
-  name: "addclinique",
+  name: "Dashboard",
   components: {
-    Header,
     adminnavbar,
-    addclinique
+    Header,
+    editdepartement
   },
 };
-</script>
+</script> 

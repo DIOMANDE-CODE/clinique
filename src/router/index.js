@@ -11,17 +11,18 @@ import profilemploye from '../views/bureautique/employe/profilemploye.vue'
 // route des departements
 import departement from '../views/bureautique/departement/departement.vue'
 import adddepartement from '../views/bureautique/departement/adddepartement.vue'
+import editdepartement from '../views/bureautique/departement/editdepartement.vue'
 
 // route des specialités
 import specialite from '../views/bureautique/specialite/specialite.vue'
 import addspecialite from '../views/bureautique/specialite/addspecialite.vue'
-
+import editspecialite from "../views/bureautique/specialite/editspecialite.vue"
 // route des clinique
 import clinique from '../views/bureautique/clinique/clinique.vue'
 import permission from '../views/bureautique/clinique/permission.vue'
 import code from '../views/bureautique/clinique/code.vue'
-import editclinique from '../views/bureautique/clinique/editclinique.vue'
-import addclinique from '../views/bureautique/clinique/addclinique.vue'
+import modifierclinique from '../views/bureautique/clinique/modifierclinique.vue'
+import ajoutclinique from '../views/bureautique/clinique/ajoutclinique.vue'
 import vclinique from '../views/bureautique/clinique/vclinique.vue'
 import vservice from '../views/bureautique/clinique/vservice.vue'
 
@@ -93,6 +94,11 @@ const routes = [
     name:'ajoutdepartement',
     component:adddepartement
   },
+  {
+    path:'/departement/modifier/:id',
+    name:'editdepartement',
+    component:editdepartement
+  },
   // specialite route
   {
     path:'/admin/specialite',
@@ -103,6 +109,11 @@ const routes = [
     path:'/specialite/add',
     name:'ajoutspecialite',
     component:addspecialite
+  },
+  {
+    path:'/specialite/modifier/:id',
+    name:'modifierspecialite',
+    component:editspecialite
   },
   // route des cliniques
   {
@@ -122,14 +133,14 @@ const routes = [
     component:code
   },
   {
-    path:'/admin/edit',
+    path:'/admin/modifier/:id',
     name:'editclinique',
-    component:editclinique
+    component:modifierclinique
   },
   {
     path:'/clinique/ajouter',
     name:'ajoutclinique',
-    component:addclinique
+    component:ajoutclinique
   },
   {
     path:'/departement/service/:id',

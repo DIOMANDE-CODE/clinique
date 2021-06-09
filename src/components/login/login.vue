@@ -46,9 +46,7 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../assets/js/chemin.js";
-
 import loader from "../loader.vue";
-
 export default {
   name: "login",
   data() {

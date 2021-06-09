@@ -3,14 +3,17 @@
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
-        <div class="m-t-20 text-center">
-          <button class="btn btn-primary" v-on:click="retourner">
-            Retourner
+        <div class="m-t-15">
+          <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
-        </div><br>
+        </div>
+        <br />
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Ajouter un(e) employé(e)</h4>
+            <h4 class="page-title" style="color:back; font-weight: bold;">
+              AJOUTER
+            </h4>
           </div>
         </div>
         <div
@@ -45,23 +48,35 @@
         </div>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <form @submit.prevent="inscrire">
+            <form>
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Nom <span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" v-model="nom" required />
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="nom"
+                      required
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Prénom <span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" v-model="prenom" required />
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="prenom"
+                      required
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Nationalité <span class="text-danger">*</span> </label>
+                    <label
+                      >Nationalité <span class="text-danger">*</span>
+                    </label>
                     <input
                       class="form-control"
                       type="text"
@@ -83,10 +98,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label
-                      >Date de naissance
-                     </label
-                    >
+                    <label>Date de naissance </label>
                     <input type="date" class="form-control" v-model="date" />
                   </div>
                 </div>
@@ -101,7 +113,9 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Situation matrimoniale <span class="text-danger">*</span> </label>
+                  <label class="display-block"
+                    >Situation matrimoniale <span class="text-danger">*</span>
+                  </label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -157,7 +171,9 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Genre <span class="text-danger">*</span> </label>
+                  <label class="display-block"
+                    >Genre <span class="text-danger">*</span>
+                  </label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -204,10 +220,16 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="col-form-label ">Clinique <span class="text-danger">*</span> </label>
+                  <label class="col-form-label "
+                    >Clinique <span class="text-danger">*</span>
+                  </label>
                   <div class="col-md-12">
-                    <select class="form-control clinique" v-model="clinique" @change="charger_departement()" >
-                      <option value='0' disabled>Choisissez sa clinique</option>
+                    <select
+                      class="form-control clinique"
+                      v-model="clinique"
+                      @change="charger_departement()"
+                    >
+                      <option value="0" disabled>Choisissez sa clinique</option>
                       <option
                         :value="clin.id"
                         v-for="clin in cliniques"
@@ -218,35 +240,47 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="col-form-label ">Departement <span class="text-danger">*</span> </label>
+                  <label class="col-form-label "
+                    >Departement <span class="text-danger">*</span>
+                  </label>
                   <div class="col-md-12">
-                    <select class="form-control" v-model="departement" @change="charger_service()">
-                      <option value='0' disabled>Choisissez son departement</option>
+                    <select
+                      class="form-control"
+                      v-model="departement"
+                      @change="charger_service()"
+                    >
+                      <option value="0" disabled
+                        >Choisissez son departement</option
+                      >
                       <option
-                        :value="depart.id"
+                        :value="depart.departement_id"
                         v-for="depart in departements"
                         v-bind:key="depart.id"
-                        >{{ depart.nom }}</option
+                        >{{ depart.departement_nom }}</option
                       >
                     </select>
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="col-form-label ">Service <span class="text-danger">*</span> </label>
+                  <label class="col-form-label "
+                    >Service <span class="text-danger">*</span>
+                  </label>
                   <div class="col-md-12">
                     <select class="form-control" v-model="service">
-                      <option value='0' disabled>Choisissez son service</option>
+                      <option value="0" disabled>Choisissez son service</option>
                       <option
-                        :value="serv.id"
+                        :value="serv.service_id"
                         v-for="serv in services"
                         v-bind:key="serv.id"
-                        >{{ serv.nom }}</option
+                        >{{ serv.service_nom }}</option
                       >
                     </select>
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Profil <span class="text-danger">*</span></label>
+                  <label class="display-block"
+                    >Profil <span class="text-danger">*</span></label
+                  >
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -276,8 +310,14 @@
                 </div>
               </div>
               <div class="m-t-20 text-center">
-                <button class="btn btn-primary submit-btn">
-                  Créer l'employé
+                <button class="btn btn-danger submit-btn">
+                  Réinitialiser</button
+                >&nbsp;&nbsp;
+                <button
+                  class="btn btn-success submit-btn"
+                  v-on:click="inscrire"
+                >
+                  Ajouter
                 </button>
               </div>
             </form>
@@ -321,7 +361,7 @@ export default {
       departement: "",
       services: [],
       service: "",
-      selectedClinique:false
+      selectedClinique: false,
     };
   },
   components: {
@@ -334,49 +374,11 @@ export default {
     retourner() {
       this.$router.push("/admin/employe");
     },
-    // lieuTravail(){
-    //   axios
-    //     .create({
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: "Bearer " + localStorage.getItem("token"),
-    //         "Access-Control-Allow-Origin": "*",
-    //       },
-    //     })
-    //     .post(chemin + "/lieuDeTravail", {
-    //       clinique_id:this.clinique,
-    //       departement_id:this.departement,
-    //       service_id:this.service,
-    //     })
-    //     .then((response) => {
-    //       this.preloader = false;
-    //       if (response.data.state === true) {
-    //         this.success = true;
-    //         this.message = response.data.message;
-
-    //         this.nom = "";
-    //         this.prenom = "";
-    //         this.nationnalite = "";
-    //         this.telephone = "";
-    //         this.date = "";
-    //         this.addresse = "";
-    //         this.situation = "";
-    //         this.genre = "";
-    //         this.email = "";
-    //         this.code = "";
-    //         this.role = "";
-    //       } else {
-    //         this.message = response.data.message;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       this.preloader = false;
-    //       console.log(user.situation_matrimoniale);
-    //       console.log(err.response.data.errors);
-    //     });
-    // },
     inscrire() {
-      this.preloader = true;
+      console.log("id service:", this.service);
+      console.log("id clinique:", this.clinique);
+      console.log("id departement", this.departement);
+      if (this.nom === "" || this.prenom) this.preloader = true;
       var user = {
         nom: this.nom,
         prenoms: this.prenom,
@@ -389,6 +391,9 @@ export default {
         email: this.email,
         password: this.code,
         role: this.role,
+        clinique_id: this.clinique,
+        departement_id: this.departement,
+        service_id: this.service,
       };
       axios
         .create({
@@ -428,7 +433,7 @@ export default {
         });
     },
     charger_clinique() {
-      console.log(" id de la clinique ",this.clinique);
+      console.log(" id de la clinique ", this.clinique);
       axios
         .create({
           headers: {
@@ -488,13 +493,16 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + `/listeServicesDepartement/${this.clinique}/${this.departement}`)
+        .get(
+          chemin +
+            `/listeServicesDepartement/${this.clinique}/${this.departement}`
+        )
         .then((response) => {
           console.log(response.data);
           this.services = response.data.data;
           // if (response.data.state === true) {
           //   this.preloader = false;
-          //   this.services = response.data.data;  
+          //   this.services = response.data.data;
           // } else {
           //   this.preloader = false;
           //   console.log("erreur de chargement");
@@ -506,7 +514,7 @@ export default {
     },
     selectClinique() {
       console.log("##################################");
-    }
+    },
   },
 };
 </script>

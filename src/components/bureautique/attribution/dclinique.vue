@@ -2,17 +2,11 @@
   <div>
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
-      <br />
-      <button
-        class="btn btn-primary"
-        style="position:absolute; left:3%"
-        v-on:click="retourner"
-      >
-        Retourner
-      </button>
       <div class="content">
-        <br /><br>
-        <h3 class="page-title">Attribution de departement(s) à clinique</h3>
+          <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i></button
+        ><br /><br />
+        <h3 class="page-title" style="color:black; font-weight: bold;">Attribuer département à clinique</h3>
         <br />
         <div
           v-if="success"
@@ -69,18 +63,18 @@
                   type="checkbox"
                   name="checkbox"
                 />
-                {{ depart.nom }}
+                {{ depart.nom }}&nbsp;&nbsp;&nbsp;
               </label>
             </div>
           </div>
         </div>
 
         <button
-          class="btn btn-primary"
+          class="btn btn-success"
           style="position:absolute; left:3%"
           v-on:click="attribuer"
         >
-          Attribution
+          Attribuer
         </button>
       </div>
     </div>
@@ -151,7 +145,13 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.departements = response.data.data;
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if(element.statut === 'actif'){
+                this.departements.push(element);
+              }
+            })
+            console.log(this.departements);
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -182,7 +182,8 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/attribuerDepartementsClinique/" + this.clinique, {
+        .post(chemin + "/attribuerDepartementsClinique/", {
+          id_clinique:this.clinique,
           departements: send_data,
         })
         .then((response) => {

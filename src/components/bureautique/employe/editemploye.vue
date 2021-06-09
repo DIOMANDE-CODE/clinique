@@ -1,14 +1,16 @@
 <template>
   <div>
+    <loader v-if="preloader"></loader>
     <div class="page-wrapper">
-      <loader v-if="preloader"></loader>
       <div class="content">
-        <button class="btn btn-primary" v-on:click="retourner">
-          Retourner
+        <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </button>
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title">Modifier</h4>
+            <h4 class="page-title" style="color:black; font-weight: bold;">
+              MODIFIER
+            </h4>
           </div>
         </div>
         <div
@@ -216,8 +218,8 @@
                 </div>
               </div>
               <div class="m-t-20 text-center">
-                <button class="btn btn-primary submit-btn">
-                  Modifier l'employé
+                <button class="btn btn-success submit-btn">
+                  Modifier
                 </button>
               </div>
             </form>
@@ -501,10 +503,10 @@ export default {
       email: "",
       role: "",
       ancien: [],
-      id:'',
-      success:false,
-      errors:false,
-      message:''
+      id: "",
+      success: false,
+      errors: false,
+      message: "",
     };
   },
   created() {
@@ -522,10 +524,9 @@ export default {
   },
   methods: {
     retourner() {
-      window.history.back();
+      this.$router.push("/admin/employe");
     },
     modifier() {
-      this.preloader = true
       var user = {
         nom: this.nom,
         prenoms: this.prenom,
@@ -539,6 +540,7 @@ export default {
         role: this.role,
       };
       console.log(user);
+      this.preloader = true;
       axios
         .create({
           headers: {
@@ -550,14 +552,16 @@ export default {
         .patch(chemin + "/modifierInformationUtilisateur/" + this.id, user)
         .then((response) => {
           if (response.data.state === true) {
-            this.preloader = false
-            this.success = true
-            this.message = 'Modification effectuée avec succès'
+            this.preloader = false;
+            this.success = true;
+            this.message = "Modification effectuée avec succès";
             console.log("modification réussie reussie");
+
+            this.nom = user.nom;
           } else {
-            this.preloader = false
-            this.errors = true
-            this.message = response.data.message
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
             console.log("erreur");
           }
         });

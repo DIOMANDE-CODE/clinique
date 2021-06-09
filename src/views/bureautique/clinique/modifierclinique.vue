@@ -2,7 +2,8 @@
   <div>
     <div class="main-wrapper">
         <Header/>
-        <editclinique></editclinique>
+        <modifierclinique></modifierclinique>
+        <adminnavbar></adminnavbar>
       <div class="sidebar-overlay" data-reff=""></div>
     </div>
   </div>
@@ -12,13 +13,14 @@
 // import header from "../components/header.vue";
 
 import Header from '../../../components/header.vue'
-import editclinique from '../../../components/bureautique/clinique/editclinique.vue'
+import adminnavbar from '../../../components/bureautique/adminnavbar.vue'
+import modifierclinique from '../../../components/bureautique/clinique/modifierclinique.vue'
 
 export default {
-  name: "editclinique",
   components: {
     Header,
-    editclinique
+    modifierclinique,
+    adminnavbar
   },
 };
 </script>

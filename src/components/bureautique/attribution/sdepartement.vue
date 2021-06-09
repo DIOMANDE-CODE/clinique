@@ -2,17 +2,13 @@
   <div>
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
-      <br />
-      <button
-        class="btn btn-primary"
-        style="position:absolute; left:3%"
-        v-on:click="retourner"
-      >
-        Retourner
-      </button>
       <div class="content">
-        <br /><br>
-        <h3 class="page-title">Attribution de service(s) à departement</h3>
+        <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i></button
+        ><br /><br />
+        <h3 class="page-title" style="color:black; font-weight: bold;">
+          Attribuer service à departement
+        </h3>
         <br />
         <div
           v-if="success"
@@ -34,7 +30,7 @@
           class="alert alert-danger alert-dismissible fade show"
           role="alert"
         >
-            Attribution non effectuée
+          Attribution non effectuée
           <button
             type="button"
             class="close"
@@ -69,18 +65,18 @@
                   type="checkbox"
                   name="checkbox"
                 />
-                {{ serv.nom }}
+                {{ serv.nom }}&nbsp;&nbsp;&nbsp;
               </label>
             </div>
           </div>
         </div>
 
         <button
-          class="btn btn-primary"
+          class="btn btn-success"
           style="position:absolute; left:3%"
           v-on:click="attribuer"
         >
-          Attribution
+          Attribuer
         </button>
       </div>
     </div>
@@ -127,7 +123,12 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.services = response.data.data;
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if (element.statut === 'actif'){
+                this.services.push(element);
+              }
+            })
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -193,8 +194,8 @@ export default {
             this.message = response.data.message;
             this.departements = "";
             this.coche = [];
-            this.charge_departement()
-            this.charge_service()
+            this.charge_departement();
+            this.charge_service();
           } else {
             this.preloader = false;
             this.errors = true;
