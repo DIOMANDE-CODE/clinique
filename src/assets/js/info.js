@@ -41,8 +41,23 @@ var clinique = {
     id : "",
 }
 
+var analyse = {
+    id:"",
+    code:"",
+    denomination: "",
+    cotation: "",
+}
+
+var assurance = {
+    id:'',
+    nom:'',
+    entreprise:''
+}
+
 module.exports.info = info
 module.exports.identifiant = identifiant
 module.exports.blog = blog
 module.exports.specialite = specialite
 module.exports.clinique = clinique
+module.exports.analyse = analyse
+module.exports.assurance = assurance

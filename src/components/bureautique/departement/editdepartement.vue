@@ -60,7 +60,7 @@
                 ></textarea>
               </div>
               <div class="m-t-20 text-center">
-                <button class="btn btn-primary submit-btn">
+                <button class="btn btn-success submit-btn">
                   modifier
                 </button>
               </div>
@@ -323,7 +323,6 @@
 import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import {blog} from "../../../assets/js/info.js"
 
 export default {
   name: "ajoutdepartement",
@@ -343,9 +342,29 @@ export default {
     loader,
   },
   created() {
-    this.id = blog.id;
-    this.nom = blog.nom;
-    this.description = blog.description;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/departement/" + this.$route.params.id)
+      .then((response) => {
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.nom = response.data.data.nom;
+          this.description = response.data.data.description;
+        } else {
+          this.preloader = false;
+          this.message = "Aucun services existants";
+          console.log("erreur de chargement");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
     retourner() {
@@ -370,7 +389,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierDepartement/" + this.id, departement)
+        .patch(chemin + "/modifierDepartement/" + this.$route.params.id, departement)
         .then((response) => {
             console.log(response.data);
           if (response.data.state === true) {

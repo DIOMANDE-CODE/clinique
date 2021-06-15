@@ -85,7 +85,6 @@
   </div>
 </template>
 <script>
-import { identifiant } from "../../../assets/js/info.js";
 import axios from "axios";
 import {chemin} from "../../../assets/js/chemin.js"
 import loader from "../../../components/loader.vue"
@@ -127,7 +126,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + `/utilisateur/${identifiant.user_id}`)
+        .get(chemin + `/utilisateur/${this.$route.params.id}`)
         .then((response) => {
           this.preloader = false;
           console.log(response.data.data);

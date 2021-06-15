@@ -37,9 +37,11 @@
             </div>
           </div>
         </div>
-         <div class="row">
+        <div class="row">
           <div class="col-sm-4 col-3">
-            <h4 class="page-title" style="color:black; font-weight:bold;">CLINIQUES</h4>
+            <h4 class="page-title" style="color:black; font-weight:bold;">
+              CLINIQUES
+            </h4>
           </div>
           <div class="col-sm-8 col-4 text-right m-b-20">
             <router-link to="/clinique/ajouter"
@@ -53,7 +55,6 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <p>{{message }}</p>
             <div class="table-responsive">
               <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
@@ -77,7 +78,7 @@
                         clinique.statut
                       }}</span>
                     </td>
-                     <td v-else>
+                    <td v-else>
                       <span class="custom-badge status-red">{{
                         clinique.statut
                       }}</span>
@@ -106,15 +107,6 @@
                             v-on:click="Voir(clinique.id)"
                             >Voir +</a
                           >
-                             <a
-                            v-if="clinique.statut === 'actif'"
-                            class="dropdown-item "
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#delete_employee"
-                            v-on:click="modifier(clinique.id)"
-                            ><i class="fa fa-pencil m-r-5"></i>Modifier</a
-                          >
                           <a
                             v-if="clinique.statut === 'actif'"
                             class="dropdown-item "
@@ -125,7 +117,7 @@
                             ><i class="fa fa-trash-o m-r-5"></i>désactiver la
                             clinique</a
                           >
-                              <a
+                          <a
                             v-if="clinique.statut === 'inactif'"
                             class="dropdown-item "
                             href="#"
@@ -151,7 +143,6 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import { clinique } from "../../../assets/js/info.js";
 import { identifiant } from "../../../assets/js/info.js";
 import loader from "../../../components/loader.vue";
 
@@ -212,37 +203,7 @@ export default {
       this.$router.push("/bureautique");
     },
     modifier(pk) {
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/clinique/" + pk)
-        .then((response) => {
-          console.log(response.data.data);
-          if (response.data.state === true) {
-            clinique.id = response.data.data.id;
-            clinique.nom = response.data.data.nom;
-            clinique.numero_identifiant = response.data.data.numero_identifiant;
-            clinique.email = response.data.data.email
-            clinique.addresse_physique = response.data.data.adresse_physique
-            clinique.addresse_postale = response.data.data.adresse_postale
-            clinique.telephone = response.data.data.telephone
-            clinique.telephone_urgence = response.data.data.telephone_urgence
-            clinique.fax = response.data.data.fax
-            console.log(clinique);
-
-            this.$router.push("/admin/modifier/" + clinique.id);
-          } else {
-            console.log("erreur");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$router.push("/admin/modifier/" + pk);
     },
     desactiver(pk) {
       this.preload = true;
@@ -263,7 +224,7 @@ export default {
             this.preload = false;
             this.success = true;
             this.message = response.data.message;
-            this.charge()
+            this.charge();
           } else {
             this.preload = false;
             this.errors = true;
@@ -294,7 +255,7 @@ export default {
             this.preload = false;
             this.success = true;
             this.message = response.data.message;
-            this.charge()
+            this.charge();
           } else {
             this.preload = false;
             this.errors = true;

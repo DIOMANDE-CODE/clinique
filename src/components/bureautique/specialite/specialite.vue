@@ -54,7 +54,6 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <p>{{ message }}</p>
             <div class="table-responsive">
               <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
@@ -140,7 +139,6 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import loader from "../../../components/loader.vue";
-import { specialite } from "../../../assets/js/info.js";
 
 export default {
   data() {
@@ -192,31 +190,7 @@ export default {
       this.$router.push("/bureautique");
     },
     modifier(pk) {
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/service/" + pk)
-        .then((response) => {
-          console.log(response.data.data);
-          if (response.data.state === true) {
-            specialite.id = response.data.data.id;
-            specialite.nom = response.data.data.nom;
-            specialite.description = response.data.data.description;
-            console.log(specialite);
-
-            this.$router.push("/specialite/modifier/" + specialite.id);
-          } else {
-            console.log("erreur");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$router.push("/specialite/modifier/" + pk);
     },
     desactiver(pk) {
       this.preloader = true;
@@ -228,7 +202,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/activierDesactiverService", {
+        .post(chemin + "/activerDesactiverService", {
           id: pk,
           statut: "inactif",
         })
@@ -259,7 +233,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/activierDesactiverService", {
+        .post(chemin + "/activerDesactiverService", {
           id: pk,
           statut: "actif",
         })

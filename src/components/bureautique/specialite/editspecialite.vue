@@ -64,7 +64,7 @@
               </div>
               <div class="m-t-20 text-center">
                 <button
-                  class="btn btn-primary submit-btn"
+                  class="btn btn-success submit-btn"
                   v-on:click="modifier"
                 >
                   modifier
@@ -329,7 +329,6 @@
 import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import { specialite } from "../../../assets/js/info.js";
 
 export default {
   name: "ajoutdepartement",
@@ -349,20 +348,39 @@ export default {
     loader,
   },
   created() {
-    this.id = specialite.id;
-    this.nom = specialite.nom;
-    this.description = specialite.description;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/service/" + this.$route.params.id)
+      .then((response) => {
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.nom = response.data.data.nom;
+          this.description = response.data.data.description;
+        } else {
+          this.preloader = false;
+          this.message = "Aucun services existants";
+          console.log("erreur de chargement");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
     retourner() {
       this.$router.push("/admin/specialite");
     },
     renitialiser() {
-      this.nom = "", 
-      this.description = "";
+      (this.nom = ""), (this.description = "");
     },
     modifier() {
-      this.preloader = true
+      this.preloader = true;
       var service = {
         nom: this.nom,
         description: this.description,
@@ -376,22 +394,22 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierService/" + this.id, service)
+        .patch(chemin + "/modifierService/" + this.$route.params.id, service)
         .then((response) => {
-            console.log(response.data);
+          console.log(response.data);
           if (response.data.state === true) {
-            this.preloader = false
-            this.success = true
-            this.message = 'Modification effectuée avec succès'
+            this.preloader = false;
+            this.success = true;
+            this.message = "Modification effectuée avec succès";
             console.log("modification réussie reussie");
           } else {
-            this.preloader = false
-            this.errors = true
-            this.message = response.data.message
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
             console.log("erreur");
           }
         });
-    }
+    },
   },
 };
 </script>

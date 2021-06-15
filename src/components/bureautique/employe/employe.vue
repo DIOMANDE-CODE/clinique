@@ -51,7 +51,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-          <p>{{ message }}</p>
+            <p>{{ message }}</p>
             <div class="table-responsive">
               <table class="table table-striped custom-table">
                 <thead>
@@ -402,7 +402,6 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import { info } from "../../../assets/js/info.js";
 import { identifiant } from "../../../assets/js/info.js";
 
 import loader from "../../../components/loader.vue";
@@ -445,7 +444,7 @@ export default {
             this.employes = response.data.data;
           } else {
             this.preload = false;
-            this.message = "Aucun employés existants"
+            this.message = "Aucun employés existants";
             console.log("erreur de chargement");
           }
         });
@@ -455,38 +454,7 @@ export default {
       this.$router.push("/employe/profil/" + pk);
     },
     modifier(pk) {
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/utilisateur/" + pk)
-        .then((response) => {
-          if (response.data.state === true) {
-            info.id = response.data.data.id;
-            info.nom = response.data.data.nom;
-            info.prenom = response.data.data.prenoms;
-            info.nationnalite = response.data.data.nationalite;
-            info.telephone = response.data.data.telephone;
-            info.date = response.data.data.date_naissance;
-            info.addresse = response.data.data.adresse_domicile;
-            info.situation = response.data.data.situation_matrimoniale;
-            info.genre = response.data.data.genre;
-            info.email = response.data.data.email;
-            info.role = response.data.data.role;
-            console.log(info);
-
-            this.$router.push("/employe/modifier/" + pk);
-          } else {
-            console.log("erreur");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$router.push("/employe/modifier/" + pk);
     },
 
     desactiver(pk) {

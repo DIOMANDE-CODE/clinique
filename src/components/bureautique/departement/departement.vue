@@ -56,7 +56,7 @@
                 <thead>
                   <tr>
                     <th>Nom des departements</th>
-                    <th>Descriptions  </th>
+                    <th>Descriptions</th>
                     <th>Status</th>
                     <th class="text-right">Actions</th>
                   </tr>
@@ -65,7 +65,7 @@
                   <tr v-for="depart in departements" v-bind:key="depart.id">
                     <td>{{ depart.nom }}</td>
                     <td>{{ depart.description }}</td>
-                    <td v-if="depart.statut==='actif'">
+                    <td v-if="depart.statut === 'actif'">
                       <span class="custom-badge status-green">{{
                         depart.statut
                       }}</span>
@@ -107,7 +107,7 @@
                             v-on:click="desactiver(depart.id)"
                             ><i class="fa fa-trash-o m-r-5"></i> Désactiver</a
                           >
-                           <a
+                          <a
                             v-else-if="depart.statut === 'inactif'"
                             class="dropdown-item"
                             href="#"
@@ -381,7 +381,6 @@
 import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import {blog} from "../../../assets/js/info.js"
 
 export default {
   data() {
@@ -416,38 +415,14 @@ export default {
             this.preloader = false;
             this.departements = response.data.data;
           } else {
-            this.preloader = false
-            this.message = "Aucun departements existants"
+            this.preloader = false;
+            this.message = "Aucun departements existants";
             console.log("erreur de chargement");
           }
         });
     },
     modifier(pk) {
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/departement/" + pk)
-        .then((response) => {
-          console.log(response.data.data);
-          if (response.data.state === true) {
-            blog.id = response.data.data.id;
-            blog.nom = response.data.data.nom;
-            blog.description = response.data.data.description;
-            console.log(blog);
-
-            this.$router.push("/departement/modifier/" + blog.id);
-          } else {
-            console.log("erreur");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$router.push("/departement/modifier/" + pk);
     },
     desactiver(pk) {
       this.preloader = true;

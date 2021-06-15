@@ -3,9 +3,12 @@
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
-        <button class="btn btn-primary btn-rounded" v-on:click="retourner">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </button>
+        <div class="m-t-15">
+          <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          </button>
+        </div>
+        <br />
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
             <h4 class="page-title" style="color:black; font-weight: bold;">
@@ -46,181 +49,21 @@
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
             <form @submit.prevent="modifier">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label> nom <span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" v-model="nom" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Prénom</label>
-                    <input class="form-control" type="text" v-model="prenom" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Nationalité</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="nationnalite"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Téléphone <span class="text-danger">*</span></label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="telephone"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label
-                      >Date de naissance
-                      <span class="text-danger">*</span></label
-                    >
-                    <input type="date" class="form-control" v-model="date" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Addresse du domicile</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="addresse"
-                    />
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label class="display-block">Situation matrimoniale</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_active"
-                      value="mariee"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_active">
-                      Marié(e)
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_inactive"
-                      value="celibataire"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      Célibataire
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_inactive"
-                      value="divorcee"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      Divorcé(e)
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_inactive"
-                      value="veuf"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      Veuf(ve)
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label class="display-block">Genre</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="quartier"
-                      id="employee_active"
-                      value="homme"
-                      v-model="genre"
-                    />
-                    <label class="form-check-label" for="employee_active">
-                      H
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="quartier"
-                      id="employee_inactive"
-                      value="femme"
-                      v-model="genre"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      F
-                    </label>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Email <span class="text-danger">*</span></label>
-                    <input class="form-control" type="email" v-model="email" />
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label class="display-block">Profil</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="status"
-                      id="employee_active"
-                      value="admin"
-                      v-model="role"
-                    />
-                    <label class="form-check-label" for="employee_active">
-                      admin
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="status"
-                      id="employee_inactive"
-                      value="utilisateur"
-                      v-model="role"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      utilisateur
-                    </label>
-                  </div>
-                </div>
+              <div class="form-group">
+                <label>Assurances</label>
+                <input class="form-control" type="text" v-model="nom" />
+              </div>
+              <div class="form-group">
+                <label>Nom de l'entreprise</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="entreprise"
+                />
               </div>
               <div class="m-t-20 text-center">
                 <button class="btn btn-success submit-btn">
-                  Modifier
+                  modifier
                 </button>
               </div>
             </form>
@@ -479,35 +322,26 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import loader from "../../../components/loader.vue";
+import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 
 export default {
-  name: "editemploye",
-  components: {
-    loader,
-  },
+  name: "ajoutdepartement",
   data() {
     return {
-      preloader: false,
-      utilisateur: [],
-      nom: "",
-      prenom: "",
-      nationnalite: "",
-      telephone: "",
-      date: "",
-      addresse: "",
-      situation: "",
-      genre: "",
-      email: "",
-      role: "",
-      ancien: [],
-      id: "",
       success: false,
       errors: false,
       message: "",
+      preloader: false,
+
+      nom: "",
+      entreprise: "",
+      id: "",
     };
+  },    
+  components: {
+    loader,
   },
   created() {
     axios
@@ -518,23 +352,12 @@ export default {
           "Access-Control-Allow-Origin": "*",
         },
       })
-      .get(chemin + "/utilisateur/" + this.$route.params.id)
+      .get(chemin + "/assurance/" + this.$route.params.id)
       .then((response) => {
-        console.log("utilisateur :", response.data.data);
         if (response.data.state === true) {
           this.preloader = false;
           this.nom = response.data.data.nom;
-          this.prenom = response.data.data.prenoms;
-          this.nationnalite = response.data.data.nationalite;
-          this.telephone = response.data.data.telephone;
-          this.date = response.data.data.date_naissance;
-          this.addresse = response.data.data.adresse_domicile;
-          this.situation = response.data.data.situation_matrimoniale;
-          this.genre = response.data.data.genre;
-          this.email = response.data.data.email;
-          this.role = response.data.data.role;
-          this.nom = response.data.data.nom;
-          this.description = response.data.data.description;
+          this.entreprise = response.data.data.entreprise;
         } else {
           this.preloader = false;
           this.message = "Aucun services existants";
@@ -547,23 +370,19 @@ export default {
   },
   methods: {
     retourner() {
-      this.$router.push("/admin/employe");
+      this.$router.push("/admin/assurance");
+    },
+    renitialiser() {
+      (this.entreprise = ""), (this.nom = "");
     },
     modifier() {
-      var user = {
-        nom: this.nom,
-        prenoms: this.prenom,
-        nationalite: this.nationnalite,
-        telephone: this.telephone,
-        date_naissance: this.date,
-        adresse_domicile: this.addresse,
-        situation_matrimoniale: this.situation,
-        genre: this.genre,
-        email: this.email,
-        role: this.role,
-      };
-      console.log(user);
+        console.log(this.id);
       this.preloader = true;
+      var assurances = {
+        nom: this.nom,
+        entreprise: this.entreprise,
+      };
+      console.log(assurances);
       axios
         .create({
           headers: {
@@ -572,15 +391,14 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierInformationUtilisateur/" + this.$route.params.id, user)
+        .patch(chemin + "/modifierAssurance/" + this.$route.params.id, assurances)
         .then((response) => {
+          console.log(response.data)
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
             this.message = "Modification effectuée avec succès";
             console.log("modification réussie reussie");
-
-            this.nom = user.nom;
           } else {
             this.preloader = false;
             this.errors = true;

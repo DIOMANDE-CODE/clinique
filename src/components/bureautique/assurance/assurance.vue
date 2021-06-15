@@ -3,16 +3,21 @@
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
-        <button class="btn btn-primary btn-rounded" v-on:click="retourner">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </button>
         <div class="row">
-          <div class="col-lg-8 offset-lg-2">
+          <div class="col-sm-5 col-5">
             <h4 class="page-title" style="color:black; font-weight: bold;">
-              MODIFIER
+              ASSURANCES
             </h4>
           </div>
+          <div class="col-sm-7 col-7 text-right m-b-30">
+            <router-link to="/add/assurance"
+              ><a style="color:white" class="btn btn-primary btn-rounded"
+                ><i class="fa fa-plus"></i> Ajouter une assurance</a
+              ></router-link
+            >
+          </div>
         </div>
+
         <div
           v-if="success"
           class="alert alert-success alert-dismissible fade show"
@@ -43,187 +48,81 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+
         <div class="row">
-          <div class="col-lg-8 offset-lg-2">
-            <form @submit.prevent="modifier">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label> nom <span class="text-danger">*</span></label>
-                    <input class="form-control" type="text" v-model="nom" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Prénom</label>
-                    <input class="form-control" type="text" v-model="prenom" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Nationalité</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="nationnalite"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Téléphone <span class="text-danger">*</span></label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="telephone"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label
-                      >Date de naissance
-                      <span class="text-danger">*</span></label
-                    >
-                    <input type="date" class="form-control" v-model="date" />
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Addresse du domicile</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="addresse"
-                    />
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label class="display-block">Situation matrimoniale</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_active"
-                      value="mariee"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_active">
-                      Marié(e)
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_inactive"
-                      value="celibataire"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      Célibataire
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_inactive"
-                      value="divorcee"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      Divorcé(e)
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="matrimoniale"
-                      id="employee_inactive"
-                      value="veuf"
-                      v-model="situation"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      Veuf(ve)
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label class="display-block">Genre</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="quartier"
-                      id="employee_active"
-                      value="homme"
-                      v-model="genre"
-                    />
-                    <label class="form-check-label" for="employee_active">
-                      H
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="quartier"
-                      id="employee_inactive"
-                      value="femme"
-                      v-model="genre"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      F
-                    </label>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label>Email <span class="text-danger">*</span></label>
-                    <input class="form-control" type="email" v-model="email" />
-                  </div>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label class="display-block">Profil</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="status"
-                      id="employee_active"
-                      value="admin"
-                      v-model="role"
-                    />
-                    <label class="form-check-label" for="employee_active">
-                      admin
-                    </label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="status"
-                      id="employee_inactive"
-                      value="utilisateur"
-                      v-model="role"
-                    />
-                    <label class="form-check-label" for="employee_inactive">
-                      utilisateur
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="m-t-20 text-center">
-                <button class="btn btn-success submit-btn">
-                  Modifier
-                </button>
-              </div>
-            </form>
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-striped custom-table mb-0 datatable">
+                <thead>
+                  <tr>
+                    <th>Assurances</th>
+                    <th>Entreprises</th>
+                    <th>Status</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="assurance in assurances" v-bind:key="assurance.id">
+                    <td>{{ assurance.nom }}</td>
+                    <td>{{ assurance.entreprise }}</td>
+                    <td v-if="assurance.statut === 'actif'">
+                      <span class="custom-badge status-green">{{
+                        assurance.statut
+                      }}</span>
+                    </td>
+                    <td v-else>
+                      <span class="custom-badge status-red">{{
+                        assurance.statut
+                      }}</span>
+                    </td>
+                    <td class="text-right">
+                      <div class="dropdown dropdown-action">
+                        <a
+                          href="#"
+                          class="action-icon dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                          ><i class="fa fa-ellipsis-v"></i
+                        ></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a
+                             v-if="assurance.statut === 'actif'"
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_department"
+                            v-on:click="modifier(assurance.id)"
+                            ><i
+                              class="fa fa-pencil m-r-5"
+                              style="cursor:pointer"
+                            ></i>
+                            Modifier</a
+                          >
+                          <a
+                            v-if="assurance.statut === 'actif'"
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_department"
+                            v-on:click="desactiver(assurance.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i> Désactiver</a
+                          >
+                          <a
+                            v-else-if="assurance.statut === 'inactif'"
+                            class="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_department"
+                            v-on:click="activer(assurance.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i> Activer</a
+                          >
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -479,90 +378,29 @@
   </div>
 </template>
 <script>
+import loader from "../../loader.vue";
 import axios from "axios";
-import loader from "../../../components/loader.vue";
 import { chemin } from "../../../assets/js/chemin.js";
+import { assurance } from "../../../assets/js/info.js";
 
 export default {
-  name: "editemploye",
-  components: {
-    loader,
-  },
   data() {
     return {
       preloader: false,
-      utilisateur: [],
-      nom: "",
-      prenom: "",
-      nationnalite: "",
-      telephone: "",
-      date: "",
-      addresse: "",
-      situation: "",
-      genre: "",
-      email: "",
-      role: "",
-      ancien: [],
-      id: "",
       success: false,
       errors: false,
+      assurances: [],
       message: "",
     };
   },
+  components: {
+    loader,
+  },
   created() {
-    axios
-      .create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .get(chemin + "/utilisateur/" + this.$route.params.id)
-      .then((response) => {
-        console.log("utilisateur :", response.data.data);
-        if (response.data.state === true) {
-          this.preloader = false;
-          this.nom = response.data.data.nom;
-          this.prenom = response.data.data.prenoms;
-          this.nationnalite = response.data.data.nationalite;
-          this.telephone = response.data.data.telephone;
-          this.date = response.data.data.date_naissance;
-          this.addresse = response.data.data.adresse_domicile;
-          this.situation = response.data.data.situation_matrimoniale;
-          this.genre = response.data.data.genre;
-          this.email = response.data.data.email;
-          this.role = response.data.data.role;
-          this.nom = response.data.data.nom;
-          this.description = response.data.data.description;
-        } else {
-          this.preloader = false;
-          this.message = "Aucun services existants";
-          console.log("erreur de chargement");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.charge();
   },
   methods: {
-    retourner() {
-      this.$router.push("/admin/employe");
-    },
-    modifier() {
-      var user = {
-        nom: this.nom,
-        prenoms: this.prenom,
-        nationalite: this.nationnalite,
-        telephone: this.telephone,
-        date_naissance: this.date,
-        adresse_domicile: this.addresse,
-        situation_matrimoniale: this.situation,
-        genre: this.genre,
-        email: this.email,
-        role: this.role,
-      };
-      console.log(user);
+    charge: function() {
       this.preloader = true;
       axios
         .create({
@@ -572,21 +410,107 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierInformationUtilisateur/" + this.$route.params.id, user)
+        .get(chemin + "/listAssurances")
+        .then((response) => {
+          console.log("assurance :", response.data.data[0].statut);
+          console.log(response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.assurances = response.data.data;
+          } else {
+            this.preloader = false;
+            this.message = "Aucune assurances existantes";
+            console.log("erreur de chargement");
+          }
+        });
+    },
+    modifier(pk) {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/assurance/" + pk)
+        .then((response) => {
+          console.log(response.data.data);
+          if (response.data.state === true) {
+            assurance.id = response.data.data.id;
+            assurance.code = response.data.data.nom;
+            assurance.denomination = response.data.data.entreprise;
+            console.log(assurance);
+
+            this.$router.push("/edit/assurance/" + assurance.id);
+          } else {
+            console.log("erreur");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    desactiver(pk) {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverAssurance", {
+          id: pk,
+          statut: "inactif",
+        })
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
-            this.message = "Modification effectuée avec succès";
-            console.log("modification réussie reussie");
-
-            this.nom = user.nom;
+            this.message = response.data.message;
+            this.charge();
           } else {
             this.preloader = false;
             this.errors = true;
             this.message = response.data.message;
-            console.log("erreur");
           }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    activer(pk) {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverAssurance", {
+          id: pk,
+          statut: "actif",
+        })
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.charge();
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
         });
     },
   },

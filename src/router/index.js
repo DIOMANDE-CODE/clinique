@@ -34,6 +34,15 @@ import attribution from '../views/bureautique/attribution/attribution.vue'
 import dclinique from '../views/bureautique/attribution/dclinique.vue'
 import sdepartement from '../views/bureautique/attribution/sdepartement.vue'
 
+// route du module analyse
+import analyse from '../views/bureautique/analyse/analyse.vue'
+import addanalyse from '../views/bureautique/analyse/addanalyse.vue'
+import editanalyse from '../views/bureautique/analyse/editanalyse.vue'
+
+// route du module assurance 
+import assurance from '../views/bureautique/assurance/assurance.vue'
+import addassurance from '../views/bureautique/assurance/addassurance.vue'
+import editassurance from '../views/bureautique/assurance/editassurance.vue'
 // route de dossier medical
 import dossier from '../views/dossier_medical/dossier.vue'
 
@@ -174,12 +183,44 @@ const routes = [
     name:'attribuerService',
     component:sdepartement
   },
+  // route du module analyse
+  {
+    path:'/admin/analyse',
+    name:'analyse',
+    component:analyse
+  },
+  {
+    path:'/add/analyse',
+    name:'addanalyse',
+    component:addanalyse
+  },
+  {
+    path:'/edit/analyse/:id',
+    name:'editanalyse',
+    component:editanalyse
+  },
+  // route du module analyse
+  {
+    path:'/admin/assurance',
+    name:'assurance',
+    component:assurance
+  },
+  {
+    path:'/add/assurance',
+    name:'addassurance',
+    component:addassurance
+  },
+  {
+    path:'/edit/assurance/:id',
+    name:'editassurance',
+    component:editassurance
+  },
   // route de dossier médical
   {
     path:'/dossier',
     name:'dossier',
     component:dossier
-  }
+  },
 ]
 
 const router = createRouter({

@@ -69,7 +69,12 @@
                       >Nom de la compagnie
                       <span class="text-danger">*</span></label
                     >
-                    <input class="form-control" type="text" v-model="nom" required/>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="nom"
+                      required
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
@@ -86,7 +91,12 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Email</label>
-                    <input class="form-control" type="email" v-model="email" required />
+                    <input
+                      class="form-control"
+                      type="email"
+                      v-model="email"
+                      required
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
@@ -120,19 +130,21 @@
                       class="form-control"
                       type="text"
                       v-model="addresse_postale"
-                     
                     />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Fax</label>
-                    <input class="form-control" type="text" v-model="fax"/>
+                    <input class="form-control" type="text" v-model="fax" />
                   </div>
                 </div>
               </div>
               <div class="m-t-20 text-center">
-                <button class="btn btn-success submit-btn" v-on:click="modifier">
+                <button
+                  class="btn btn-success submit-btn"
+                  v-on:click="modifier"
+                >
                   Modifier
                 </button>
               </div>
@@ -147,7 +159,6 @@
 import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import { clinique } from "../../../assets/js/info.js";
 
 export default {
   name: "ajoutdepartement",
@@ -174,30 +185,51 @@ export default {
     loader,
   },
   created() {
-    this.id = clinique.id;
-    this.nom = clinique.nom;
-    this.numero_identifiant = clinique.numero_identifiant;
-    this.email = clinique.email;
-    this.addresse_physique = clinique.addresse_physique;
-    this.addresse_postale = clinique.addresse_postale;
-    this.telephone = clinique.telephone;
-    this.telephone_urgence = clinique.telephone_urgence;
-    this.addresse_physique = clinique.addresse_physique;
-    this.addresse_postale = clinique.addresse_postale;
-    this.fax = clinique.fax;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/clinique/" + this.$route.params.id)
+      .then((response) => {
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.nom = response.data.data.nom;
+          this.numero_identifiant = response.data.data.numero_identifiant;
+          this.email = response.data.data.email;
+          this.addresse_physique = response.data.data.addresse_physique;
+          this.addresse_postale = response.data.data.addresse_postale;
+          this.telephone = response.data.data.telephone;
+          this.telephone_urgence = response.data.data.telephone_urgence;
+          this.addresse_physique = response.data.data.adresse_physique;
+          this.addresse_postale = response.data.data.adresse_postale;
+          this.fax = response.data.data.fax;
+        } else {
+          this.preloader = false;
+          this.message = "Aucun services existants";
+          console.log("erreur de chargement");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   methods: {
     retourner() {
-      this.$router.push("/admin/clinique");
+      this.$router.push("/clinique/voir/" + this.$route.params.id);
     },
     renitialiser() {
-      this.nom = ""
-      this.numero_identifiant = ""
-      this.email = ""
-      this.addresse_physique = ""
-      this.addresse_postale = ""
-      this.telephone = ""
-      this.telephone_urgence = ""
+      this.nom = "";
+      this.numero_identifiant = "";
+      this.email = "";
+      this.addresse_physique = "";
+      this.addresse_postale = "";
+      this.telephone = "";
+      this.telephone_urgence = "";
+      this.fax = "";
     },
     modifier() {
       this.preloader = true;
@@ -211,8 +243,8 @@ export default {
         adresse_postale: this.addresse_postale,
         fax: this.fax,
       };
-      console.log("la clinique:",clin);
-      console.log("route:",chemin + "/modifierClinique/" + this.id);
+      console.log("la clinique:", clin);
+      console.log("route:", chemin + "/modifierClinique/" + this.$route.params.id);
       axios
         .create({
           headers: {
@@ -221,7 +253,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierClinique/" + this.id, clin)
+        .patch(chemin + "/modifierClinique/" + this.$route.params.id, clin)
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
