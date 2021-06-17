@@ -50,14 +50,14 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="form-group">
-                <label>Code de l'analyse</label>
+                <label>Code de l'analyse <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="code" required />
               </div>
              <div class="form-group">
-                <label>Dénomination de l'analyse</label>
+                <label>Dénomination de l'analyse <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="denomination" required />
               </div> <div class="form-group">
-                <label>Cotation de l'analyse</label>
+                <label>Cotation de l'analyse <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="cotation" required />
               </div>
               <div class="m-t-20 text-center">

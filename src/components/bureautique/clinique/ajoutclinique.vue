@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loader></loader>
+    <loader v-if="preloader"></loader>
     <div class="page-wrapper" v-if="previous">
       <div class="content">
         <div class="m-t-15">
@@ -80,7 +80,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Telephone</label>
+                    <label>Telephone <span class="text-danger">*</span></label>
                     <input
                       class="form-control "
                       type="number"
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Email</label>
+                    <label>Email <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="email"
@@ -102,7 +102,10 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Numero d'urgence</label>
+                    <label
+                      >Numero d'urgence
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="number"
@@ -113,7 +116,10 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Addresse physique</label>
+                    <label
+                      >Addresse physique
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -126,7 +132,10 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Addresse postale</label>
+                    <label
+                      >Addresse postale
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -137,7 +146,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Fax</label>
+                    <label>Fax <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -152,8 +161,8 @@
                   class="btn btn-danger submit-btn"
                   v-on:click="renitialiser"
                 >
-                  Réinitialiser
-                </button>&nbsp;&nbsp;
+                  Réinitialiser</button
+                >&nbsp;&nbsp;
                 <button class="btn btn-dark submit-btn" v-on:click="suivant">
                   Suivant
                 </button>
@@ -264,7 +273,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card-box">
-              <h3 class="card-title">Liste des des attributions</h3>
+              <h3 class="card-title">Liste des attributions</h3>
               <div class="experience-box">
                 <ul class="experience-list">
                   <li
@@ -349,6 +358,8 @@ export default {
   },
   methods: {
     retour() {
+      this.errors = false;
+      this.success = false;
       this.previous = true;
       this.next = false;
     },
@@ -379,6 +390,7 @@ export default {
       } else {
         this.previous = false;
         this.next = true;
+        this.preloader = true;
         this.services = [];
         this.charge_departement();
         this.charge_service();
@@ -390,7 +402,6 @@ export default {
 
     // donnee des attributions
     charge_service() {
-      this.preloader = true;
       axios
         .create({
           headers: {
@@ -419,7 +430,6 @@ export default {
         });
     },
     charge_departement() {
-      this.preloader = true;
       axios
         .create({
           headers: {
@@ -443,76 +453,40 @@ export default {
         });
     },
     attribuer() {
-      var send_attribution = {
-        id_departement: this.departements[this.departement].id,
-        departement: this.departements[this.departement].nom,
-        id_services: [],
-        nom_services: [],
-      };
-      this.coche.forEach((item) => {
-
-        const data = {
-          id: "",
+      if (this.sauvegarder === []) {
+        console.log("erreur");
+        this.errors = true;
+        this.message = "Veuillez effectuer au minimum une attribution";
+      } else {
+        var send_attribution = {
+          id_departement: this.departements[this.departement].id,
+          departement: this.departements[this.departement].nom,
+          id_services: [],
+          nom_services: [],
         };
+        this.coche.forEach((item) => {
+          const data = {
+            id: "",
+          };
 
-        console.log("item :", item);
-        data.id = this.services[item - 1].id;
-        send_attribution.id_services.push(data);
-        send_attribution.nom_services.push(this.services[item - 1].nom);
-      });
+          console.log("item :", item);
+          data.id = this.services[item - 1].id;
+          send_attribution.id_services.push(data);
+          send_attribution.nom_services.push(this.services[item - 1].nom);
+        });
 
-      this.sauvegarder.push(send_attribution);
+        this.sauvegarder.push(send_attribution);
 
-      console.log("sauvegarder :", this.sauvegarder);
-      this.attribution_departements_services.push(send_attribution);
-      console.log(
-        "attribution_departements_services :",
-        this.attribution_departements_services
-      );
+        console.log("sauvegarder :", this.sauvegarder);
+        this.attribution_departements_services.push(send_attribution);
+        console.log(
+          "attribution_departements_services :",
+          this.attribution_departements_services
+        );
 
-      console.log("send attribution :", send_attribution);
-      this.coche = [];
-
-      // console.log(" departements coche :",this.coche);
-      // this.voir = true;
-      // console.log(this.voir);
-      // this.preloader = true;
-      // // var send_attribution = []
-
-      // console.log(
-      //   " departement attribué :",
-      //   this.departements[this.departement]
-      // );
-
-      // var send_data = {
-      //   position_departement: this.departement,
-      //   id_services: [],
-      // };
-      // var services_attribues = []
-      // this.coche.forEach((key, item) => {
-      //   console.log(" services attribués :",this.services[item]);
-      //   services_attribues.push(this.services[item])
-
-      //   // console.log("service attribué :", data.position_service);
-      //   // send_attribution.id_services.push(data);
-      //   // console.log("send attribution :", sen);
-      // });
-
-      // send_attribution = {
-      //   departement:   this.departements[this.departement],
-      //   id_services: services_attribues,
-      // };
-
-      // console.log("send attribution: ",send_attribution);
-      // this.attribution_departements_services.push(send_attribution)
-      // console.log("attribution departements services :",this.attribution_departements_services);
-
-      // this.sauvegarder.push(send_data);
-
-      // this.coche = [];
-      // console.log(this.sauvegarder);
-      // console.log("donnee coche:",send_data);
-      // console.log("departements_services:", sauvegarder);
+        console.log("send attribution :", send_attribution);
+        this.coche = [];
+      }
     },
     effacer(pk) {
       console.log("pk:", pk);
@@ -526,57 +500,63 @@ export default {
       console.log("new liste :", this.attribution_departements_services);
     },
     terminer() {
-      var clinique = {
-        nom: this.nom,
-        numero_identifiant: this.numero_identifiant,
-        telephone: this.telephone,
-        email: this.email,
-        telephone_urgence: this.telephone_urgence,
-        adresse_postale: this.addresse_postale,
-        adresse_physique: this.addresse_physique,
-        fax: this.fax,
-        departements_services: this.sauvegarder,
-      };
-      console.log(clinique);
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .post(chemin + "/creationClinique", clinique)
-        .then((response) => {
-          this.preloader = true;
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            (this.nom = ""),
-              (this.email = ""),
-              (this.numero_identifiant = ""),
-              (this.telephone = ""),
-              (this.telephone_urgence = ""),
-              (this.addresse_postale = ""),
-              (this.addresse_physique = ""),
-              (this.fax = ""),
-              (this.coche = []);
-            console.log("reussie");
+      this.message = "";
+      if (this.attribution_departements_services === "") {
+        this.errors = true;
+        this.message = "Veuillez effectuer au minimum une attribution";
+      } else {
+        var clinique = {
+          nom: this.nom,
+          numero_identifiant: this.numero_identifiant,
+          telephone: this.telephone,
+          email: this.email,
+          telephone_urgence: this.telephone_urgence,
+          adresse_postale: this.addresse_postale,
+          adresse_physique: this.addresse_physique,
+          fax: this.fax,
+          departements_services: this.sauvegarder,
+        };
+        console.log(clinique);
+        axios
+          .create({
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .post(chemin + "/creationClinique", clinique)
+          .then((response) => {
+            this.preloader = true;
+            if (response.data.state === true) {
+              this.preloader = false;
+              this.success = true;
+              this.message = response.data.message;
+              (this.nom = ""),
+                (this.email = ""),
+                (this.numero_identifiant = ""),
+                (this.telephone = ""),
+                (this.telephone_urgence = ""),
+                (this.addresse_postale = ""),
+                (this.addresse_physique = ""),
+                (this.fax = ""),
+                (this.coche = []);
+              console.log("reussie");
 
-            this.nom = "";
-            this.description = "";
-          } else {
+              this.nom = "";
+              this.description = "";
+            } else {
+              this.preloader = false;
+              this.errors = true;
+              this.message = response.data.message;
+            }
+          })
+          .catch((err) => {
             this.preloader = false;
             this.errors = true;
-            this.message = response.data.message;
-          }
-        })
-        .catch((err) => {
-          this.preloader = false;
-          this.errors = true;
-          console.log(err);
-        });
+            console.log(err);
+          });
+      }
     },
   },
 };

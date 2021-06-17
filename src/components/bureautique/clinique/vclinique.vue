@@ -2,6 +2,7 @@
   <div>
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
+      <!-- Voir le profil de la clinique -->
       <div class="content">
         <button class="btn btn-primary btn-rounded" v-on:click="retourner">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
@@ -109,6 +110,7 @@
           </ul>
 
           <div class="tab-content">
+            <!-- Script pour ajouter service -->
             <div class="tab-pane show active" id="about-cont">
               <div class="row">
                 <div class="col-md-12">
@@ -125,7 +127,7 @@
                         <label class=" col-md-2">Service(s):</label>
                         <div class="col-md-10">
                           <div class="checkbox">
-                            <p>{{erreur_message }}</p>
+                            <p>{{ erreur_message }}</p>
                             <label
                               v-for="(service, cle) in services_not"
                               :key="cle"
@@ -157,6 +159,7 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="content" v-if="ajout_departement_service">
                       <h3
                         class="card-title"
@@ -686,7 +689,7 @@ export default {
       identite: "",
       departements_final: [],
       // specialites: [],
-      erreur_message:"",
+      erreur_message: "",
       message: "",
       success: false,
       errors: false,
@@ -695,7 +698,7 @@ export default {
       assurances: [],
       services: [],
       departements: [],
-      services_not:[],
+      services_not: [],
 
       // Ajout analyses, assurance, departements/services
       ajout_analyse: false,
@@ -723,140 +726,7 @@ export default {
   },
   methods: {
     // fonction des chargements
-    charger_departement_service() {
-      console.log("charger departements");
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/getDepartementsNotInClinique/" + this.$route.params.id)
-        .then((response) => {
-          console.log("departements not in clinique :", response.data);
-          if (response.data.state === true) {
-            if (
-              response.data.departements.state === true &&
-              response.data.services.state === true
-            ) {
-              console.log("all is true");
-              this.departements = response.data.departements.data;
-              this.services = response.data.services.data;
-              console.log("services not in :", this.services);
-              console.log("departements not in :", this.departements);
-            }
-            this.preloader = false;
-          } else {
-            this.preloader = false;
-            console.log("erreur de chargement");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-      charger_assurances() {
-        this.list_assurance = true;
-        axios
-          .create({
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
-          .get(chemin + "/listAssurances")
-          .then((response) => {
-            if (response.data.state === true) {
-              console.log("charger assurances :", response.data.data);
-              this.preloader = false;
-              var donnee = response.data.data;
-              donnee.forEach((element) => {
-                if (element.statut === "actif") {
-                  this.assurances.push(element);
-                }
-              });
-            } else {
-              this.preloader = false;
-              console.log("erreur de chargement");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      },
-    modifier_clinique() {
-      console.log("modifier_clinique");
-      this.$router.push("/admin/modifier/" + this.$route.params.id);
-    },
-    retour_analyse() {
-      this.ajout_analyse = false;
-      this.list_analyse = true;
-    },
-    retour_assurance() {
-      this.ajout_assurance = false;
-      this.list_assurance = true;
-    },
-    retour_departement_service() {
-      this.ajout_departement_service = false;
-      this.list_departement_service = true;
-    },
-    retour_add_service() {
-      this.ajout_service = false;
-      this.list_departement_service = true;
-    },
-    ajouter_departement_service() {
-      console.log("departements cliquer");
-      this.ajout_departement_service = true;
-      this.list_departement_service = false;
-    },
-    add_service(pk) {
-      this.ajout_service = true;
-      this.list_departement_service = false;
-      this.departement = pk;
-      console.log(pk);
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/getServicesNotInDepartement/" + pk)
-        .then((response) => {
-          this.services_not = [];
-          this.erreur_message = "";
-          if (response.data.state === true) {
-            this.preloader = false;
-            console.log("charger not services :", response.data.data);
-            var donnee = response.data.data;
-            donnee.forEach((element) => {
-              if (element.statut === "actif") {
-                this.services_not.push(element);
-              }
-            });
-          } else {
-            this.preloader = false;
-            this.erreur_message = "Aucun services disponible"
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      console.log("ajouter");
-    },
-    ajouter_analyse() {
-      this.ajout_analyse = true;
-      this.list_analyse = false;
-      console.log("cliquer");
-    },
-    ajouter_assurance() {
-      this.ajout_assurance = true;
-      this.list_assurance = false;
-    },
+
     charger_analyses() {
       this.list_analyse = true;
       this.preloader = true;
@@ -941,9 +811,150 @@ export default {
           console.log("departements final :", this.departements_final[0]);
         });
     },
+    charger_departement_service() {
+      console.log("charger departements");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/getDepartementsNotInClinique/" + this.$route.params.id)
+        .then((response) => {
+          console.log("departements not in clinique :", response.data);
+          if (response.data.state === true) {
+            if (
+              response.data.departements.state === true &&
+              response.data.services.state === true
+            ) {
+              console.log("all is true");
+              this.departements = response.data.departements.data;
+              this.services = response.data.services.data;
+              console.log("services not in :", this.services);
+              console.log("departements not in :", this.departements);
+            }
+            this.preloader = false;
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_assurances() {
+      this.list_assurance = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listAssurances")
+        .then((response) => {
+          if (response.data.state === true) {
+            console.log("charger assurances :", response.data.data);
+            this.preloader = false;
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if (element.statut === "actif") {
+                this.assurances.push(element);
+              }
+            });
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    // Fonction de retour
+
+    retour_analyse() {
+      this.ajout_analyse = false;
+      this.list_analyse = true;
+    },
+    retour_assurance() {
+      this.ajout_assurance = false;
+      this.list_assurance = true;
+    },
+    retour_departement_service() {
+      this.ajout_departement_service = false;
+      this.list_departement_service = true;
+    },
+    retour_add_service() {
+      this.ajout_service = false;
+      this.list_departement_service = true;
+    },
     retourner() {
       this.$router.push("/admin/clinique");
     },
+
+    // fonction d'ajout
+    ajouter_departement_service() {
+      console.log("departements cliquer");
+      this.ajout_departement_service = true;
+      this.list_departement_service = false;
+    },
+    add_service(pk) {
+      this.ajout_service = true;
+      this.list_departement_service = false;
+      this.departement = pk;
+      console.log(pk);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/getServicesNotInDepartement/" + pk)
+        .then((response) => {
+          this.services_not = [];
+          this.erreur_message = "";
+          if (response.data.state === true) {
+            this.preloader = false;
+            console.log("charger not services :", response.data.data);
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if (element.statut === "actif") {
+                this.services_not.push(element);
+              }
+            });
+          } else {
+            this.preloader = false;
+            this.erreur_message = "Aucun services disponible";
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log("ajouter");
+    },
+    ajouter_analyse() {
+      this.ajout_analyse = true;
+      this.list_analyse = false;
+      console.log("cliquer");
+    },
+    ajouter_assurance() {
+      this.ajout_assurance = true;
+      this.list_assurance = false;
+    },
+
+    modifier_clinique() {
+      console.log("modifier_clinique");
+      this.$router.push("/admin/modifier/" + this.$route.params.id);
+    },
+
     desactiver_depart(pk) {
       this.preloader = true;
       console.log(pk);
@@ -979,6 +990,7 @@ export default {
           console.log(err);
         });
     },
+
     service(pk) {
       this.$router.push("/departement/service/" + pk);
     },
@@ -1031,41 +1043,59 @@ export default {
       console.log("new liste :", this.attribution_departements_services);
     },
 
-
-
-
-    terminer_ajout_service()  {
+    terminer_ajout_service() {
       console.log("ajout services");
       console.log("id du departement ajout service:", this.departement);
+      console.log("service coché:", this.coche);
       var send_attribution = {
         id_departement: this.departement,
         id_services: [],
       };
-      this.coche.forEach((item) => {
+      this.coche.forEach((service) => {
         const data = {
           id: "",
         };
-        console.log("item :", item);
-        console.log("services :", this.services[item - 1].nom);
-        data.id = this.services[item - 1].id;
-        send_attribution.id_services.push(data);
-        send_attribution.nom_services.push(this.services[item - 1].nom);
-        console.log("send attribution :", send_attribution);
-        // console.log("this.services[item - 1].nom ",this.services[item - 1].nom);
+        data.id = service;
+        console.log("service :", data);
+        send_attribution.id_services.push(data)
       });
+      console.log(send_attribution);
 
-      this.sauvegarder.push(send_attribution);
+      var ajout_service = {
+        clinique_id : this.$route.params.id,
+        departements_services: send_attribution,
+      };
+      console.log(ajout_service);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/addCliniqueDepartementService", ajout_service)
+        .then((response) => {
+          this.preloader = true;
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            console.log("reussie");
 
-      console.log("sauvegarder :", this.sauvegarder);
-      this.attribution_departements_services.push(send_attribution);
-      console.log(
-        "attribution_departements_services :",
-        this.attribution_departements_services
-      );
-
-      console.log("send attribution :", send_attribution);
-      this.coche = [];
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          this.errors = true;
+          console.log(err);
+        });
     },
+
     terminer_departement_service() {
       console.log("id de la clinique", this.$route.params.id);
       console.log(
@@ -1106,9 +1136,9 @@ export default {
         });
     },
 
-
     // fonction pour effacer
     effacer_service(service_id, departement_id) {
+      this.prealoader = true;
       console.log("liste departements services :", this.departements_final[0]);
       console.log("service supprimé");
       console.log("id du service:", service_id);
@@ -1128,7 +1158,7 @@ export default {
           service_id: service_id,
         })
         .then((response) => {
-          window.location.reload()
+          window.location.reload();
           console.log(response.data);
           console.log("service supprimé");
         })
@@ -1137,8 +1167,9 @@ export default {
           console.log(err);
         });
     },
-    effacer_departement(pk){
-      console.log("departement id :",pk);
+
+    effacer_departement(pk) {
+      console.log("departement id :", pk);
       axios
         .create({
           headers: {
@@ -1152,7 +1183,7 @@ export default {
           departement_id: pk,
         })
         .then((response) => {
-          window.location.reload()
+          window.location.reload();
           console.log(response.data);
           console.log("departement supprimé");
         })
@@ -1160,7 +1191,7 @@ export default {
           this.preloader = false;
           console.log(err);
         });
-    }
+    },
   },
 };
 </script>

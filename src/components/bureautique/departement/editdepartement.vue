@@ -47,7 +47,7 @@
           <div class="col-lg-8 offset-lg-2">
             <form @submit.prevent="modifier">
               <div class="form-group">
-                <label>Nom du departement</label>
+                <label>Nom du departement <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="nom" />
               </div>
               <div class="form-group">
@@ -342,6 +342,7 @@ export default {
     loader,
   },
   created() {
+    this.preloader = true;
     axios
       .create({
         headers: {

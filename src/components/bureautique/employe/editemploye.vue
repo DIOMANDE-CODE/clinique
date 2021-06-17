@@ -55,13 +55,13 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Prénom</label>
+                    <label>Prénom <span class="text-danger">*</span></label>
                     <input class="form-control" type="text" v-model="prenom" />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Nationalité</label>
+                    <label>Nationalité <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -90,7 +90,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Addresse du domicile</label>
+                    <label>Addresse du domicile <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -99,7 +99,7 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Situation matrimoniale</label>
+                  <label class="display-block">Situation matrimoniale <span class="text-danger">*</span></label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -154,7 +154,7 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Genre</label>
+                  <label class="display-block">Genre <span class="text-danger">*</span></label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -189,7 +189,7 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Profil</label>
+                  <label class="display-block">Profil <span class="text-danger">*</span></label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -510,6 +510,7 @@ export default {
     };
   },
   created() {
+    this.preloader = true;
     axios
       .create({
         headers: {

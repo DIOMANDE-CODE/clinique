@@ -50,7 +50,7 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="form-group">
-                <label>Nom de l'assurance</label>
+                <label>Nom de l'assurance <span class="text-danger">*</span></label>
                 <input
                   class="form-control"
                   type="text"

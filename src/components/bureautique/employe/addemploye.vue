@@ -98,17 +98,28 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Date de naissance </label>
-                    <input type="date" class="form-control" v-model="date" />
+                    <label
+                      >Date de naissance <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      v-model="date"
+                      required
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Addresse du domicile</label>
+                    <label
+                      >Addresse du domicile
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
                       v-model="addresse"
+                      required
                     />
                   </div>
                 </div>
@@ -164,6 +175,7 @@
                       id="employee_inactive"
                       value="veuf"
                       v-model="situation"
+                      required
                     />
                     <label class="form-check-label" for="employee_inactive">
                       Veuf(ve)
@@ -205,12 +217,19 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label>Email <span class="text-danger">*</span></label>
-                    <input class="form-control" type="email" v-model="email" />
+                    <input
+                      class="form-control"
+                      type="email"
+                      v-model="email"
+                      required
+                    />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label> Mot de passe </label>
+                    <label>
+                      Mot de passe <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="password"
@@ -225,6 +244,7 @@
                   </label>
                   <div class="col-md-12">
                     <select
+                      required
                       class="form-control clinique"
                       v-model="clinique"
                       @change="charger_departement()"
@@ -245,6 +265,7 @@
                   </label>
                   <div class="col-md-12">
                     <select
+                      required
                       class="form-control"
                       v-model="departement"
                       @change="charger_service()"
@@ -269,6 +290,7 @@
                     <select class="form-control" v-model="service">
                       <option value="0" disabled>Choisissez son service</option>
                       <option
+                        required
                         :value="serv.service_id"
                         v-for="serv in services"
                         v-bind:key="serv.id"
@@ -310,7 +332,10 @@
                 </div>
               </div>
               <div class="m-t-20 text-center">
-                <button class="btn btn-danger submit-btn">
+                <button
+                  class="btn btn-danger submit-btn"
+                  v-on:click="renitialiser"
+                >
                   Réinitialiser</button
                 >&nbsp;&nbsp;
                 <button
@@ -374,11 +399,44 @@ export default {
     retourner() {
       this.$router.push("/admin/employe");
     },
+    renitialiser() {
+      (this.nom = ""),
+        (this.prenom = ""),
+        (this.nationnalite = ""),
+        (this.telephone = ""),
+        (this.date = ""),
+        (this.addresse = ""),
+        (this.situation = ""),
+        (this.genre = ""),
+        (this.email = ""),
+        (this.code = ""),
+        (this.role = ""),
+        (this.clinique = ""),
+        (this.departement = ""),
+        (this.service = "");
+    },
     inscrire() {
       console.log("id service:", this.service);
       console.log("id clinique:", this.clinique);
       console.log("id departement", this.departement);
-      if (this.nom === "" || this.prenom) this.preloader = true;
+      if (
+        this.nom === "" ||
+        this.prenom === "" ||
+        this.nationnalite === "" ||
+        this.nationnalite === "" ||
+        this.telephone === "" ||
+        this.date === "" ||
+        this.addresse === "" ||
+        this.situation === "" ||
+        this.genre === "" ||
+        this.email === "" ||
+        this.code === "" ||
+        this.role === "" ||
+        this.clinique === "" ||
+        this.departement === "" ||
+        this.service === ""
+      )
+        this.preloader = true;
       var user = {
         nom: this.nom,
         prenoms: this.prenom,

@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Telephone</label>
+                    <label>Telephone <span class="text-danger">*</span></label>
                     <input
                       class="form-control "
                       type="text"
@@ -90,7 +90,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Email</label>
+                    <label>Email <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="email"
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Numero d'urgence</label>
+                    <label>Numero d'urgence <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -112,7 +112,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Adresse physique</label>
+                    <label>Adresse physique <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -125,7 +125,7 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Adresse postale</label>
+                    <label>Adresse postale <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -135,7 +135,7 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Fax</label>
+                    <label>Fax <span class="text-danger">*</span></label>
                     <input class="form-control" type="text" v-model="fax" />
                   </div>
                 </div>
@@ -185,6 +185,7 @@ export default {
     loader,
   },
   created() {
+    this.preloader = true;
     axios
       .create({
         headers: {
