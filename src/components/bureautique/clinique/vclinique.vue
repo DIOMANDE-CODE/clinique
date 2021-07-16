@@ -52,6 +52,7 @@
                             email
                           }}</span>
                         </li>
+
                         <li>
                           <span
                             class="title"
@@ -107,10 +108,19 @@
                 >Assurances</a
               >
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#bottom-tab4" data-toggle="tab"
+                >Workflow</a
+              >
+            </li>
           </ul>
 
           <div class="tab-content">
+
+
             <!-- Script pour ajouter service -->
+
+            
             <div class="tab-pane show active" id="about-cont">
               <div class="row">
                 <div class="col-md-12">
@@ -211,6 +221,7 @@
                             </div>
                           </div>
                           <button
+                            v-if="terminer"
                             class="btn btn-success"
                             style="position:absolute; left:85%;"
                             v-on:click="terminer_departement_service"
@@ -288,6 +299,13 @@
                         class="fa fa-plus-circle m-r-5"
                         style="cursor:pointer; color:blue;"
                         v-on:click="ajouter_departement_service"
+                      ></i
+                      >&nbsp;&nbsp;
+                      <i
+                        class="fa fa-rotate-right m-r-5"
+                        style="cursor:pointer; color:green;"
+                        v-on:click="actualiser"
+                        alt="actualiser"
                       ></i>
                     </h3>
                     <div class="experience-box" v-if="list_departement_service">
@@ -378,7 +396,7 @@
                         <div class="col-md-10">
                           <div class="checkbox">
                             <label
-                              v-for="(analyse, cle) in analyses"
+                              v-for="(analyse, cle) in analyses_empty"
                               :key="cle"
                             >
                               <input
@@ -413,6 +431,13 @@
                         class="fa fa-plus-circle m-r-5"
                         style="cursor:pointer; color:blue;"
                         v-on:click="ajouter_analyse"
+                      ></i
+                      >&nbsp;&nbsp;
+                      <i
+                        class="fa fa-rotate-right m-r-5"
+                        style="cursor:pointer; color:green;"
+                        v-on:click="actualiser"
+                        alt="actualiser"
                       ></i>
                     </h3>
 
@@ -428,7 +453,7 @@
                                 <th>Denominations</th>
                                 <th>Cotations</th>
                                 <th>Status</th>
-                                <th class="text-right">Actions</th>
+                                <!--<th class="text-right">Actions</th> -->
                               </tr>
                             </thead>
                             <tbody>
@@ -449,7 +474,7 @@
                                     analyse.statut
                                   }}</span>
                                 </td>
-                                <td class="text-right">
+                                <!-- <td class="text-right">
                                   <div class="dropdown dropdown-action">
                                     <a
                                       href="#"
@@ -467,42 +492,15 @@
                                         href="#"
                                         data-toggle="modal"
                                         data-target="#delete_employee"
-                                        v-on:click="Voir(analyse.id)"
-                                        >Voir +</a
-                                      >
-                                      <a
-                                        v-if="analyse.statut === 'actif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="modifier(analyse.id)"
-                                        ><i class="fa fa-pencil m-r-5"></i
-                                        >Modifier</a
-                                      >
-                                      <a
-                                        v-if="analyse.statut === 'actif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="desactiver(analyse.id)"
+                                        v-on:click="
+                                          supprimer_analyse(analyse.id)
+                                        "
                                         ><i class="fa fa-trash-o m-r-5"></i
-                                        >désactiver la clinique</a
-                                      >
-                                      <a
-                                        v-if="analyse.statut === 'inactif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="activer(analyse.id)"
-                                        ><i class="fa fa-trash-o m-r-5"></i
-                                        >Activer la clinique</a
+                                        >supprimer l'analyse</a
                                       >
                                     </div>
                                   </div>
-                                </td>
+                                </td> -->
                               </tr>
                             </tbody>
                           </table>
@@ -513,6 +511,7 @@
                 </div>
               </div>
             </div>
+
 
             <!-- Assurance -->
 
@@ -532,7 +531,7 @@
                         <div class="col-md-10">
                           <div class="checkbox">
                             <label
-                              v-for="(assurance, cle) in assurances"
+                              v-for="(assurance, cle) in assurances_empty"
                               :key="cle"
                             >
                               <input
@@ -568,6 +567,13 @@
                         class="fa fa-plus-circle m-r-5"
                         style="cursor:pointer; color:blue;"
                         v-on:click="ajouter_assurance"
+                      ></i
+                      >&nbsp;&nbsp;
+                      <i
+                        class="fa fa-rotate-right m-r-5"
+                        style="cursor:pointer; color:green;"
+                        v-on:click="actualiser"
+                        alt="actualiser"
                       ></i>
                     </h3>
                     <div class="row" v-if="list_assurance">
@@ -581,7 +587,7 @@
                                 <th>Assurances</th>
                                 <th>Entreprises</th>
                                 <th>Status</th>
-                                <th class="text-right">Actions</th>
+                                <!--<th class="text-right">Actions</th>-->
                               </tr>
                             </thead>
                             <tbody>
@@ -601,7 +607,7 @@
                                     assurance.statut
                                   }}</span>
                                 </td>
-                                <td class="text-right">
+                                <!-- <td class="text-right">
                                   <div class="dropdown dropdown-action">
                                     <a
                                       href="#"
@@ -619,47 +625,269 @@
                                         href="#"
                                         data-toggle="modal"
                                         data-target="#delete_employee"
-                                        v-on:click="Voir(assurance.id)"
-                                        >Voir +</a
-                                      >
-                                      <a
-                                        v-if="assurance.statut === 'actif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="modifier(assurance.id)"
-                                        ><i class="fa fa-pencil m-r-5"></i
-                                        >Modifier</a
-                                      >
-                                      <a
-                                        v-if="assurance.statut === 'actif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="desactiver(assurance.id)"
+                                        v-on:click="
+                                          supprimer_assurance(assurance.id)
+                                        "
                                         ><i class="fa fa-trash-o m-r-5"></i
-                                        >désactiver la clinique</a
-                                      >
-                                      <a
-                                        v-if="assurance.statut === 'inactif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="activer(assurance.id)"
-                                        ><i class="fa fa-trash-o m-r-5"></i
-                                        >Activer la clinique</a
+                                        >supprimer l'assurance</a
                                       >
                                     </div>
                                   </div>
-                                </td>
+                                </td>-->
                               </tr>
                             </tbody>
                           </table>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Workflow -->
+
+            <div class="tab-pane show active" id="bottom-tab4">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card-box">
+                    <div class="content">
+                      <h3
+                        v-if="ajout_service"
+                        class="card-title"
+                        style="color:black; font-weight: bold;"
+                      >
+                        Ajouter des services
+                      </h3>
+                      <div class="form-group row" v-if="ajout_service_workflow">
+                        <label class=" col-md-2">Service(s):</label>
+                        <div class="col-md-10">
+                          <div class="checkbox">
+                            <p>{{ erreur_message }}</p>
+                            <label
+                              v-for="(service, cle) in services_not"
+                              :key="cle"
+                            >
+                              <input
+                                :value="service.id"
+                                v-model="coche"
+                                type="checkbox"
+                                name="checkbox"
+                                required
+                              />
+                              {{ service.nom }}&nbsp;&nbsp;&nbsp;
+                            </label>
+                          </div>
+                          <button
+                            class="btn btn-success"
+                            style="position:absolute; left:85%;"
+                            v-on:click="terminer_ajout_service"
+                          >
+                            Ajouter
+                          </button>
+                          <button
+                            class="btn btn-dark"
+                            style="position:absolute; left:65%"
+                            v-on:click="retour_add_service"
+                          >
+                            Precedent
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="content" v-if="ajout_workflow">
+                      <h3
+                        class="card-title"
+                        style="color:black; font-weight: bold;"
+                      >
+                        Rélier des services
+                      </h3>
+                      <div class="form-group row">
+                        <label class=" col-md-2">Service source:</label>
+                        <div class="col-md-10">
+                          <div class="form-group row">
+                            <div class="col-md-10">
+                              <select
+                                class="form-control"
+                                v-model="service_source"
+                              >
+                                <option
+                                  :value="cle"
+                                  v-for="(depart, cle) in services_workflow"
+                                  :key="cle"
+                                  >{{ depart.nom }}</option
+                                >
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label
+                              class="col-form-label col-md-2"
+                              style="position:absolute; left:-20%;"
+                              >Destination(s):</label
+                            >
+                            <div class="col-md-10">
+                              <div class="checkbox">
+                                <label
+                                  v-for="(serv, cle) in services_workflow"
+                                  :key="cle"
+                                >
+                                  <input
+                                    :value="serv.id"
+                                    v-model="coche"
+                                    type="checkbox"
+                                    name="checkbox"
+                                    required
+                                  />
+                                  {{ serv.nom }}&nbsp;&nbsp;&nbsp;
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            v-if="terminer_workflow"
+                            class="btn btn-success"
+                            style="position:absolute; left:85%;"
+                            v-on:click="terminer_ajout_workflow"
+                          >
+                            Terminer
+                          </button>
+                          <button
+                            class="btn btn-warning"
+                            style="position:absolute; left:45%; color:white;"
+                            v-on:click="attribuer_workflow"
+                          >
+                            Rélier et continuer/terminer
+                          </button>
+                          <button
+                            class="btn btn-dark"
+                            style="position:absolute; left:-15%"
+                            v-on:click="retour_workflow"
+                          >
+                            Precedent
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="tab-pane show active"
+                      id="about-cont"
+                      v-if="ajout_workflow"
+                    >
+                      <br /><br />
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="card-box">
+                            <h3 class="card-title">
+                              Detail du workflow
+                            </h3>
+                            <div class="experience-box">
+                              <ul class="experience-list">
+                                <li
+                                  v-for="(attribution_departement_service,
+                                  cle) in attribution_departements_services_workflow"
+                                  :key="cle"
+                                >
+                                  <div class="experience-user">
+                                    <div class="before-circle"></div>
+                                  </div>
+                                  <div class="experience-content">
+                                    <div class="timeline-content">
+                                      <a class="name">{{
+                                        attribution_departement_service.service_source
+                                      }}</a
+                                      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                        class="fa fa-trash-o m-r-5"
+                                        style="cursor:pointer; color:red;"
+                                        v-on:click="effacer_workflow(cle)"
+                                      ></i
+                                      ><br /><br />
+                                      &nbsp;&nbsp;<span
+                                        v-for="service in attribution_departement_service.nom_services"
+                                        :key="service.id"
+                                        class="custom-badge status-green"
+                                        >{{ service }}</span
+                                      >&nbsp;&nbsp;
+                                    </div>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <h3 class="card-title" v-if="list_workflow">
+                      Workflow de la clinique &nbsp; &nbsp;<i
+                        class="fa fa-plus-circle m-r-5"
+                        style="cursor:pointer; color:blue;"
+                        v-on:click="ajouter_workflow"
+                      ></i
+                      >&nbsp;&nbsp;
+                      <i
+                        class="fa fa-rotate-right m-r-5"
+                        style="cursor:pointer; color:green;"
+                        v-on:click="actualiser"
+                        alt="actualiser"
+                      ></i>
+                    </h3>
+                    <div class="experience-box" v-if="list_workflow">
+                      <ul class="experience-list">
+                        <li
+                          v-for="(workflow, cle) in workflow_final"
+                          :key="cle"
+                        >
+                          <div class="experience-user">
+                            <div class="before-circle"></div>
+                          </div>
+                          <div class="experience-content">
+                            <div class="timeline-content">
+                              <a class="name">{{ workflow.source.nom }}</a
+                              >&nbsp;&nbsp;&nbsp;<!--<i
+                                class="fa fa-plus-circle m-r-5"
+                                style="cursor:pointer; color:blue;"
+                                v-on:click="
+                                  ajouter_service(departement.departement_id)
+                                "
+                              ></i
+                              >--><br /><br />
+                              <div class="row">
+                                <div
+                                  v-for="(service_lie,
+                                  cle) in workflow.destinations"
+                                  :key="cle"
+                                >
+                                  <span
+                                    v-if="service_lie.status === 'inactif'"
+                                    class="custom-badge status-red"
+                                    >{{ service_lie.nom }} </span
+                                  >&nbsp;&nbsp;
+                                  <span
+                                    v-if="service_lie.statut === 'actif'"
+                                    class="custom-badge status-green"
+                                    >{{ service_lie.nom }} </span
+                                  >&nbsp;
+                                  <i
+                                    style="color:red; cursor:pointer;"
+                                    v-on:click="
+                                      effacer_service_workflow_interne(
+                                        workflow.source.id,
+                                        service_lie.id
+                                      )
+                                    "
+                                    class="fa fa-minus-circle"
+                                    aria-hidden="true"
+                                  ></i>
+                                </div>
+                                &nbsp;&nbsp;&nbsp;
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -695,7 +923,9 @@ export default {
       errors: false,
       preloader: false,
       analyses: [],
+      analyses_empty: [],
       assurances: [],
+      assurances_empty: [],
       services: [],
       departements: [],
       services_not: [],
@@ -711,21 +941,123 @@ export default {
       coche: [],
       sauvegarder: [],
       attribution_departements_services: [],
+      terminer: false,
+
+      // Workflow
+      ajout_workflow: false,
+      list_workflow: false,
+      services_workflow: [],
+      service_source: "",
+      attribution_departements_services_workflow: [],
+      terminer_workflow: false,
+      sauvegarder_workflow: [],
+      workflow_finale: [],
     };
   },
   components: {
     loader,
   },
   created() {
-    this.preloader = true;
     this.chargement();
-    this.chargement_depart();
-    this.charger_analyses();
-    this.charger_assurances();
-    this.charger_departement_service();
+    this.workflow();
   },
   methods: {
     // fonction des chargements
+    actualiser() {
+      window.location.reload();
+    },
+    workflow() {
+      this.list_workflow = true;
+      console.log("service workflow");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/getWorkflow/" + this.$route.params.id)
+        .then((response) => {
+          console.log(response.data);
+          var workflow = [];
+          console.log("response :", response.data);
+          console.log("response departements:", response.data);
+          workflow = response.data;
+          console.log("workflows", workflow);
+          this.workflow_final = workflow.data;
+          console.log("workflow final :", this.workflow_final);
+        });
+    },
+
+    retour_workflow() {
+      (this.services_workflow = []), (this.list_workflow = true);
+      this.ajout_workflow = false;
+    },
+
+    effacer_service_workflow_interne(source_id, destination_service_id) {
+      this.prealoader = true;
+      console.log("liste departements services :", this.workflow_final[0]);
+      console.log("service supprimé");
+      console.log("id du service:", destination_service_id);
+      console.log("id du departement :", source_id);
+
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/deleteWorkflow", {
+          clinique_id: this.$route.params.id,
+          destination_service_id: destination_service_id,
+          source_service_id: source_id,
+        })
+        .then((response) => {
+          window.location.reload();
+          console.log(response.data);
+          console.log("service supprimé");
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+
+    ajouter_workflow() {
+      this.list_workflow = false;
+      this.ajout_workflow = true;
+      console.log("ajouter");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listService")
+        .then((response) => {
+          console.log("service workflow :", response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if (element.statut === "actif") {
+                this.services_workflow.push(element);
+              }
+            });
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
 
     charger_analyses() {
       this.list_analyse = true;
@@ -740,6 +1072,7 @@ export default {
         })
         .get(chemin + "/listAnalyses")
         .then((response) => {
+          console.log("success");
           if (response.data.state === true) {
             this.preloader = false;
             console.log("charger analyses :", response.data.data);
@@ -749,8 +1082,74 @@ export default {
                 this.analyses.push(element);
               }
             });
+
+            this.charger_assurances();
           } else {
             this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_analyses_empty() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listAnalysesEmpty/" + this.$route.params.id)
+        .then((response) => {
+          console.log("success");
+          if (response.data.state === true) {
+            this.preloader = false;
+            console.log("charger analyses :", response.data.data);
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if (element.statut === "actif") {
+                this.analyses_empty.push(element);
+              }
+            });
+          } else {
+            this.preloader = false;
+            this.message = "Aucune analyse a attribué";
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    chargement_assurance_empty() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listAssurancesEmpty/" + this.$route.params.id)
+        .then((response) => {
+          console.log("success");
+          if (response.data.state === true) {
+            this.preloader = false;
+            console.log("charger analyses :", response.data.data);
+            var donnee = response.data.data;
+            donnee.forEach((element) => {
+              if (element.statut === "actif") {
+                this.assurance_empty.push(element);
+              }
+            });
+          } else {
+            this.preloader = false;
+            this.message = "Aucune assurance a attribué";
             console.log("erreur de chargement");
           }
         })
@@ -782,6 +1181,8 @@ export default {
             this.addresse_physique = response.data.data.adresse_physique;
             this.fax = response.data.data.fax;
             this.adresse_postale = response.data.data.adresse_postale;
+
+            this.chargement_depart();
           } else {
             this.preloader = false;
             console.log(response.data.response);
@@ -809,6 +1210,8 @@ export default {
           console.log("departements", departements);
           this.departements_final.push(departements);
           console.log("departements final :", this.departements_final[0]);
+
+          this.charger_analyses();
         });
     },
     charger_departement_service() {
@@ -835,7 +1238,7 @@ export default {
               console.log("services not in :", this.services);
               console.log("departements not in :", this.departements);
             }
-            this.preloader = false;
+            
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -866,6 +1269,8 @@ export default {
                 this.assurances.push(element);
               }
             });
+
+            this.charger_departement_service();
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -887,6 +1292,7 @@ export default {
       this.list_assurance = true;
     },
     retour_departement_service() {
+      this.chargement_depart();
       this.ajout_departement_service = false;
       this.list_departement_service = true;
     },
@@ -943,6 +1349,7 @@ export default {
     ajouter_analyse() {
       this.ajout_analyse = true;
       this.list_analyse = false;
+      this.charger_analyses_empty();
       console.log("cliquer");
     },
     ajouter_assurance() {
@@ -997,6 +1404,7 @@ export default {
 
     attribuer() {
       console.log("attribuer");
+      this.terminer = true;
       console.log(this.departements[this.departement]);
       console.log(this.coche);
       var send_attribution = {
@@ -1031,6 +1439,49 @@ export default {
       this.coche = [];
     },
 
+    attribuer_workflow() {
+      this.terminer_workflow = true;
+      console.log("attribuer");
+      console.log(
+        "services source:",
+        this.services_workflow[this.service_source]
+      );
+      console.log(" services coche : ", this.coche);
+      var send_attribution = {
+        source_id: this.services_workflow[this.service_source].id,
+        service_source: this.services_workflow[this.service_source].nom,
+        destination_service_id: [],
+        nom_services: [],
+      };
+      console.log("services :", this.services_workflow);
+      this.coche.forEach((item) => {
+        const data = {
+          id: "",
+        };
+        console.log("item foreach:", item);
+        console.log("services :", this.services_workflow[item - 1]);
+        data.id = this.services_workflow[item - 1].id;
+        send_attribution.destination_service_id.push(data);
+        send_attribution.nom_services.push(
+          this.services_workflow[item - 1].nom
+        );
+        console.log("send attribution :", send_attribution);
+        // console.log("this.services[item - 1].nom ",this.services[item - 1].nom);
+      });
+
+      this.sauvegarder_workflow.push(send_attribution);
+
+      console.log("sauvegarder :", this.sauvegarder_workflow);
+      this.attribution_departements_services_workflow.push(send_attribution);
+      console.log(
+        "attribution_departements_services :",
+        this.attribution_departements_services_workflow
+      );
+
+      console.log("send attribution :", send_attribution);
+      this.coche = [];
+    },
+
     effacer(pk) {
       console.log("pk:", pk);
       console.log(
@@ -1043,7 +1494,33 @@ export default {
       console.log("new liste :", this.attribution_departements_services);
     },
 
+    effacer_workflow(pk) {
+      console.log("departement id :", pk);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/updateToDeleteDepartementClinique", {
+          clinique_id: this.$route.params.id,
+          departement_id: pk,
+        })
+        .then((response) => {
+          window.location.reload();
+          console.log(response.data);
+          console.log("departement supprimé");
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+
     terminer_ajout_service() {
+      const service_ajoute = [];
       console.log("ajout services");
       console.log("id du departement ajout service:", this.departement);
       console.log("service coché:", this.coche);
@@ -1057,13 +1534,14 @@ export default {
         };
         data.id = service;
         console.log("service :", data);
-        send_attribution.id_services.push(data)
+        send_attribution.id_services.push(data);
       });
       console.log(send_attribution);
+      service_ajoute.push(send_attribution);
 
       var ajout_service = {
-        clinique_id : this.$route.params.id,
-        departements_services: send_attribution,
+        clinique_id: this.$route.params.id,
+        departements_services: service_ajoute,
       };
       console.log(ajout_service);
       axios
@@ -1077,12 +1555,12 @@ export default {
         .post(chemin + "/addCliniqueDepartementService", ajout_service)
         .then((response) => {
           this.preloader = true;
+          console.log("result :", response);
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
             console.log("reussie");
-
           } else {
             this.preloader = false;
             this.errors = true;
@@ -1103,9 +1581,12 @@ export default {
         this.departements[this.departement].id
       );
       console.log("liste complete :", this.sauvegarder);
+
       var service_departement = {
+        clinique_id: this.$route.params.id,
         departements_services: this.sauvegarder,
       };
+
       console.log(service_departement);
       axios
         .create({
@@ -1115,8 +1596,114 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/creationClinique", service_departement)
+        .post(chemin + "/addCliniqueDepartementService", service_departement)
         .then((response) => {
+          console.log(" response data :", response.data);
+          this.preloader = true;
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.sauvegarder = [];
+            console.log("reussie");
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          this.errors = true;
+          console.log(err);
+        });
+    },
+
+    terminer_analyse() {
+      console.log("id de la clinique", this.$route.params.id);
+      console.log("sauvegarder", this.coche);
+      var analyse_ajouter = [];
+      this.coche.forEach((item) => {
+        const data = {
+          id: "",
+        };
+        console.log("item :", item);
+        data.id = item;
+        analyse_ajouter.push(data);
+      });
+      console.log(analyse_ajouter);
+      this.coche = [];
+
+      var analyse = {
+        clinique_id: this.$route.params.id,
+        analyses: analyse_ajouter,
+      };
+
+      console.log("analyse: ", analyse);
+      console.log(analyse);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/attributionAnalysesClinique", analyse)
+        .then((response) => {
+          console.log(" response data :", response.data);
+          this.preloader = true;
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            this.message = response.data.message;
+            console.log("reussie");
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          this.errors = true;
+          console.log(err);
+        });
+    },
+
+    terminer_assurance() {
+      console.log("id de la clinique", this.$route.params.id);
+      console.log("sauvegarder", this.coche);
+      var assurance_ajouter = [];
+      this.coche.forEach((item) => {
+        const data = {
+          id: "",
+        };
+        console.log("item :", item);
+        data.id = item;
+        assurance_ajouter.push(data);
+      });
+      console.log(assurance_ajouter);
+      this.coche = [];
+
+      var assurance = {
+        clinique_id: this.$route.params.id,
+        assurances: assurance_ajouter,
+      };
+
+      console.log("analyse: ", assurance);
+      console.log(assurance);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/attributionAssurancesClinique", assurance)
+        .then((response) => {
+          console.log(" response data :", response.data);
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
@@ -1186,6 +1773,99 @@ export default {
           window.location.reload();
           console.log(response.data);
           console.log("departement supprimé");
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+
+    terminer_ajout_workflow() {
+      console.log("id de la clinique", this.$route.params.id);
+      console.log("liste complete :", this.sauvegarder_workflow);
+
+      var workflow = {
+        clinique_id: this.$route.params.id,
+        source_service_id: this.sauvegarder_workflow,
+      };
+
+      console.log(workflow);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/createWorkflow", workflow)
+        .then((response) => {
+          console.log(" response data :", response.data);
+          this.preloader = true;
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.success = true;
+            console.log("success");
+            this.message = response.data.message;
+            this.sauvegarder = [];
+            console.log("reussie");
+          } else {
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          this.errors = true;
+          console.log(err);
+        });
+    },
+
+    supprimer_analyse(pk) {
+      console.log("analyse id :", pk);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverCliniqueAnanlyse", {
+          clinique_id: this.$route.params.id,
+          analyses_id: pk,
+          statut: "inactif",
+        })
+        .then((response) => {
+          window.location.reload();
+          console.log(response.data);
+          console.log("analyse supprimé");
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+
+    supprimer_assurance(pk) {
+      console.log("assurance id :", pk);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/updateToDeleteDepartementClinique", {
+          clinique_id: this.$route.params.id,
+          assurance_id: pk,
+        })
+        .then((response) => {
+          window.location.reload();
+          console.log(response.data);
+          console.log("assurance supprimé");
         })
         .catch((err) => {
           this.preloader = false;

@@ -388,9 +388,8 @@ export default {
               this.message = response.data.message;
               console.log("reussie");
 
-              this.code = "";
-              this.denomination = "";
-              this.cotation = "";
+              this.nom = "";
+              this.description = "";
             } else {
               this.preloader = false;
               this.errors = true;

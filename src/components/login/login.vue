@@ -86,7 +86,8 @@ export default {
                 this.preloader = false
                 console.log('token :',response.data.token);
                 console.log(('User info :',response.data.user));
-                localStorage.setItem('token',response.data.token)
+                localStorage.setItem('token',response.data.token);
+                this.$store.dispatch('setCurrentIdentifiant',response.data.user.id);
                 this.$router.push('/bureautique')
               }
             })

@@ -43,8 +43,48 @@ import editanalyse from '../views/bureautique/analyse/editanalyse.vue'
 import assurance from '../views/bureautique/assurance/assurance.vue'
 import addassurance from '../views/bureautique/assurance/addassurance.vue'
 import editassurance from '../views/bureautique/assurance/editassurance.vue'
-// route de dossier medical
-import dossier from '../views/dossier_medical/dossier.vue'
+
+// route workflow
+import profil from '../views/bureautique/profil/profil.vue'
+import addprofil from '../views/bureautique/profil/addprofil.vue'
+
+// route des droits d'accès
+import droit from '../views/bureautique/droit/droit.vue'
+
+// route de entite acceuil
+import acceuil from '../views/entite/acceuil/acceuil.vue'
+import addpatient from '../views/entite/acceuil/addpatient.vue'
+import editpatient from '../views/entite/acceuil/editpatient.vue'
+import profilepatient from '../views/entite/acceuil/profilpatient.vue'
+import adddossier from '../views/entite/acceuil/adddossier.vue'
+
+// route de la pharmacie
+import pharmacie from '../views/bureautique/pharmacie/pharmacie.vue'
+import categorie from '../views/bureautique/pharmacie/categorie_medicament/categorie.vue'
+import addcategorie from '../views/bureautique/pharmacie/categorie_medicament/addcategorie.vue'
+import editcategorie from '../views/bureautique/pharmacie/categorie_medicament/editcategorie.vue'
+
+import addmedicament from '../views/bureautique/pharmacie/medicament/addmedicament.vue'
+import editmedicament from '../views/bureautique/pharmacie/medicament/editmedicament.vue'
+import medicament from '../views/bureautique/pharmacie/medicament/medicament.vue'
+
+// route du module diagnostic
+import diagnostic from '../views/bureautique/diagnostic/diagnostic.vue'
+import adddiagnostic from '../views/bureautique/diagnostic/adddiagnostic.vue'
+import editdiagnostic from '../views/bureautique/diagnostic/editdiagnostic.vue'
+
+// route du module constante
+import constante from '../views/bureautique/constante/constante.vue'
+import addconstante from '../views/bureautique/constante/addconstante.vue'
+import editconstante from '../views/bureautique/constante/editconstante.vue'
+
+// route des traitements
+import traitement from '../views/bureautique/traitement/traitement.vue'
+import addtraitement from '../views/bureautique/traitement/addtraitement.vue'
+import edittraitement from '../views/bureautique/traitement/edittraitement.vue'
+
+// route du dossier médical
+import dossier from '../views/bureautique/dossier_medical/dossier.vue'
 
 const routes = [
   {
@@ -215,12 +255,143 @@ const routes = [
     name:'editassurance',
     component:editassurance
   },
-  // route de dossier médical
+  // route de workflow
+  {
+    path:'/acceuil',
+    name:'acceuil',
+    component:acceuil
+  },
+  {
+    path:'/admin/profil',
+    name:'profil',
+    component:profil
+  },
+  {
+    path:'/profil/ajouter',
+    name:'addprofil',
+    component:addprofil
+  },
+  // route des droits
+  {
+    path:'/employe/droit/:id',
+    name:'droit',
+    component:droit
+  },
+  // route de entite acceuil
+  {
+    path:'/acceuil/addpatient',
+    name:'addpatient',
+    component:addpatient
+  },
+  {
+    path:'/acceuil/editpatient/:id',
+    name:'editpatient',
+    component:editpatient
+  },
+  {
+    path:'/acceuil/profil/:id',
+    name:'profilpatient',
+    component:profilepatient
+  },
+  {
+    path:'/acceuil/dossier/:id',
+    name:'adddossier',
+    component:adddossier
+  },
+
+  // route de la pharmacie
+  {
+    path:'/pharmacie',
+    name:'pharmacie',
+    component:pharmacie
+  },
+  {
+    path:'/pharmacie/categorie',
+    name:'categorie',
+    component:categorie
+  },
+  {
+    path:'/pharmacie/categorie/add',
+    name:'addcategorie',
+    component:addcategorie
+  },
+  {
+    path:'/pharmacie/categorie/edit/:id',
+    name:'editcategorie',
+    component:editcategorie
+  },
+  {
+    path:'/pharmacie/medicament',
+    name:'medicament',
+    component:medicament
+  },
+  {
+    path:'/pharmacie/medicament/add',
+    name:'addmedicament',
+    component:addmedicament
+  },
+  {
+    path:'/pharmacie/medicament/edit/:id',
+    name:'editmedicament',
+    component:editmedicament
+  },
+
+  // route du module diagnostic
+  {
+    path:'/diagnostic',
+    name:'diagnostic',
+    component:diagnostic
+  },
+  {
+    path:'/diagnostic/add',
+    name:'adddiagnostic',
+    component:adddiagnostic
+  },
+  {
+    path:'/diagnostic/edit/:id',
+    name:'editdiagnostic',
+    component:editdiagnostic
+  },
+
+  // route du module constante
+  {
+    path:'/constante',
+    name:'constante',
+    component:constante
+  },
+  {
+    path:'/constante/add',
+    name:'addconstante',
+    component:addconstante
+  },
+  {
+    path:'/constante/edit/:id',
+    name:'editconstante',
+    component:editconstante
+  },
+  // route des traitements
+  {
+    path:'/traitement',
+    name:'traitement',
+    component:traitement
+  },
+  {
+    path:'/traitement/add',
+    name:'addtraitement',
+    component:addtraitement
+  },
+  {
+    path:'/traitement/edit/:id',
+    name:'edittraitement',
+    component:edittraitement
+  },
+
+  // route du DM
   {
     path:'/dossier',
     name:'dossier',
     component:dossier
-  },
+  }
 ]
 
 const router = createRouter({

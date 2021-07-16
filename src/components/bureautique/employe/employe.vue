@@ -103,6 +103,18 @@
                             v-if="employe.statut === 'actif'"
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
+                            v-on:click="droit(employe.id)"
+                            v-bind:identifiant="identifiant"
+                            ><i
+                              class="fa fa-lock m-r-5"
+                              style="cursor:pointer"
+                            ></i>
+                            Droit d'accès</a
+                          >
+                          <a
+                            v-if="employe.statut === 'actif'"
+                            class="dropdown-item"
+                            style="color:black; cursor:pointer"
                             v-on:click="modifier(employe.id)"
                             v-bind:identifiant="identifiant"
                             ><i
@@ -456,6 +468,9 @@ export default {
     modifier(pk) {
       this.$router.push("/employe/modifier/" + pk);
     },
+    droit(pk) {
+      this.$router.push("/employe/droit/" + pk);
+    },
 
     desactiver(pk) {
       this.preload = true;
@@ -487,6 +502,9 @@ export default {
           this.preload = false;
           console.log(err);
         });
+    },
+    calendrier(pk) {
+      this.$router.push("/employe/calendrier/" + pk);
     },
     activer(pk) {
       this.preload = true;

@@ -51,6 +51,7 @@
 
         <div class="row">
           <div class="col-md-12">
+            <p>{{ message }}</p>
             <div class="table-responsive">
               <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
@@ -412,7 +413,6 @@ export default {
         })
         .get(chemin + "/listAssurances")
         .then((response) => {
-          console.log("assurance :", response.data.data[0].statut);
           console.log(response.data);
           if (response.data.state === true) {
             this.preloader = false;

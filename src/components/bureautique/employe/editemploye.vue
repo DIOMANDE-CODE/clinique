@@ -61,7 +61,9 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Nationalité <span class="text-danger">*</span></label>
+                    <label
+                      >Nationalité <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -90,7 +92,10 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Addresse du domicile <span class="text-danger">*</span></label>
+                    <label
+                      >Addresse du domicile
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -99,7 +104,10 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Situation matrimoniale <span class="text-danger">*</span></label>
+                  <label class="display-block"
+                    >Situation matrimoniale
+                    <span class="text-danger">*</span></label
+                  >
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -154,7 +162,9 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Genre <span class="text-danger">*</span></label>
+                  <label class="display-block"
+                    >Genre <span class="text-danger">*</span></label
+                  >
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -189,7 +199,26 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">Profil <span class="text-danger">*</span></label>
+                  <label class="col-form-label ">
+                    Fonction <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12">
+                    <select class="form-control" v-model="profile">
+                      <option value="0" disabled>Choisissez sa fonction</option>
+                      <option
+                        required
+                        :value="profil.id"
+                        v-for="profil in profiles"
+                        v-bind:key="profil.id"
+                        >{{ profil.titre }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="display-block"
+                    >Profil <span class="text-danger">*</span></label
+                  >
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -507,6 +536,9 @@ export default {
       success: false,
       errors: false,
       message: "",
+      profiles: [],
+      profile: "",
+      pivot : "",
     };
   },
   created() {
@@ -521,7 +553,8 @@ export default {
       })
       .get(chemin + "/utilisateur/" + this.$route.params.id)
       .then((response) => {
-        console.log("utilisateur :", response.data.data);
+        this.listProfil();
+        console.log("utilisateur :", response.data);
         if (response.data.state === true) {
           this.preloader = false;
           this.nom = response.data.data.nom;
@@ -536,6 +569,8 @@ export default {
           this.role = response.data.data.role;
           this.nom = response.data.data.nom;
           this.description = response.data.data.description;
+          this.profile = response.data.data.profile[0].titre;
+          this.pivot = response.data.data.profile[0].pivot.id
         } else {
           this.preloader = false;
           this.message = "Aucun services existants";
@@ -562,7 +597,9 @@ export default {
         genre: this.genre,
         email: this.email,
         role: this.role,
+        profile_id: this.profile,
       };
+      user.pivot = this.pivot;
       console.log(user);
       this.preloader = true;
       axios
@@ -573,7 +610,10 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierInformationUtilisateur/" + this.$route.params.id, user)
+        .put(
+          chemin + "/modifierInformationUtilisateur/" + this.$route.params.id,
+          user
+        )
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
@@ -588,6 +628,32 @@ export default {
             this.message = response.data.message;
             console.log("erreur");
           }
+        });
+    },
+
+    listProfil() {
+      console.log("service");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + `/getListeProfile`)
+        .then((response) => {
+          console.log("profil :",response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.profiles = response.data.data;
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
   },

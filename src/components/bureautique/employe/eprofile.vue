@@ -71,6 +71,10 @@
                           <span class="title" style="font-weight: bold;">Role:</span>
                           <span class="text" style="color:black">{{ role }}</span>
                         </li>
+                         <li>
+                          <span class="title" style="font-weight: bold;">Fonction:</span>
+                          <span class="text" style="color:black">{{ profile }}</span>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -103,6 +107,7 @@ export default {
       adresse_domicile: "",
       prenom: "",
       preloader: false,
+      profile : "",
     };
   },
   components: {
@@ -140,6 +145,8 @@ export default {
             this.adresse_domicile = response.data.data.adresse_domicile
             this.role = response.data.data.role
             this.prenom = response.data.data.prenoms
+            this.profile = response.data.data.profile[0].titre;
+
           } else {
             this.preload = false;
             this.errors = true;

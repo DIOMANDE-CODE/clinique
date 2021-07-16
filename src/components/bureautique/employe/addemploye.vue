@@ -300,6 +300,23 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
+                  <label class="col-form-label ">
+                    Fonction <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12">
+                    <select class="form-control" v-model="profile">
+                      <option value="0" disabled>Choisissez sa fonction</option>
+                      <option
+                        required
+                        :value="profil.id"
+                        v-for="profil in profiles"
+                        v-bind:key="profil.id"
+                        >{{ profil.titre }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
                   <label class="display-block"
                     >Profil <span class="text-danger">*</span></label
                   >
@@ -331,21 +348,18 @@
                   </div>
                 </div>
               </div>
-              <div class="m-t-20 text-center">
-                <button
-                  class="btn btn-danger submit-btn"
-                  v-on:click="renitialiser"
-                >
-                  Réinitialiser</button
-                >&nbsp;&nbsp;
-                <button
-                  class="btn btn-success submit-btn"
-                  v-on:click="inscrire"
-                >
-                  Ajouter
-                </button>
-              </div>
             </form>
+            <div class="m-t-20 text-center">
+              <button
+                class="btn btn-danger submit-btn"
+                v-on:click="renitialiser"
+              >
+                Réinitialiser</button
+              >&nbsp;&nbsp;
+              <button class="btn btn-success submit-btn" v-on:click="inscrire">
+                Ajouter
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -356,7 +370,6 @@
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-
 export default {
   name: "epresent",
   data() {
@@ -378,7 +391,7 @@ export default {
       success: false,
       errors: false,
       message: "",
-      // chargement des données de la clinique, departement et services
+      // chargement des données de la clinique, departement et services, profiles
       cliniques: [],
       clinique: "",
       id_clinique: "",
@@ -387,6 +400,8 @@ export default {
       services: [],
       service: "",
       selectedClinique: false,
+      profiles: [],
+      profile: "",
     };
   },
   components: {
@@ -394,6 +409,7 @@ export default {
   },
   created() {
     this.charger_clinique();
+    this.listProfil();
   },
   methods: {
     retourner() {
@@ -413,7 +429,8 @@ export default {
         (this.role = ""),
         (this.clinique = ""),
         (this.departement = ""),
-        (this.service = "");
+        (this.service = ""),
+        (this.profile = "");
     },
     inscrire() {
       console.log("id service:", this.service);
@@ -434,7 +451,8 @@ export default {
         this.role === "" ||
         this.clinique === "" ||
         this.departement === "" ||
-        this.service === ""
+        this.service === "" ||
+        this.profile === ""
       )
         this.preloader = true;
       var user = {
@@ -452,7 +470,9 @@ export default {
         clinique_id: this.clinique,
         departement_id: this.departement,
         service_id: this.service,
+        profile_id: this.profile,
       };
+      console.log("user information :", user);
       axios
         .create({
           headers: {
@@ -465,29 +485,24 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.preloader = false;
-          if (response.data.state === true) {
-            this.success = true;
-            this.message = response.data.message;
-
-            this.nom = "";
-            this.prenom = "";
-            this.nationnalite = "";
-            this.telephone = "";
-            this.date = "";
-            this.addresse = "";
-            this.situation = "";
-            this.genre = "";
-            this.email = "";
-            this.code = "";
-            this.role = "";
-          } else {
-            this.message = response.data.message;
-          }
+          this.success = true;
+          this.message = response.data.message;
+          this.nom = "";
+          this.prenom = "";
+          this.nationnalite = "";
+          this.telephone = "";
+          this.date = "";
+          this.addresse = "";
+          this.situation = "";
+          this.genre = "";
+          this.email = "";
+          this.code = "";
+          this.role = "";
+          this.profile = "";
         })
         .catch((err) => {
           this.preloader = false;
-          console.log(user.situation_matrimoniale);
-          console.log(err.response.data.errors);
+          console.log(err);
         });
     },
     charger_clinique() {
@@ -565,6 +580,31 @@ export default {
           //   this.preloader = false;
           //   console.log("erreur de chargement");
           // }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    listProfil() {
+      console.log("service");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + `/getListeProfile`)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.profiles = response.data.data;
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
         })
         .catch((err) => {
           console.log(err);
