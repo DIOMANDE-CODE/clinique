@@ -175,6 +175,7 @@ export default {
         send_data.push(data);
       });
       console.log(send_data);
+      console.log(this.departement);
       axios
         .create({
           headers: {

@@ -86,6 +86,13 @@ import edittraitement from '../views/bureautique/traitement/edittraitement.vue'
 // route du dossier médical
 import dossier from '../views/bureautique/dossier_medical/dossier.vue'
 
+// route de service/entite prise de constante
+import entiteconstante from '../views/entite/constante/entiteconstante.vue'
+import prendreconstante from '../views/entite/constante/prendreconstante.vue'
+
+// route du service medecin/consultation
+import consultation from '../views/entite/consultation/consultation.vue'
+
 const routes = [
   {
     path: '/',
@@ -385,12 +392,28 @@ const routes = [
     name:'edittraitement',
     component:edittraitement
   },
-
   // route du DM
   {
     path:'/dossier',
     name:'dossier',
     component:dossier
+  },
+// route de service/entite prise de constante
+  {
+    path:'/entite/constante',
+    name:'entiteconstante',
+    component:entiteconstante
+  },
+  {
+    path:'/entite/prendre/constante/:id',
+    name:'prendreconstante',
+    component:prendreconstante
+  },
+  // route du service medecin/consultation
+  {
+    path:'/consultation',
+    name:'consultation',
+    component:consultation
   }
 ]
 

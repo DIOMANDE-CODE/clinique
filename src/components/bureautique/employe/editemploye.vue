@@ -246,6 +246,67 @@
                     </label>
                   </div>
                 </div>
+                <div class="form-group col-sm-6">
+                  <label class="col-form-label "
+                    >Clinique <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12">
+                    <select
+                      required
+                      class="form-control clinique"
+                      v-model="clinique"
+                      @change="charger_departement()"
+                    >
+                      <option value="0" disabled>Choisissez sa clinique</option>
+                      <option
+                        :value="clin.id"
+                        v-for="clin in cliniques"
+                        v-bind:key="clin.id"
+                        >{{ clin.nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="col-form-label "
+                    >Departement <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12">
+                    <select
+                      required
+                      class="form-control"
+                      v-model="departement"
+                      @change="charger_service()"
+                    >
+                      <option value="0" disabled
+                        >Choisissez son departement</option
+                      >
+                      <option
+                        :value="depart.departement_id"
+                        v-for="depart in departements"
+                        v-bind:key="depart.id"
+                        >{{ depart.departement_nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label class="col-form-label "
+                    >Service <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12">
+                    <select class="form-control" v-model="service">
+                      <option value="0" disabled>Choisissez son service</option>
+                      <option
+                        required
+                        :value="serv.service_id"
+                        v-for="serv in services"
+                        v-bind:key="serv.id"
+                        >{{ serv.service_nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="m-t-20 text-center">
                 <button class="btn btn-success submit-btn">
@@ -538,50 +599,144 @@ export default {
       message: "",
       profiles: [],
       profile: "",
-      pivot : "",
+      pivot: "",
+
+      // chargement des données de la clinique, departement et services, profiles
+      cliniques: [],
+      clinique: "",
+      id_clinique: "",
+      departements: [],
+      departement: "",
+      services: [],
+      service: "",
+      selectedClinique: false,
     };
   },
   created() {
-    this.preloader = true;
-    axios
-      .create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .get(chemin + "/utilisateur/" + this.$route.params.id)
-      .then((response) => {
-        this.listProfil();
-        console.log("utilisateur :", response.data);
-        if (response.data.state === true) {
-          this.preloader = false;
-          this.nom = response.data.data.nom;
-          this.prenom = response.data.data.prenoms;
-          this.nationnalite = response.data.data.nationalite;
-          this.telephone = response.data.data.telephone;
-          this.date = response.data.data.date_naissance;
-          this.addresse = response.data.data.adresse_domicile;
-          this.situation = response.data.data.situation_matrimoniale;
-          this.genre = response.data.data.genre;
-          this.email = response.data.data.email;
-          this.role = response.data.data.role;
-          this.nom = response.data.data.nom;
-          this.description = response.data.data.description;
-          this.profile = response.data.data.profile[0].titre;
-          this.pivot = response.data.data.profile[0].pivot.id
-        } else {
-          this.preloader = false;
-          this.message = "Aucun services existants";
-          console.log("erreur de chargement");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.charger_info();
+    this.charger_clinique();
   },
   methods: {
+    charger_service() {
+      console.log("service");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(
+          chemin +
+            `/listeServicesDepartement/${this.clinique}/${this.departement}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.services = response.data.data;
+          // if (response.data.state === true) {
+          //   this.preloader = false;
+          //   this.services = response.data.data;
+          // } else {
+          //   this.preloader = false;
+          //   console.log("erreur de chargement");
+          // }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_departement() {
+      console.log("departement clinique id ", this.clinique);
+      // this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/getDepartementsClinique/" + this.clinique)
+        .then((response) => {
+          console.log(response.data.data);
+          this.departements = response.data.data;
+          // if (response.data.state === true) {
+          //   this.preloader = false;
+          //   this.departements = response.data.data;
+          // } else {
+          //   this.preloader = false;
+          //   console.log("erreur de chargement");
+          // }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_clinique() {
+      console.log(" id de la clinique ", this.clinique);
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listClinique")
+        .then((response) => {
+          this.preloader = false;
+          if (response.data.state === true) {
+            this.cliniques = response.data.data;
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    charger_info() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/utilisateur/" + this.$route.params.id)
+        .then((response) => {
+          this.listProfil();
+          console.log("utilisateur :", response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.nom = response.data.data.nom;
+            this.prenom = response.data.data.prenoms;
+            this.nationnalite = response.data.data.nationalite;
+            this.telephone = response.data.data.telephone;
+            this.date = response.data.data.date_naissance;
+            this.addresse = response.data.data.adresse_domicile;
+            this.situation = response.data.data.situation_matrimoniale;
+            this.genre = response.data.data.genre;
+            this.email = response.data.data.email;
+            this.role = response.data.data.role;
+            this.nom = response.data.data.nom;
+            this.description = response.data.data.description;
+            this.profile = response.data.data.profile[0].titre;
+            this.pivot = response.data.data.profile[0].pivot.id;
+          } else {
+            this.preloader = false;
+            this.message = "Aucun services existants";
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     retourner() {
       this.$router.push("/admin/employe");
     },
@@ -597,6 +752,9 @@ export default {
         genre: this.genre,
         email: this.email,
         role: this.role,
+        clinique_id: this.clinique,
+        departement_id: this.departement,
+        service_id: this.service,
         profile_id: this.profile,
       };
       user.pivot = this.pivot;
@@ -615,11 +773,11 @@ export default {
           user
         )
         .then((response) => {
+          console.log("reponse :",response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
             this.message = "Modification effectuée avec succès";
-            console.log("modification réussie reussie");
 
             this.nom = user.nom;
           } else {
@@ -643,7 +801,7 @@ export default {
         })
         .get(chemin + `/getListeProfile`)
         .then((response) => {
-          console.log("profil :",response.data);
+          console.log("profil :", response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.profiles = response.data.data;

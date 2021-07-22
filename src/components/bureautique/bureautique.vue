@@ -28,6 +28,18 @@
             >
           </div>
           <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="admin">
+            <router-link to="/attribution"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-exchange" aria-hidden="true"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1">Attribution</span>
+                </div>
+              </div></router-link
+            >
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="admin">
             <router-link to="/admin/analyse"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -88,9 +100,7 @@
           <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="secretaire">
             <router-link to="/acceuil"
               ><div class="dash-widget">
-                <span class="dash-widget-bg1"
-                  ><i class="fa fa-home"></i
-                ></span>
+                <span class="dash-widget-bg1"><i class="fa fa-home"></i></span>
                 <div class="dash-widget-info text-right">
                   <span class="widget-title1"> Accueil</span>
                 </div>
@@ -133,7 +143,19 @@
               </div></router-link
             >
           </div>
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="admin">
+           <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="infirmiere">
+            <router-link to="/entite/constante"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-thermometer"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1"> Prise de constante</span>
+                </div>
+              </div></router-link
+            >
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="admin">
             <router-link to="/traitement"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -152,14 +174,15 @@
 </template>
 <script>
 import axios from "axios";
-import { chemin } from "../../assets/js/chemin.js"; 
+import { chemin } from "../../assets/js/chemin.js";
 
 export default {
   name: "index",
   data() {
     return {
       admin: false,
-      secretaire  : false,
+      secretaire: false,
+      infirmiere: false
     };
   },
   created() {
@@ -191,6 +214,10 @@ export default {
               switch (profil) {
                 case "sécrétaire":
                   this.secretaire = true;
+                  break;
+                case "infirmière":
+                  this.infirmiere = true;
+                  break;
               }
             }
           } else {

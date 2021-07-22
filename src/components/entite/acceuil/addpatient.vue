@@ -50,7 +50,7 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="row">
-                  <div class="col-sm-6">
+                <div class="col-sm-6">
                   <div class="form-group">
                     <label> Objet <span class="text-danger">*</span></label>
                     <input
@@ -451,6 +451,11 @@
                       Veuf(ve)
                     </label>
                   </div>
+                  <div class="form-group col-sm-6">
+                  <label class="col-form-label ">
+                    Service destinataire<span class="text-danger">*</span>
+                  </label>
+                </div>
                 </div>
               </div>
             </form>
@@ -480,7 +485,7 @@ export default {
   data() {
     return {
       // Data of patient
-      objet:'',
+      objet: "",
       nom: "",
       prenom: "",
       sexe: "",
@@ -504,7 +509,7 @@ export default {
       activite: "",
       instruction: "",
       matrimoniale: "",
-      assurances:[],
+      assurances: [],
 
       preloader: false,
       success: false,
@@ -516,37 +521,36 @@ export default {
   components: {
     loader,
   },
-  mounted(){
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listAssurances")
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.assurances = response.data.data;
-          } else {
-            this.preloader = false;
-            this.message = "Aucune assurances existantes";
-            console.log("erreur de chargement");
-          }
-        });
+  mounted() {
+    this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listAssurances")
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.assurances = response.data.data;
+        } else {
+          this.preloader = false;
+          this.message = "Aucune assurances existantes";
+          console.log("erreur de chargement");
+        }
+      });
   },
   methods: {
-    
     retourner() {
       this.$router.push("/acceuil");
     },
     renitialiser() {
       (this.objet = ""),
-      (this.nom = ""),
+        (this.nom = ""),
         (this.prenom = ""),
         (this.sexe = ""),
         (this.date = ""),
@@ -614,8 +618,8 @@ export default {
         email: this.mail,
         assurance: this.assurance,
         assurance_id: this.assurance_nom,
-        numero_bon:this.bon_assurance,
-        matricule:this.matricule_assurance,
+        numero_bon: this.bon_assurance,
+        matricule: this.matricule_assurance,
         acte: this.acte_assurance,
         profile_id: localStorage.getItem("identifiant"),
         profession: this.profession,

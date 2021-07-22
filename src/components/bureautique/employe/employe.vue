@@ -419,7 +419,6 @@ import { identifiant } from "../../../assets/js/info.js";
 import loader from "../../../components/loader.vue";
 
 export default {
-  name: "employe",
   data() {
     return {
       employes: [],

@@ -33,6 +33,14 @@
               >
             </li>
             <li v-if="admin">
+              <router-link to="/attribution"
+                ><a
+                  ><i class="fa fa-exchange"></i>
+                  <span style="color:black;">Attribution</span></a
+                ></router-link
+              >
+            </li>
+            <li v-if="admin">
               <router-link to="/admin/analyse"
                 ><a
                   ><i class="fa fa-heartbeat"></i>
@@ -112,6 +120,14 @@
                 ></router-link
               >
             </li>
+            <li v-if="infirmiere">
+              <router-link to="/entite/constante"
+                ><a
+                  ><i class="fa fa-thermometer"></i>
+                  <span style="color:black;">Prise de constante</span></a
+                ></router-link
+              >
+            </li>
             <li v-if="admin">
               <router-link to="/dossier"
                 ><a
@@ -136,11 +152,12 @@ export default {
     return {
       admin: false,
       secretaire: false,
+      infirmiere: false,
       identifiant: "",
       profiles: [],
     };
   },
-  created() {
+  mounted() {
     this.listProfil();
   },
   methods: {
@@ -160,7 +177,7 @@ export default {
           if (response.data.state === true) {
             this.preloader = false;
             this.profiles = response.data.data;
-            this.charger_utilsateur()
+            this.charger_utilsateur();
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -188,6 +205,7 @@ export default {
           console.log("information about user", response.data);
           if (response.data.state === true) {
             const role = response.data.data.role;
+
             console.log("admin :", role);
             if (role === "admin") {
               this.admin = true;
@@ -196,6 +214,10 @@ export default {
               switch (profil) {
                 case "sécrétaire":
                   this.secretaire = true;
+                  break; //
+                case "infirmière":
+                  this.infirmiere = true;
+                  break; //
               }
             }
           } else {

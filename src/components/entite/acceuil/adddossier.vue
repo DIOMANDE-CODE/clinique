@@ -16,7 +16,7 @@
             </h4>
           </div>
         </div>
-        <div
+        <div 
           v-if="success"
           class="alert alert-success alert-dismissible fade show"
           role="alert"

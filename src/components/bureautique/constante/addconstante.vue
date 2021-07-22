@@ -58,6 +58,17 @@
                   required
                 />
               </div>
+              <div class="form-group">
+                <label class="col-form-label "
+                  >Type <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-12">
+                  <select class="form-control" v-model="type">
+                    <option value="text">Text</option>
+                    <option value="number">Number</option>
+                  </select>
+                </div>
+              </div>
             </form>
             <div class="m-t-20 text-center">
               <button class="btn btn-success submit-btn" v-on:click="ajouter">
@@ -332,6 +343,7 @@ export default {
       message: "",
       preloader: false,
       nom: "",
+      type: "",
     };
   },
   components: {
@@ -339,7 +351,7 @@ export default {
   },
   methods: {
     renitialiser() {
-      (this.nom = "");
+      (this.nom = ""), (this.type = "");
     },
     ajouter() {
       if (this.nom === "") {
@@ -349,6 +361,7 @@ export default {
         this.preloader = true;
         var constante = {
           libelle: this.nom,
+          type: this.type,
         };
         console.log(constante);
         axios
@@ -359,15 +372,16 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           })
-          .post(chemin + "/ajouterConstante", constante,)
+          .post(chemin + "/ajouterConstante", constante)
           .then((response) => {
             console.log(response.data);
-              this.preloader = false;
-              this.success = true;
-              this.message = "Une nouvelle constante ajoutée";
-              console.log("reussie");
+            this.preloader = false;
+            this.success = true;
+            this.message = "Une nouvelle constante ajoutée";
+            console.log("reussie");
 
-              this.nom = "";
+            this.nom = "";
+            this.type = "";
           })
           .catch((err) => {
             this.preloader = false;
@@ -375,6 +389,9 @@ export default {
             console.log(err);
           });
       }
+    },
+    modifier(pk){
+          this.$router.push("/edit/constante/" + pk)
     },
     retourner() {
       this.$router.push("/constante");

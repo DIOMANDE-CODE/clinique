@@ -57,12 +57,14 @@
                   <thead>
                     <tr>
                       <th>Libéllé</th>
+                      <th>Type</th>
                       <th class="text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="depart in constantes" v-bind:key="depart.id">
                       <td>{{ depart.libelle }}</td>
+                      <td>{{ depart.type }}</td>
                       <td class="text-right">
                         <div class="dropdown dropdown-action">
                           <a

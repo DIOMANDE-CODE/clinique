@@ -127,7 +127,6 @@ import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 
 export default {
-  name: "employe",
   data() {
     return {
       clients: [],
