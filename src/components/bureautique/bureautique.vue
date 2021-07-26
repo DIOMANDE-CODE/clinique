@@ -143,7 +143,7 @@
               </div></router-link
             >
           </div>
-           <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="infirmiere">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="infirmiere">
             <router-link to="/entite/constante"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -151,6 +151,18 @@
                 ></span>
                 <div class="dash-widget-info text-right">
                   <span class="widget-title1"> Prise de constante</span>
+                </div>
+              </div></router-link
+            >
+          </div>
+               <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="medecin">
+            <router-link to="/consultation"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-code-fork"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1"> Consultation</span>
                 </div>
               </div></router-link
             >
@@ -163,6 +175,18 @@
                 ></span>
                 <div class="dash-widget-info text-right">
                   <span class="widget-title1"> Traitements </span>
+                </div>
+              </div></router-link
+            >
+          </div>
+              <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="examinateur">
+            <router-link to="/laboratoire"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-heartbeat"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1"> Examens </span>
                 </div>
               </div></router-link
             >
@@ -182,7 +206,9 @@ export default {
     return {
       admin: false,
       secretaire: false,
-      infirmiere: false
+      infirmiere: false,
+      medecin: false,
+      examinateur: false,
     };
   },
   created() {
@@ -217,6 +243,12 @@ export default {
                   break;
                 case "infirmière":
                   this.infirmiere = true;
+                  break;
+                case "medecin":
+                  this.medecin = true;
+                  break;
+                case "examinateur":
+                  this.examinateur = true;
                   break;
               }
             }

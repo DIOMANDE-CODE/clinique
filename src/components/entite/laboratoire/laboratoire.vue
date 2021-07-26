@@ -83,24 +83,13 @@
                           <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
-                            v-on:click="faire_diagnostic(employe.dossier.id)"
+                            v-on:click="faire_examen(employe.dossier.id)"
                             v-bind:identifiant="identifiant"
                             ><i
-                              class="fa fa-search m-r-5"
+                              class="fa fa-heartbeat m-r-5"
                               style="cursor:pointer"
                             ></i>
-                            Faire une consultation</a
-                          >
-                             <a
-                            class="dropdown-item"
-                            style="color:black; cursor:pointer"
-                            v-on:click="voir_dm(employe.dossier.client_id)"
-                            v-bind:identifiant="identifiant"
-                            ><i
-                              class="fa fa-user m-r-5"
-                              style="cursor:pointer"
-                            ></i>
-                            Voir son DM</a
+                            Faire ses examens</a
                           >
                         </div>
                       </div>
@@ -411,12 +400,8 @@ export default {
           }
         });
     },
-    faire_diagnostic(pk) {
-      this.$router.push("/consultation/diagnostic/" + pk);
-    },
-    voir_dm(pk) {
-      console.log(pk);
-      this.$router.push("/consultation/dossier_medical/" + pk);
+    faire_examen(pk) {
+      this.$router.push("/laboratoire/examen/" + pk);
     },
     calendrier(pk) {
       this.$router.push("/employe/calendrier/" + pk);

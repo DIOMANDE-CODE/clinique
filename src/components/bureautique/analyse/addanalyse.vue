@@ -49,16 +49,12 @@
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
             <form>
-              <div class="form-group">
-                <label>Code de l'analyse <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="code" required />
-              </div>
              <div class="form-group">
-                <label>Dénomination de l'analyse <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="denomination" required />
+                <label>Libéllé <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" v-model="libelle" required />
               </div> <div class="form-group">
-                <label>Cotation de l'analyse <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="cotation" required />
+                <label>Prix <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" v-model="prix" required />
               </div>
               <div class="m-t-20 text-center">
                 <button
@@ -341,9 +337,8 @@ export default {
       errors: false,
       message: "",
       preloader: false,
-      code: "",
-      denomination: "",
-      cotation:"",
+      libelle: "",
+      prix:"",
     };
   },
   components: {
@@ -351,7 +346,7 @@ export default {
   },
   methods: {
     renitialiser() {
-      (this.code = ""), (this.denomination = ""),(this.cotation = "");
+    (this.libelle = ""),(this.prix = "");
     },
     ajouter() {
       if (this.code === "" || this.denomination === "" || this.cotation === ""){
@@ -361,9 +356,8 @@ export default {
       else {
         this.preloader = true;
       var analyse = {
-        code: this.code,
-        denomination: this.denomination,
-        cotation:this.cotation
+        libelle: this.libelle,
+        prix:this.prix
       };
       console.log(analyse);
       axios
@@ -374,18 +368,17 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/creationAnalyse", analyse)
+        .post(chemin + "/ajouterExamen ", analyse)
         .then((response) => {
           console.log(response.data);
-          if (response.data.state === true) {
+          if (response.data.state === 'true') {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
             console.log("reussie");
 
-            this.code = "";
-            this.denomination = "";
-            this.cotation = "";
+            this.libelle = "";
+            this.prix = "";
           } else {
             this.preloader = false;
             this.errors = true;

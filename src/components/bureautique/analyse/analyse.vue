@@ -56,28 +56,15 @@
               <table class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
-                    <th>Codes</th>
-                    <th>Denominations</th>
-                    <th>Cotations</th>
-                    <th>Status</th>
+                    <th>Libellex</th>
+                    <th>prix</th>
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="analyse in analyses" v-bind:key="analyse.id">
-                    <td>{{ analyse.code }}</td>
-                    <td>{{ analyse.denomination }}</td>
-                    <td>{{ analyse.cotation }}</td>
-                    <td v-if="analyse.statut === 'actif'">
-                      <span class="custom-badge status-green">{{
-                        analyse.statut
-                      }}</span>
-                    </td>
-                    <td v-else>
-                      <span class="custom-badge status-red">{{
-                        analyse.statut
-                      }}</span>
-                    </td>
+                    <td>{{ analyse.libelle }}</td>
+                    <td>{{ analyse.prix }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -89,7 +76,6 @@
                         ></a>
                         <div class="dropdown-menu dropdown-menu-right">
                           <a
-                            v-if="analyse.statut === 'actif'"
                             class="dropdown-item"
                             href="#"
                             data-toggle="modal"
@@ -102,22 +88,12 @@
                             Modifier</a
                           >
                           <a
-                            v-if="analyse.statut === 'actif'"
                             class="dropdown-item"
                             href="#"
                             data-toggle="modal"
                             data-target="#delete_department"
                             v-on:click="desactiver(analyse.id)"
                             ><i class="fa fa-trash-o m-r-5"></i> Désactiver</a
-                          >
-                          <a
-                            v-else-if="analyse.statut === 'inactif'"
-                            class="dropdown-item"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#delete_department"
-                            v-on:click="activer(analyse.id)"
-                            ><i class="fa fa-trash-o m-r-5"></i> Activer</a
                           >
                         </div>
                       </div>
@@ -412,17 +388,11 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + "/listAnalyses")
+        .get(chemin + "/listeDesExamens")
         .then((response) => {
-          console.log("analyses :", response.data.data);
-          if (response.data.state === true) {
+          console.log("analyses :", response.data);
             this.preloader = false;
-            this.analyses = response.data.data;
-          } else {
-            this.preloader = false;
-            this.message = "Aucune analyses existantes";
-            console.log("erreur de chargement");
-          }
+            this.analyses = response.data;
         });
     },
     modifier(pk) {

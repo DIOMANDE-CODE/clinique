@@ -1,43 +1,5 @@
 <template>
   <div>
-    <loader v-if="preloader"></loader>
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Dossier</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            {{message_assurance}}
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="page-wrapper">
       <div class="content">
         <button class="btn btn-primary btn-rounded" v-on:click="retourner">
@@ -214,8 +176,6 @@
                 v-on:click="voir(dossier.id)"
                 type="button"
                 class="btn btn-info"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
               >
                 Voir +
               </button>
@@ -229,7 +189,6 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import loader from "../../../components/loader.vue";
 
 export default {
   name: "profilemploye",
@@ -260,46 +219,16 @@ export default {
       message_assurance: "",
     };
   },
-  components: {
-    loader,
-  },
   created() {
     this.charger_info();
   },
   methods: {
     retourner() {
-      this.$router.push("/acceuil");
+      this.$router.push("/consultation");
     },
     voir(pk){
       console.log(pk);
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + `/patient/${this.$route.params.id}`)
-        .then((response) => {
-          const dossiers = response.data.dossiers;
-          dossiers.forEach((dossier) => {
-            if(dossier.id === pk){
-              console.log("id du dossiers", dossier.assurance);
-              this.assurances = dossier.assurance;
-              console.log(" assurance :",dossier.assurance);
-              if(this.assurance === 0){
-                this.message_assurance = "Aucune assurance";
-              }
-            }
-          })
-
-
-        })
-        .catch((err) => {
-          this.preload = false;
-          console.log(err);
-        });
+      this.$router.push("/consultation/info_medical/" + pk);
     },
     charger_info() {
       console.log(chemin);

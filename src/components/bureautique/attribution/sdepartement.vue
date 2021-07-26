@@ -45,7 +45,7 @@
           <div class="col-md-10">
             <select class="form-control" v-model="departement">
               <option
-                :value="cle"
+                :value="depart.id"
                 v-for="(depart, cle) in departements"
                 :key="cle"
                 >{{ depart.nom }}</option
@@ -189,20 +189,15 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
             this.departements = "";
             this.coche = [];
+            this.services = [];
             this.charge_departement();
             this.charge_service();
-          } else {
-            this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
-            console.log("erreur de chargement");
-          }
+          
         })
         .catch((err) => {
           console.log(err);

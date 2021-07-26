@@ -92,6 +92,15 @@ import prendreconstante from '../views/entite/constante/prendreconstante.vue'
 
 // route du service medecin/consultation
 import consultation from '../views/entite/consultation/consultation.vue'
+import diagnostics from '../views/entite/consultation/diagnostics.vue'
+
+// route de laboratoire
+import laboratoire from '../views/entite/laboratoire/laboratoire.vue'
+import examen from '../views/entite/laboratoire/examen.vue'
+
+// route dm du patient par medecin
+import dm from '../views/entite/consultation/dm.vue'
+import infodm from '../views/entite/consultation/infodm.vue'
 
 const routes = [
   {
@@ -414,6 +423,33 @@ const routes = [
     path:'/consultation',
     name:'consultation',
     component:consultation
+  },
+  {
+    path:'/consultation/diagnostic/:id',
+    name:'diagnostics',
+    component:diagnostics
+  },
+  // route de laboratoire
+  {
+    path:'/laboratoire',
+    name:'laboratoire',
+    component:laboratoire
+  },
+  {
+    path:'/laboratoire/examen/:id',
+    name:'examen',
+    component:examen
+  },
+  // route dm du patient
+  {
+    path:'/consultation/dossier_medical/:id',
+    name:'dm',
+    component:dm
+  },
+  {
+    path:'/consultation/info_medical/:id',
+    name:'infodm',
+    component:infodm
   }
 ]
 

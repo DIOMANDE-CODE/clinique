@@ -128,11 +128,27 @@
                 ></router-link
               >
             </li>
+            <li v-if="medecin">
+              <router-link to="/consultation"
+                ><a
+                  ><i class="fa fa-code-fork"></i>
+                  <span style="color:black;">Consultation</span></a
+                ></router-link
+              >
+            </li>
             <li v-if="admin">
               <router-link to="/dossier"
                 ><a
                   ><i class="fa fa-folder"></i>
                   <span style="color:black;">Dossier Médical</span></a
+                ></router-link
+              >
+            </li>
+               <li v-if="examinateur">
+              <router-link to="/laboratoire"
+                ><a
+                  ><i class="fa fa-heartbeat"></i>
+                  <span style="color:black;">Laboratoire</span></a
                 ></router-link
               >
             </li>
@@ -153,6 +169,8 @@ export default {
       admin: false,
       secretaire: false,
       infirmiere: false,
+      medecin:false,
+      examinateur: false,
       identifiant: "",
       profiles: [],
     };
@@ -217,6 +235,12 @@ export default {
                   break; //
                 case "infirmière":
                   this.infirmiere = true;
+                  break; //
+                case "medecin":
+                  this.medecin = true;
+                  break; //
+                case "examinateur":
+                  this.examinateur = true;
                   break; //
               }
             }

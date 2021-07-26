@@ -50,20 +50,14 @@
           <div class="col-lg-8 offset-lg-2">
             <form @submit.prevent="modifier">
               <div class="form-group">
-                <label>Code de l'analyse <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="code" />
+                <label> Libéllé <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" v-model="libelle" />
               </div>
               <div class="form-group">
-                <label>Dénomination de l'analyse <span class="text-danger">*</span></label>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="denomination"
-                />
-              </div>
-              <div class="form-group">
-                <label>Cotation de l'analyse <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="cotation" />
+                <label
+                  >Prix de l'examen <span class="text-danger">*</span></label
+                >
+                <input class="form-control" type="text" v-model="prix" />
               </div>
               <div class="m-t-20 text-center">
                 <button class="btn btn-success submit-btn">
@@ -339,9 +333,8 @@ export default {
       message: "",
       preloader: false,
 
-      code: "",
-      denomination: "",
-      cotation: "",
+      libelle: "",
+      prix: "",
       id: "",
     };
   },
@@ -358,18 +351,11 @@ export default {
           "Access-Control-Allow-Origin": "*",
         },
       })
-      .get(chemin + "/analyse/" + this.$route.params.id)
+      .get(chemin + "/examen/" + this.$route.params.id)
       .then((response) => {
-        if (response.data.state === true) {
-          this.preloader = false;
-          this.code = response.data.data.code;
-          this.denomination = response.data.data.code;
-          this.cotation = response.data.data.cotation
-        } else {
-          this.preloader = false;
-          this.message = "Aucun services existants";
-          console.log("erreur de chargement");
-        }
+        this.preloader = false;
+        this.libelle = response.data.libelle;
+        this.prix = response.data.prix;
       })
       .catch((err) => {
         console.log(err);
@@ -380,17 +366,16 @@ export default {
       this.$router.push("/admin/analyse");
     },
     renitialiser() {
-      (this.code = ""), (this.denomination = ""), (this.cotation = "");
+      (this.libelle = ""), (this.prix = "");
     },
     modifier() {
-        console.log(this.id);
+      console.log(this.id);
       this.preloader = true;
-      var analyses = {
-        code: this.code,
-        denomination: this.denomination,
-        cotation: this.cotation,
+      var analyse = {
+        libelle: this.libelle,
+        prix: this.prix,
       };
-      console.log(analyses);
+      console.log(analyse);
       axios
         .create({
           headers: {
@@ -399,20 +384,13 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierAnalyse/" + this.$route.params.id, analyses)
+        .put(chemin + "/examen/" + this.$route.params.id, analyse)
         .then((response) => {
-          console.log(response.data)
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.success = true;
-            this.message = "Modification effectuée avec succès";
-            console.log("modification réussie reussie");
-          } else {
-            this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
-            console.log("erreur");
-          }
+          console.log(response.data);
+          this.preloader = false;
+          this.success = true;
+          this.message = "Modification effectuée avec succès";
+          console.log("modification réussie reussie");
         });
     },
   },
