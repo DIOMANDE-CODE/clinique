@@ -1,7 +1,12 @@
 <template>
   <div>
     <loader v-if="preloader"></loader>
-    <img src="../../../assets/img/clock.png" alt="examen" width="100%" height="800px"/>
+    <img
+      src="../../../assets/img/clock.png"
+      alt="examen"
+      width="100%"
+      height="800px"
+    />
     <div class="page-wrapper">
       <div class="content">
         <div class="m-t-15">
@@ -54,8 +59,9 @@
                     @change="activerdiagnostic()"
                   />
                 </h4>
-
                 <form action="#" v-if="activer_diagnostic">
+                  <p>{{ info_message_diagnostic }}</p>
+
                   <div class="form-group row">
                     <div
                       class="col-4"
@@ -125,7 +131,7 @@
                   />
                 </h4>
                 <div class="row doctor-grid" v-if="activer_examens">
-                  <p>{{ info_message_examens }}</p>
+                  <p>{{ info_message_examen }}</p>
                   <div
                     class="col-md-4 col-sm-4  col-lg-6"
                     v-for="examen in examens"
@@ -162,6 +168,61 @@
                     @change="activerordonnance()"
                   />
                 </h4>
+                <div class="row">
+                  <div class="col-md-12" v-if="activer_ordonnances">
+                    <p>{{ message_info_ordonnance }}</p>
+                    <div class="table-responsive">
+                      <table class="table table-striped custom-table">
+                        <thead>
+                          <tr>
+                            <th>Medicament</th>
+                            <th>Quantié</th>
+                            <th>Quantité</th>
+                            <th>Posologie</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="employe in ordonnances"
+                            v-bind:key="employe.id"
+                          >
+                            <td
+                              v-for="medicament in employe.medicaments"
+                              :key="medicament.id"
+                            >
+                              {{ medicament.libelle }}
+                            </td>
+                            <td
+                              v-for="medicament in employe.medicaments"
+                              :key="medicament.id"
+                            >
+                              {{ medicament.dosage }}
+                            </td>
+                            <td
+                              v-for="medicament in employe.medicaments"
+                              :key="medicament.id"
+                            >
+                              {{ medicament.pivot.quantity }}
+                            </td>
+                            <td
+                              v-for="medicament in employe.medicaments"
+                              :key="medicament.id"
+                            >
+                              {{ medicament.pivot.posologie }}
+                            </td>
+                            <td
+                              v-for="medicament in employe.medicaments"
+                              :key="medicament.id"
+                            >
+                              {{ medicament.created_at }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -214,8 +275,8 @@ export default {
   components: {
     loader,
   },
-  created() {
-    this.charger_examen();
+  mounted() {
+    this.charger_diagnostic();
   },
   methods: {
     activerdiagnostic() {
@@ -321,6 +382,33 @@ export default {
           if (this.diagnostics.length === 0) {
             this.info_message_diagnostic = "aucun diagnostic fait à ce jour";
           }
+          this.charger_ordonnance();
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    charger_ordonnance() {
+      console.log("examen");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/dossiersByClient/" + this.$route.params.id)
+        .then((response) => {
+          console.log("ordonnance list :", response.data.data.ordonnances);
+          this.ordonnances = response.data.data.ordonnances;
+          console.log(this.ordonnances);
+          if (this.ordonnances.length === 0) {
+            this.message_info_ordonnance =
+              "Aucune ordonnance prescrite fait ce jour";
+          }
+          this.charger_examen();
         })
         .catch((err) => {
           this.preloader = false;
@@ -342,9 +430,8 @@ export default {
           console.log("examens list :", response.data.data);
           this.examens = response.data.data.examens;
           if (this.examens.length === 0) {
-            this.info_message = "Aucun examen fait ce jour";
+            this.info_message_examen = "Aucun examen fait ce jour";
           }
-          this.charger_diagnostic();
         })
         .catch((err) => {
           this.preloader = false;

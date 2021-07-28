@@ -265,11 +265,10 @@ export default {
           this.matrimoniale = response.data.status_matrimonial;
           this.dossiers = response.data.dossiers;
 
-          console.log("dossiers :", this.dossiers);
         })
         .catch((err) => {
           this.preload = false;
-          console.log(err);
+          console.log(err); 
         });
     },
   },

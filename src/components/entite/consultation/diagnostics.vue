@@ -99,6 +99,7 @@
                               type="text"
                               class="form-control"
                               rows="3"
+                              v-model="diagnostic.description"
                             ></textarea>
                           </div>
                         </div>
@@ -141,7 +142,36 @@
                 </form>
               </div>
               <div class="card-box">
-                <h4 class="card-title">Pensements</h4>
+                <h4 class="card-title">
+                  Pensements
+                  <input
+                    type="checkbox"
+                    name="radio"
+                    v-model="activerPensements"
+                    @change="activerpensement()"
+                  />
+                </h4>
+                <form action="#" v-if="activer_pensements">
+                  <div class="form-group row">
+                    <div
+                      class="col-4"
+                      v-for="examen in medocs"
+                      v-bind:key="examen.id"
+                    >
+                      <div class="col-md-10">
+                        <div class="checkbox">
+                          <input
+                            type="checkbox"
+                            name="checkbox"
+                            v-model="examen.value"
+                          />
+                          {{ examen.libelle }}
+                        </div>
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
               <div class="card-box">
                 <h4 class="card-title">
@@ -283,7 +313,11 @@
                 </div>
               </div>
               <div class="m-t-20 text-center">
-                <button type="button" class="btn btn-success submit-btn" v-on:click="valider">
+                <button
+                  type="button"
+                  class="btn btn-success submit-btn"
+                  v-on:click="valider"
+                >
                   Valider
                 </button>
               </div>
@@ -305,7 +339,7 @@ export default {
       // Data of constante
       assurances: [],
       diagnostics: [],
-      pensemnts: [],
+      pensements: [],
       examens: [],
       workflows: [],
       liste_constantes: [],
@@ -340,6 +374,13 @@ export default {
     this.charger_diagnostic();
   },
   methods: {
+    activerpensement() {
+      if (this.activer_pensements === false) {
+        this.activer_pensements = true;
+      } else {
+        this.activer_pensements = false;
+      }
+    },
     activerdiagnostic() {
       if (this.activer_diagnostic === false) {
         this.activer_diagnostic = true;
@@ -487,48 +528,42 @@ export default {
       this.preloader = true;
       console.log("diagnostics :", this.diagnostics);
       console.log("examens :", this.examens);
-      console.log("pensements :", this.pensements);
+      console.log("pensements :", this.medocs);
       console.log("destination id", this.destination);
-      if (this.destination === ""){
-        this.errors = true
-        this.message = "Veuillez indiquer un destinataire"
-        this.preloader = false;
-      }
-      else if (this.ordonnances === []){
+      if (this.destination === "") {
         this.errors = true;
-        this.message = "Veuillez donner une ordonnance"
+        this.message = "Veuillez indiquer un destinataire";
         this.preloader = false;
-      }
-      else {
+      } else {
         axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .post(chemin + "/ajouterDiagnosticDossier ", {
-          dossier_id: this.$route.params.id,
-          diagnostics: this.diagnostics,
-          examens: this.examens,
-          pensements: this.pensemnts,
-          ordonnances: this.ordonnances,
-          destination_service_id: this.destination,
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.success = true;
-          location.reload();
-          this.message = "Consultation terminée";
-          this.ordonnances = [];
-        })
-        .catch((err) => {
-          this.preloader = false;
-          console.log(err);
-        });
-      }  
+          .create({
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .post(chemin + "/ajouterDiagnosticDossier ", {
+            dossier_id: this.$route.params.id,
+            diagnostics: this.diagnostics,
+            examens: this.examens,
+            pensements: this.medocs,
+            ordonnances: this.ordonnances,
+            destination_service_id: this.destination,
+          })
+          .then((response) => {
+            console.log(response.data);
+            this.preloader = false;
+            this.success = true;
+            location.reload();
+            this.message = "Consultation terminée";
+            this.ordonnances = [];
+          })
+          .catch((err) => {
+            this.preloader = false;
+            console.log(err);
+          });
+      }
     },
     prescire() {
       console.log("################################");
