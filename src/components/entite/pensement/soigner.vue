@@ -7,6 +7,9 @@
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
+          <button style="position: relative; left:85%;" class="btn btn-success btn-rounded" v-on:click="terminer">
+           Terminer
+          </button>
         </div>
         <br />
         <div
@@ -42,57 +45,16 @@
 
         <div class="content">
           <div class="row doctor-grid">
-              <p>{{ message_diagnostic }}</p>
+            <p>{{ message_diagnostic }}</p>
             <div
               class="col-md-4 col-sm-4  col-lg-4"
-              v-for="examen in examens.examens"
+              v-for="examen in pensements.pensements"
               :key="examen.id"
             >
-              <div class="profile-widget" v-if="examen.pivot.resultat === null">
+              <div class="profile-widget">
                 <h4 class="doctor-name text-ellipsis">
                   <a href="profile.html">{{ examen.libelle }}</a>
                 </h4>
-                <br />
-                <div class="form-group row">
-                  <div class="col-md-12">
-                    <input
-                      class="form-control"
-                      type="file"
-                      ref="file"
-                      id="file"
-                      @change="onFilesSelected"
-                    />
-                  </div>
-                  <div class="col-md-10">
-                    <br />
-                    <div class="checkbox">
-                      Payé
-                      <input
-                        type="checkbox"
-                        :name="examen.id + '_checkbox'"
-                        :value="examen.pivot.purchased"
-                        v-model="examen.pivot.purchased"
-                        @change="paye(examen.id, examen.pivot.purchased)"
-                      />
-                    </div>
-                    <br />
-                  </div>
-                </div>
-                <div class="m-t-20 text-center">
-                  <button
-                    type="button"
-                    class="btn btn-warning submit-btn"
-                    v-on:click="
-                      valider(
-                        examen.id,
-                        examen.pivot.id,
-                        examen.pivot.purchased
-                      )
-                    "
-                  >
-                    Valider
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -112,11 +74,11 @@
           <div class="m-t-20 text-center">
             <button
               type="button"
-              class="btn btn-success submit-btn"
+              class="btn btn-warning submit-btn"
               v-on:click="transferer"
             >
-              Transferer
-            </button>
+              Transferer</button
+            >
           </div>
         </div>
       </div>
@@ -134,7 +96,7 @@ export default {
     return {
       // Data of constante
       file: "",
-      examens: [],
+      pensements: [],
       workflows: [],
       liste_constantes: [],
       preloader: false,
@@ -203,12 +165,12 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + "/listeExamenByDossier/" + this.$route.params.id)
+        .get(chemin + "/pensementsByDossier/" + this.$route.params.id)
         .then((response) => {
-          console.log("examen dossier :", response.data.examens);
-          this.examens = response.data;
-          if (this.examens.examens.length === 0) {
-            this.message_diagnostic = "Aucun n'examen pour ce patient";
+          console.log("pensement dossier :", response.data);
+          this.pensements = response.data;
+          if (this.pensements.pensements.length === 0) {
+            this.message_diagnostic = "Aucun pensement pour ce patient";
           }
         })
         .catch((err) => {
@@ -218,7 +180,7 @@ export default {
     },
 
     retourner() {
-      this.$router.push("/laboratoire");
+      this.$router.push("/pensement");
     },
     onFilesSelected(e) {
       this.file = e.target.files[0];
@@ -263,9 +225,6 @@ export default {
       }
     },
     valider(pk, ligne_id, solder) {
-      if (solder === true) {
-        solder = 1;
-      }
       console.log("purchased", this.achat);
       const data = new FormData();
       data.append("dossier_id", this.$route.params.id);
@@ -276,15 +235,7 @@ export default {
       console.log(pk, ligne_id);
       this.preloader = true;
       console.log("image :", solder);
-      if (this.destination === "") {
-        this.errors = true;
-        this.message = "Veuillez indiquer un destinataire";
-        this.preloader = false;
-      } else if (this.ordonnances === []) {
-        this.errors = true;
-        this.message = "Veuillez donner une ordonnance";
-        this.preloader = false;
-      } else {
+      {
         axios
           .create({
             headers: {

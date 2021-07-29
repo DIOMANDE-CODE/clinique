@@ -144,11 +144,27 @@
                 ></router-link
               >
             </li>
-               <li v-if="examinateur">
+            <li v-if="examinateur">
               <router-link to="/laboratoire"
                 ><a
                   ><i class="fa fa-heartbeat"></i>
                   <span style="color:black;">Laboratoire</span></a
+                ></router-link
+              >
+            </li>
+            <li v-if="soignant">
+              <router-link to="/pensement"
+                ><a
+                  ><i class="fa fa-signing"></i>
+                  <span style="color:black;">Pensements</span></a
+                ></router-link
+              >
+            </li>
+                <li v-if="urgence">
+              <router-link to="/pensement"
+                ><a
+                  ><i class="fa fa-signing"></i>
+                  <span style="color:black;">Urgences</span></a
                 ></router-link
               >
             </li>
@@ -169,8 +185,10 @@ export default {
       admin: false,
       secretaire: false,
       infirmiere: false,
-      medecin:false,
+      medecin: false,
       examinateur: false,
+      soignant: false,
+      urgence: false,
       identifiant: "",
       profiles: [],
     };
@@ -229,18 +247,27 @@ export default {
               this.admin = true;
             } else {
               const profil = response.data.data.profile[0].titre;
-              switch (profil) {
-                case "sécrétaire":
+              const service = response.data.data.service[0].nom
+              console.log("profile :", profil);
+              console.log("service :",service);
+              switch (profil + "|" + service) {
+                case "sécrétaire|Accueil":
                   this.secretaire = true;
                   break; //
-                case "infirmière":
+                case "infirmière|Prise De Constante":
                   this.infirmiere = true;
                   break; //
-                case "medecin":
+                case "medecin|Consultation Générale":
                   this.medecin = true;
                   break; //
-                case "examinateur":
+                case "examinateur|Laboratoire":
                   this.examinateur = true;
+                  break; //
+                case "soignant|Pensement":
+                  this.soignant = true;
+                  break; //
+                case "medecine|Urgence":
+                  this.urgence = true
                   break; //
               }
             }

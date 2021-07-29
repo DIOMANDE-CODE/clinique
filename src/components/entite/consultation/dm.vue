@@ -228,7 +228,7 @@ export default {
     },
     voir(pk){
       console.log(pk);
-      this.$router.push("/consultation/info_medical/" + pk);
+      this.$router.push("/consultation/info_medical/" + this.$route.params.id + "/" + pk);
     },
     charger_info() {
       console.log(chemin);

@@ -102,6 +102,13 @@ import examen from '../views/entite/laboratoire/examen.vue'
 import dm from '../views/entite/consultation/dm.vue'
 import infodm from '../views/entite/consultation/infodm.vue'
 
+// route du service pensement
+import pensement from '../views/entite/pensement/pensement.vue'
+import soigner from '../views/entite/pensement/soigner.vue'
+
+// route du service urgence
+import urgence from '../views/entite/urgence/urgence.vue'
+
 const routes = [
   {
     path: '/',
@@ -447,9 +454,26 @@ const routes = [
     component:dm
   },
   {
-    path:'/consultation/info_medical/:id',
+    path:'/consultation/info_medical/:id/:pk',
     name:'infodm',
     component:infodm
+  },
+  // route de service pensement
+  {
+    path:'/pensement',
+    name:'pensement',
+    component:pensement
+  },
+  {
+    path:'/pensement/:id',
+    name:'soigner',
+    component:soigner
+  },
+  // route du service urgence
+  {
+    path:'/urgence',
+    name:'urgence',
+    component:urgence
   }
 ]
 

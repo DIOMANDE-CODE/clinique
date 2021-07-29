@@ -11,23 +11,7 @@
         >
       </div>
       <ul class="nav user-menu float-right">
-        <li class="nav-item dropdown d-none d-sm-block">
-          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"
-            ><i class="fa fa-bell-o"></i>
-            <span class="badge badge-pill bg-danger float-right">0</span></a
-          >
-        
-        </li>
-        <li class="nav-item dropdown d-none d-sm-block">
-          <a
-            href="javascript:void(0);"
-            id="open_msg_box"
-            class="hasnotifications nav-link"
-            ><i class="fa fa-comment-o"></i>
-            <span class="badge badge-pill bg-danger float-right">0</span></a
-          >
-        </li>
-        <li class="nav-item dropdown has-arrow">
+        <li class="nav-item dropdown">
           <a
             href="#"
             class="dropdown-toggle nav-link user-link"
@@ -43,7 +27,7 @@
               <span class="status online"></span>
             </span>
 
-            <span v-on:click="deconnecter">Deconnexion</span>
+            <span @click="deconnecter">Deconnexion</span>
           </a>
         </li>
       </ul>

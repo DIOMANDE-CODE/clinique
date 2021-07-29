@@ -155,7 +155,7 @@
               </div></router-link
             >
           </div>
-               <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="medecin">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="medecin">
             <router-link to="/consultation"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -179,7 +179,7 @@
               </div></router-link
             >
           </div>
-              <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="examinateur">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="examinateur">
             <router-link to="/laboratoire"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -187,6 +187,30 @@
                 ></span>
                 <div class="dash-widget-info text-right">
                   <span class="widget-title1"> Examens </span>
+                </div>
+              </div></router-link
+            >
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="soignant">
+            <router-link to="/pensement"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-signing"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1"> Pensements </span>
+                </div>
+              </div></router-link
+            >
+          </div>
+             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="urgence">
+            <router-link to="/urgence"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-signing"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1"> Urgences </span>
                 </div>
               </div></router-link
             >
@@ -209,6 +233,8 @@ export default {
       infirmiere: false,
       medecin: false,
       examinateur: false,
+      soignant: false,
+      urgence: false,
     };
   },
   created() {
@@ -237,18 +263,27 @@ export default {
               this.admin = true;
             } else {
               const profil = response.data.data.profile[0].titre;
-              switch (profil) {
-                case "sécrétaire":
+              const service = response.data.data.service[0].nom;
+              console.log("profile :", profil);
+              console.log("service :", service);
+              switch (profil + "|" + service) {
+                case "sécrétaire|Accueil":
                   this.secretaire = true;
                   break;
-                case "infirmière":
+                case "infirmière|Prise De Constante":
                   this.infirmiere = true;
                   break;
-                case "medecin":
+                case "medecin|Consultation Générale":
                   this.medecin = true;
                   break;
-                case "examinateur":
+                case "examinateur|Laboratoire":
                   this.examinateur = true;
+                  break;
+                 case "soignant|Pensement":
+                  this.soignant = true;
+                  break;
+                case "medecin|Urgence":
+                  this.urgence = true;
                   break;
               }
             }

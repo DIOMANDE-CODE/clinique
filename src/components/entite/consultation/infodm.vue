@@ -156,7 +156,44 @@
                 </div>
               </div>
               <div class="card-box">
-                <h4 class="card-title">Pensements</h4>
+                <h4 class="card-title">
+                  Pensements
+                  <input
+                    type="checkbox"
+                    name="radio"
+                    v-model="activerPensements"
+                    @change="activerpensement()"
+                  />
+                </h4>
+                <form action="#" v-if="activer_pensements">
+                  <p>{{ info_message_pensements }}</p>
+
+                  <div class="form-group row">
+                    <div
+                      class="col-4"
+                      v-for="diagnostic in pensements"
+                      v-bind:key="diagnostic.id"
+                    >
+                      <div
+                        class="col-md-10"
+                      >
+                        <div class="checkbox">
+                          <input
+                            type="checkbox"
+                            name="checkbox"
+                            checked
+                            disabled
+                            v-model="diagnostic.value"
+                            :value="diagnostic.id"
+                          />
+                          {{ diagnostic.libelle }}
+                        </div>
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
               <div class="card-box">
                 <h4 class="card-title">
@@ -259,11 +296,13 @@ export default {
       detail: false,
       info_message_diagnostic: "",
       info_message_examens: "",
+      info_message_pensements: "",
 
       medicament: "",
       quantite: "",
       posologie: "",
       ordonnances: [],
+      pensements : [],
       id: "",
 
       activer_diagnostic: false,
@@ -300,7 +339,7 @@ export default {
         this.activer_ordonnances = false;
       }
     },
-    activerpensemnt() {
+    activerpensement() {
       if (this.activer_pensements === false) {
         this.activer_pensements = true;
       } else {
@@ -431,6 +470,30 @@ export default {
           this.examens = response.data.data.examens;
           if (this.examens.length === 0) {
             this.info_message_examen = "Aucun examen fait ce jour";
+          }
+          this.charger_pensement();
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    charger_pensement() {
+      console.log("loading......................");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/dossiersByClient/" + this.$route.params.id)
+        .then((response) => {
+          console.log("pensements list :", response.data.data);
+          this.pensements = response.data.data.pensements;
+          if (this.pensements.length === 0) {
+            this.info_message_pensements = "Aucun pensement fait ce jour";
           }
         })
         .catch((err) => {
