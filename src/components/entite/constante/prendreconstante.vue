@@ -69,6 +69,19 @@
                     />
                   </div>
                 </div>
+                <div class="form-group">
+                  <label class="col-form-label">Service destinataire</label>
+                  <div>
+                    <select class="form-control" v-model="destination">
+                      <option
+                        :value="workflow.service.id"
+                        v-for="workflow in workflows"
+                        v-bind:key="workflow.id"
+                        >{{ workflow.service.nom }}</option
+                      >
+                    </select>
+                  </div>
+                </div>
               </div>
             </form>
             <div class="m-t-20 text-center">
@@ -100,6 +113,8 @@ export default {
       assurances: [],
       constantes: [],
       liste_constantes: [],
+      workflows: [],
+      destination:'',
 
       preloader: false,
       success: false,
@@ -115,6 +130,27 @@ export default {
     this.charge();
   },
   methods: {
+    charger_workfow() {
+      console.log("workflow");
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/getWorkflowService")
+        .then((response) => {
+          console.log(response.data);
+          this.workflows = response.data.data;
+          console.log("workflow :", this.workflows);
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
     charge() {
       console.log("loading......................");
       axios
@@ -129,6 +165,7 @@ export default {
         .then((response) => {
           console.log("constante list :", response.data);
           this.constantes = response.data;
+          this.charger_workfow();
         })
         .catch((err) => {
           this.preloader = false;
@@ -154,11 +191,13 @@ export default {
       this.charge();
     },
     ajouter() {
+       console.log("destination id", this.destination);
       this.preloader = true;
       var constante_final = {
-          dossier_id: this.$route.params.id,
-          constantes: this.constantes,
-        }
+        dossier_id: this.$route.params.id,
+        constantes: this.constantes,
+        destination_service_id: this.destination,
+      };
       console.log("constante finale :", constante_final);
       axios
         .create({

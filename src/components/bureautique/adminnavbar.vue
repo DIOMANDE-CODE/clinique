@@ -160,7 +160,7 @@
                 ></router-link
               >
             </li>
-                <li v-if="urgence">
+            <li v-if="urgence">
               <router-link to="/pensement"
                 ><a
                   ><i class="fa fa-signing"></i>
@@ -247,9 +247,9 @@ export default {
               this.admin = true;
             } else {
               const profil = response.data.data.profile[0].titre;
-              const service = response.data.data.service[0].nom
+              const service = response.data.data.service[0].nom;
               console.log("profile :", profil);
-              console.log("service :",service);
+              console.log("service :", service);
               switch (profil + "|" + service) {
                 case "sécrétaire|Accueil":
                   this.secretaire = true;
@@ -266,8 +266,8 @@ export default {
                 case "soignant|Pensement":
                   this.soignant = true;
                   break; //
-                case "medecine|Urgence":
-                  this.urgence = true
+                case "medecin|Urgence":
+                  this.urgence = true;
                   break; //
               }
             }

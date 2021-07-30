@@ -38,7 +38,14 @@
             <h4 class="page-title" style="color:black; font-weight:bold;">
               LISTE D'ATTENTE
             </h4>
+         
           </div>
+            <i
+              class="fa fa-rotate-right m-r-5"
+              style="cursor:pointer; color:green; position:absolute; left:25%;"
+              v-on:click="actualiser"
+              alt="actualiser"
+            ></i>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -91,7 +98,7 @@
                             ></i>
                             Faire une consultation</a
                           >
-                             <a
+                          <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
                             v-on:click="voir_dm(employe.dossier.client_id)"
@@ -420,6 +427,9 @@ export default {
     },
     calendrier(pk) {
       this.$router.push("/employe/calendrier/" + pk);
+    },
+    actualiser() {
+      window.location.reload();
     },
     activer(pk) {
       this.preload = true;

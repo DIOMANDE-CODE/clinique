@@ -108,6 +108,8 @@ import soigner from '../views/entite/pensement/soigner.vue'
 
 // route du service urgence
 import urgence from '../views/entite/urgence/urgence.vue'
+import traiterurgence from "../views/entite/urgence/traiterurgence.vue"
+import fairetraitement from "../views/entite/urgence/fairetraitement.vue"
 
 const routes = [
   {
@@ -474,6 +476,16 @@ const routes = [
     path:'/urgence',
     name:'urgence',
     component:urgence
+  },
+  {
+    path:'/urgence/:id',
+    name:'traiterurgence',
+    component:traiterurgence
+  },
+  {
+    path:'/urgence/traitement/:id',
+    name:'fairetraitement',
+    component:fairetraitement
   }
 ]
 

@@ -42,56 +42,36 @@
 
         <div class="content">
           <div class="row doctor-grid">
-              <p>{{ message_diagnostic }}</p>
+            <p>{{ message_diagnostic }}</p>
             <div
               class="col-md-4 col-sm-4  col-lg-4"
-              v-for="examen in examens.examens"
+              v-for="examen in traitements"
               :key="examen.id"
             >
-              <div class="profile-widget" v-if="examen.pivot.resultat === null">
+              <div class="profile-widget">
                 <h4 class="doctor-name text-ellipsis">
                   <a href="profile.html">{{ examen.libelle }}</a>
                 </h4>
                 <br />
-                <div class="form-group row">
-                  <div class="col-md-12">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Doses </label>
                     <input
                       class="form-control"
-                      type="file"
-                      ref="file"
-                      id="file"
-                      @change="onFilesSelected"
+                      type="text"
+                      v-model="examen.dose"
                     />
                   </div>
-                  <div class="col-md-10">
-                    <br />
-                    <div class="checkbox">
-                      Payé
-                      <input
-                        type="checkbox"
-                        :name="examen.id + '_checkbox'"
-                        :value="examen.pivot.purchased"
-                        v-model="examen.pivot.purchased"
-                        @change="paye(examen.id, examen.pivot.purchased)"
-                      />
-                    </div>
-                    <br />
-                  </div>
                 </div>
-                <div class="m-t-20 text-center">
-                  <button
-                    type="button"
-                    class="btn btn-warning submit-btn"
-                    v-on:click="
-                      valider(
-                        examen.id,
-                        examen.pivot.id,
-                        examen.pivot.purchased
-                      )
-                    "
-                  >
-                    Valider
-                  </button>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Voie </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="examen.voie"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -115,7 +95,7 @@
               class="btn btn-success submit-btn"
               v-on:click="transferer"
             >
-              Transferer
+              Appliquer le traitement
             </button>
           </div>
         </div>
@@ -123,7 +103,6 @@
     </div>
   </div>
 </template>
-
 <script>
 var solde = "";
 import loader from "../../loader.vue";
@@ -134,7 +113,7 @@ export default {
     return {
       // Data of constante
       file: "",
-      examens: [],
+      traitements: [],
       workflows: [],
       liste_constantes: [],
       preloader: false,
@@ -145,12 +124,13 @@ export default {
       achat: null,
       payee: "",
       message_diagnostic: "",
-
       medicament: "",
       quantite: "",
       posologie: "",
       ordonnances: [],
       id: "",
+      voie: "",
+      dose: "",
 
       activer_diagnostic: false,
       activer_examens: false,
@@ -203,11 +183,11 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + "/listeExamenByDossier/" + this.$route.params.id)
+        .get(chemin + "/listeDesTraitementsUrgence")
         .then((response) => {
-          console.log("examen dossier :", response.data.examens);
-          this.examens = response.data;
-          if (this.examens.examens.length === 0) {
+          console.log("traitement dossier :", response.data);
+          this.traitements = response.data;
+          if (this.traitements.length === 0) {
             this.message_diagnostic = "Aucun n'examen pour ce patient";
           }
         })
@@ -217,7 +197,7 @@ export default {
         });
     },
     retourner() {
-      this.$router.push("/laboratoire");
+      this.$router.push("/urgence/" + this.$route.params.id);
     },
     onFilesSelected(e) {
       this.file = e.target.files[0];
@@ -239,21 +219,16 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           })
-          .post(chemin + "/transfererDossier", {
+          .post(chemin + "/ajouterTraitementDossier", {
             dossier_id: this.$route.params.id,
-            destination_service_id: this.destination,
+            traitements: this.traitements,
           })
           .then((response) => {
             console.log(response.data);
-            if (response.data.state === "true") {
-              this.preloader = false;
-              this.success = true;
-              this.message = "transfert effectué";
-              this.destination = "";
-            } else {
-              this.errors = true;
-              this.message = "transfert non enregistré";
-            }
+            this.preloader = false;
+            this.success = true;
+            this.message = "Traitement effectué";
+            this.destination = "";
           })
           .catch((err) => {
             this.preloader = false;
@@ -266,11 +241,6 @@ export default {
         solder = 1;
       }
       console.log("purchased", this.achat);
-      const data = new FormData();
-      data.append("dossier_id", this.$route.params.id);
-      data.append("purchased", pk);
-      data.append("id", ligne_id);
-      data.append("resultat", pk);
 
       console.log(pk, ligne_id);
       this.preloader = true;
@@ -292,7 +262,9 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           })
-          .post(chemin + "/modifierExamenDossier", data)
+          .post(chemin + "/ajouterTraitementDossier", {
+            traitements: this.traitements,
+          })
           .then((response) => {
             console.log(response.data);
             if (response.data.state === "true") {

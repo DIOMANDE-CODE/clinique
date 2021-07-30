@@ -36,7 +36,13 @@
         <div class="row">
           <div class="col-sm-4 col-3">
             <h4 class="page-title" style="color:black; font-weight:bold;">
-              LISTE D'ATTENTE
+              LISTE D'ATTENTE &nbsp;&nbsp;
+              <i
+                class="fa fa-rotate-right m-r-5"
+                style="cursor:pointer; color:green;"
+                v-on:click="actualiser"
+                alt="actualiser"
+              ></i>
             </h4>
           </div>
         </div>
@@ -83,13 +89,21 @@
                           <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
-                            v-on:click="faire_pensement(employe.dossier.id)"
+                            v-on:click="faire_urgence(employe.dossier.id)"
                             v-bind:identifiant="identifiant"
                             ><i
                               class="fa fa-signing"
                               style="cursor:pointer"
                             ></i>
-                            Faire ses pensements</a
+                            Faire les traitements</a
+                          >
+                          <a
+                            class="dropdown-item"
+                            style="color:black; cursor:pointer"
+                            v-on:click="terminer(employe.id)"
+                            v-bind:identifiant="identifiant"
+                          >
+                            Terminer</a
                           >
                         </div>
                       </div>
@@ -377,6 +391,9 @@ export default {
     this.charge();
   },
   methods: {
+    actualiser() {
+      window.location.reload();
+    },
     charge: function() {
       this.preload = true;
       axios
@@ -400,11 +417,34 @@ export default {
           }
         });
     },
-    faire_pensement(pk) {
-      this.$router.push("/pensement/" + pk);
+    faire_urgence(pk) {
+      this.$router.push("/urgence/" + pk);
     },
     calendrier(pk) {
       this.$router.push("/employe/calendrier/" + pk);
+    },
+    terminer(pk) {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json,multipart/form-data",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .put(chemin + "/modifierFileAttente/" + pk,{
+          status:'termine'
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.preloader = false;
+          Location.reload()
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
     },
     activer(pk) {
       this.preload = true;
