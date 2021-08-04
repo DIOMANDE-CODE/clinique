@@ -228,7 +228,7 @@ export default {
     },
     voir(pk){
       console.log(pk);
-      this.$router.push("/consultation/info_medical/" + this.$route.params.id + "/" + pk);
+      this.$router.push("/consultation/info_medical/" + pk);
     },
     charger_info() {
       console.log(chemin);
@@ -243,6 +243,7 @@ export default {
         })
         .get(chemin + `/patient/${this.$route.params.id}`)
         .then((response) => {
+          console.log("dossiers medical :", response.data);
           this.preloader = false;
           console.log(response.data);
           this.nom = response.data.nom;

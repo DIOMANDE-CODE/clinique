@@ -224,6 +224,38 @@ export default {
           });
       }
     },
+    terminer(){
+      console.log("destination :", this.destination);
+      console.log("examens :", this.examens);
+      this.preloader = true;
+        axios
+          .create({
+            headers: {
+              "Content-Type": "application/json,multipart/form-data",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .put(chemin + "/modifierFileAttente/" + this.$route.params.id, {
+            status : "termine"
+          })
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.state === "true") {
+              this.preloader = false;
+              this.success = true;
+              this.message = "transfert effectué";
+              this.destination = "";
+            } else {
+              this.errors = true;
+              this.message = "transfert non enregistré";
+            }
+          })
+          .catch((err) => {
+            this.preloader = false;
+            console.log(err);
+          });
+    },
     valider(pk, ligne_id, solder) {
       console.log("purchased", this.achat);
       const data = new FormData();

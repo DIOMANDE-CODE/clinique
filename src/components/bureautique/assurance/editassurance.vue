@@ -53,6 +53,10 @@
                 <label>Assurances <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="nom" />
               </div>
+                <div class="form-group">
+                <label>Pourcentage <span class="text-danger">*</span></label>
+                <input class="form-control" type="text" v-model="pourcentage" />
+              </div>
               <div class="form-group">
                 <label>Nom de l'entreprise</label>
                 <input
@@ -338,6 +342,7 @@ export default {
       nom: "",
       entreprise: "",
       id: "",
+      pourcentage : "",
     };
   },    
   components: {
@@ -359,6 +364,7 @@ export default {
           this.preloader = false;
           this.nom = response.data.data.nom;
           this.entreprise = response.data.data.entreprise;
+          this.pourcentage = response.data.data.pourcentage;
         } else {
           this.preloader = false;
           this.message = "Aucun services existants";
@@ -374,7 +380,7 @@ export default {
       this.$router.push("/admin/assurance");
     },
     renitialiser() {
-      (this.entreprise = ""), (this.nom = "");
+      (this.entreprise = ""), (this.nom = ""),(this.pourcentage = "");
     },
     modifier() {
         console.log(this.id);
@@ -382,6 +388,7 @@ export default {
       var assurances = {
         nom: this.nom,
         entreprise: this.entreprise,
+        pourcentage: this.pourcentage
       };
       console.log(assurances);
       axios

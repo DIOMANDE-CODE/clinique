@@ -203,7 +203,7 @@
               </div></router-link
             >
           </div>
-             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="urgence">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="urgence">
             <router-link to="/urgence"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -211,6 +211,18 @@
                 ></span>
                 <div class="dash-widget-info text-right">
                   <span class="widget-title1"> Urgences </span>
+                </div>
+              </div></router-link
+            >
+          </div>
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="caisse">
+            <router-link to="/caisse"
+              ><div class="dash-widget">
+                <span class="dash-widget-bg1"
+                  ><i class="fa fa-money"></i
+                ></span>
+                <div class="dash-widget-info text-right">
+                  <span class="widget-title1"> Caisse </span>
                 </div>
               </div></router-link
             >
@@ -235,6 +247,7 @@ export default {
       examinateur: false,
       soignant: false,
       urgence: false,
+      caisse: false,
     };
   },
   created() {
@@ -279,11 +292,14 @@ export default {
                 case "examinateur|Laboratoire":
                   this.examinateur = true;
                   break;
-                 case "soignant|Pensement":
+                case "soignant|Pensement":
                   this.soignant = true;
                   break;
                 case "medecin|Urgence":
                   this.urgence = true;
+                  break;
+                case "caissière|Caisse":
+                  this.caisse = true;
                   break;
               }
             }

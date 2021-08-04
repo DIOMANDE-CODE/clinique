@@ -15,16 +15,15 @@
           <a
             href="#"
             class="dropdown-toggle nav-link user-link"
-            data-toggle="dropdown"
+
           >
             <span class="user-img">
               <img
                 class="rounded-circle"
-                src="../assets/img/user.jpg"
+                src="../assets/image/992511.png"
                 width="24"
                 alt="Admin"
               />
-              <span class="status online"></span>
             </span>
 
             <span @click="deconnecter">Deconnexion</span>

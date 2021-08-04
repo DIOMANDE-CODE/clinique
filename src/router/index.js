@@ -111,6 +111,10 @@ import urgence from '../views/entite/urgence/urgence.vue'
 import traiterurgence from "../views/entite/urgence/traiterurgence.vue"
 import fairetraitement from "../views/entite/urgence/fairetraitement.vue"
 
+// route du service caisse
+import caisse from '../views/entite/caisse/caisse.vue'
+import facture from '../views/entite/caisse/facture.vue'
+
 const routes = [
   {
     path: '/',
@@ -456,7 +460,7 @@ const routes = [
     component:dm
   },
   {
-    path:'/consultation/info_medical/:id/:pk',
+    path:'/consultation/info_medical/:id',
     name:'infodm',
     component:infodm
   },
@@ -486,6 +490,18 @@ const routes = [
     path:'/urgence/traitement/:id',
     name:'fairetraitement',
     component:fairetraitement
+  },
+
+  // route du service caisse
+  {
+    path:'/caisse',
+    name:'caisse',
+    component:caisse
+  },
+  {
+    path:'/facture/:id',
+    name:'facture',
+    component:facture
   }
 ]
 

@@ -7,6 +7,9 @@
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
+          <button style="position: relative; left:85%;" class="btn btn-success btn-rounded" v-on:click="terminer">
+           Terminer
+          </button>
         </div>
         <br />
         <div
@@ -318,7 +321,7 @@
                   class="btn btn-success submit-btn"
                   v-on:click="valider"
                 >
-                  Valider
+                  Transferer
                 </button>
               </div>
             </div>
@@ -444,6 +447,38 @@ export default {
           this.preloader = false;
           console.log(err);
         });
+    },
+    terminer(){
+      console.log("destination :", this.destination);
+      console.log("examens :", this.examens);
+      this.preloader = true;
+        axios
+          .create({
+            headers: {
+              "Content-Type": "application/json,multipart/form-data",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .put(chemin + "/modifierFileAttente/" + this.$route.params.id, {
+            status : "termine"
+          })
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.state === "true") {
+              this.preloader = false;
+              this.success = true;
+              this.message = "transfert effectué";
+              this.destination = "";
+            } else {
+              this.errors = true;
+              this.message = "transfert non enregistré";
+            }
+          })
+          .catch((err) => {
+            this.preloader = false;
+            console.log(err);
+          });
     },
     charger_workfow() {
       console.log("workflow");

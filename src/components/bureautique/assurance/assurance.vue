@@ -58,6 +58,7 @@
                   <tr>
                     <th>Assurances</th>
                     <th>Entreprises</th>
+                    <th>Pourcentage (%)</th>
                     <th>Status</th>
                     <th class="text-right">Actions</th>
                   </tr>
@@ -66,6 +67,7 @@
                   <tr v-for="assurance in assurances" v-bind:key="assurance.id">
                     <td>{{ assurance.nom }}</td>
                     <td>{{ assurance.entreprise }}</td>
+                    <td>{{ assurance.pourcentage }}</td>
                     <td v-if="assurance.statut === 'actif'">
                       <span class="custom-badge status-green">{{
                         assurance.statut

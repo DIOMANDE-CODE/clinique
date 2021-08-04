@@ -51,18 +51,17 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table">
+              <table id="example" class="table table-striped custom-table">
                 <thead>
                   <tr>
                     <th style="min-width:200px;">Noms</th>
                     <th>Prenoms</th>
                     <th>Sexes</th>
-                    <th>Contacts</th>
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="employe in clients" v-bind:key="employe.id">
+                  <tr v-for="employe in clients" :key="employe.id">
                     <td>
                       <img
                         width="28"
@@ -75,7 +74,6 @@
                     </td>
                     <td>{{ employe.prenoms }}</td>
                     <td>{{ employe.sexe }}</td>
-                    <td>{{ employe.contacts_cel }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -97,7 +95,7 @@
                             ></i>
                             Voir +</a
                           >
-                             <a
+                          <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
                             v-on:click="consultation(employe.id)"
@@ -109,7 +107,6 @@
                             nouvelle consultation</a
                           >
                         </div>
-                        
                       </div>
                     </td>
                   </tr>
@@ -126,7 +123,46 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
+  mounted() {
+    this.preload = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listerPatients")
+      .then((response) => {
+        console.log("Patients :",response.data);
+        this.preload = false;
+        this.clients = response.data;
+        setTimeout(function() {
+          $("#example").DataTable({
+            pagingType: "full_numbers",
+            pageLength: 5,
+            processing: true,
+            dom: "Bfrtip",
+            buttons: ["copy", "csv", "print"],
+            "order": []
+          });
+        }, 1000);
+      });
+  },
   data() {
     return {
       clients: [],
@@ -139,9 +175,6 @@ export default {
     };
   },
   components: {},
-  created() {
-    this.charge();
-  },
   methods: {
     charge: function() {
       this.preload = true;
@@ -158,14 +191,15 @@ export default {
           console.log(response.data);
           this.preload = false;
           this.clients = response.data;
+          this.table.rows = this.clients;
         });
     },
     voir(pk) {
       this.$router.push("/acceuil/profil/" + pk);
     },
-    consultation(pk){
+    consultation(pk) {
       this.$router.push("/acceuil/dossier/" + pk);
-    }
+    },
   },
 };
 </script>

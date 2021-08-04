@@ -168,6 +168,14 @@
                 ></router-link
               >
             </li>
+              <li v-if="caisse">
+              <router-link to="/caisse"
+                ><a
+                  ><i class="fa fa-money"></i>
+                  <span style="color:black;">Caisse</span></a
+                ></router-link
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -189,6 +197,7 @@ export default {
       examinateur: false,
       soignant: false,
       urgence: false,
+      caisse: false,
       identifiant: "",
       profiles: [],
     };
@@ -269,6 +278,8 @@ export default {
                 case "medecin|Urgence":
                   this.urgence = true;
                   break; //
+                case "caissière|Caisse":
+                  this.caisse = true;
               }
             }
           } else {

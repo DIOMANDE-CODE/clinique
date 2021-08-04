@@ -301,7 +301,7 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6">
-                  <label class="display-block">En activté </label>
+                  <label class="display-block"> Situation professionnel </label>
                   <div class="form-check form-check-inline">
                     <input
                       class="form-check-input"
@@ -326,6 +326,19 @@
                     />
                     <label class="form-check-label" for="employee_inactive">
                       Chômage
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="activite"
+                      id="employee_inactive"
+                      value="activite"
+                      v-model="activite"
+                    />
+                    <label class="form-check-label" for="employee_inactive">
+                      En activté
                     </label>
                   </div>
                 </div>
@@ -451,11 +464,6 @@
                       Veuf(ve)
                     </label>
                   </div>
-                  <div class="form-group col-sm-6">
-                  <label class="col-form-label ">
-                    Service destinataire<span class="text-danger">*</span>
-                  </label>
-                </div>
                 </div>
               </div>
             </form>
@@ -665,6 +673,7 @@ export default {
           this.activite = "";
           this.instruction = "";
           this.matrimoniale = "";
+          this.$router.push("/acceuil");
         })
         .catch((err) => {
           this.preloader = false;

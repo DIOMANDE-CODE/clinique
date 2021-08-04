@@ -58,7 +58,7 @@
                   <div class="form-group">
                     <label>
                       {{ constante.libelle }}
-                      <span class="text-danger">*</span></label
+                     </label
                     >
                     <input
                       class="form-control"
@@ -213,7 +213,7 @@ export default {
           this.preloader = false;
           this.success = true;
           this.message = "Constante ajouté avec success";
-          this.charge();
+          this.$router.push("/entite/constante");
         })
         .catch((err) => {
           this.preloader = false;

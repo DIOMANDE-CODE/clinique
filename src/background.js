@@ -4,6 +4,9 @@ import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const isDevelopment = process.env.NODE_ENV !== "production";
+window.$ = window.jquery = require('./node_modules/jquery');<font></font>
+window.dt = require('./node_modules/datatables.net')();<font></font>
+window.$('#table_id').DataTable();<font></font>
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([

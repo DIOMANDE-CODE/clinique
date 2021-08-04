@@ -39,12 +39,18 @@
               LISTE D'ATTENTE
             </h4>
           </div>
+            <i
+              class="fa fa-rotate-right m-r-5"
+              style="cursor:pointer; color:green; position:relative; right:3%;"
+              v-on:click="actualiser"
+              alt="actualiser"
+            ></i>
         </div>
         <div class="row">
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table">
+              <table id="example" class="table table-striped custom-table">
                 <thead>
                   <tr>
                     <th style="min-width:200px;">Noms</th>
@@ -356,28 +362,22 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 import loader from "../../../components/loader.vue";
 
 export default {
-  data() {
-    return {
-      patients: [],
-      identifiant: null,
-      status: "",
-      preload: false,
-      success: false,
-      errors: false,
-      message: "",
-    };
-  },
-  components: {
-    loader,
-  },
-  created() {
-    this.charge();
-  },
-  methods: {
-    charge: function() {
+  mounted() {
       this.preload = true;
       axios
         .create({
@@ -393,18 +393,46 @@ export default {
           if (response.data.state === "true") {
             this.preload = false;
             this.patients = response.data.data;
+            setTimeout(function() {
+          $("#example").DataTable({
+            pagingType: "full_numbers",
+            pageLength: 5,
+            processing: true,
+            dom: "Bfrtip",
+            buttons: ["copy", "csv", "print"],
+            "order": []
+          });
+        }, 1000);
           } else {
             this.preload = false;
             this.message = "Aucun employés existants";
             console.log("erreur de chargement");
           }
-        });
-    },
+        })
+  },
+  data() {
+    return {
+      patients: [],
+      identifiant: null,
+      status: "",
+      preload: false,
+      success: false,
+      errors: false,
+      message: "",
+    };
+  },
+  components: {
+    loader,
+  },
+  methods: {
     prendre(pk) {
       this.$router.push("/entite/prendre/constante/" + pk);
     },
     calendrier(pk) {
       this.$router.push("/employe/calendrier/" + pk);
+    },
+       actualiser() {
+      window.location.reload();
     },
     activer(pk) {
       this.preload = true;

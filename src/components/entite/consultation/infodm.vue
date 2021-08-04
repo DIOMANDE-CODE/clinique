@@ -456,6 +456,8 @@ export default {
     },
     charger_examen() {
       console.log("loading......................");
+          console.log("params :",this.$route.params);
+
       axios
         .create({
           headers: {

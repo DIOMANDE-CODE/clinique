@@ -1,21 +1,8 @@
 <template>
   <div>
-    <loader v-if="preloader"></loader>
+    <loader v-if="preload"></loader>
     <div class="page-wrapper">
       <div class="content">
-        <div class="m-t-15">
-          <button class="btn btn-primary btn-rounded" v-on:click="retourner">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
-          </button>
-        </div>
-        <br />
-        <div class="row">
-          <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title" style="color:black; font-weight: bold;">
-              AJOUTER
-            </h4>
-          </div>
-        </div>
         <div
           v-if="success"
           class="alert alert-success alert-dismissible fade show"
@@ -47,47 +34,70 @@
           </button>
         </div>
         <div class="row">
-          <div class="col-lg-8 offset-lg-2">
-            <form>
-              <div class="form-group">
-                <label>Nom de l'assurance <span class="text-danger">*</span></label>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="nom"
-                  required
-                />
-              </div>
-                <div class="form-group">
-                <label>Pourcentage de l'assurance <span class="text-danger">*</span></label>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="pourcentage"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>Nom de l'entreprise</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="entreprise"
-                  required
-                />
-              </div>
-              <div class="m-t-20 text-center">
-                <button
-                  class="btn btn-danger submit-btn"
-                  v-on:click="renitialiser"
-                >
-                  Réinitialiser</button
-                >&nbsp;&nbsp;&nbsp;
-                <button class="btn btn-success submit-btn" v-on:click="ajouter">
-                  creer
-                </button>
-              </div>
-            </form>
+          <div class="col-sm-4 col-3">
+            <h4 class="page-title" style="color:black; font-weight:bold;">
+              LISTE D'ATTENTE
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p>{{ message }}</p>
+            <div class="table-responsive">
+              <table class="table table-striped custom-table">
+                <thead>
+                  <tr>
+                    <th style="min-width:200px;">Noms</th>
+                    <th>Prenoms</th>
+                    <th>Status</th>
+                    <th>Motif</th>
+
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="employe in patients" v-bind:key="employe.id">
+                    <td>
+                      <img
+                        width="28"
+                        height="28"
+                        src="../../../assets/img/user.jpg"
+                        class="rounded-circle"
+                        alt=""
+                      />
+                      <h2>{{ employe.dossier.client.nom }}</h2>
+                    </td>
+                    <td>{{ employe.dossier.client.prenoms }}</td>
+                    <td>{{ employe.status }}</td>
+                    <td>{{ employe.dossier.objet }}</td>
+                    <td class="text-right">
+                      <div class="dropdown dropdown-action">
+                        <a
+                          href="#"
+                          class="action-icon dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                          ><i class="fa fa-ellipsis-v"></i
+                        ></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a
+                            class="dropdown-item"
+                            style="color:black; cursor:pointer"
+                            v-on:click="faire_facture(employe.dossier.id)"
+                            v-bind:identifiant="identifiant"
+                            ><i
+                              class="fa fa-money"
+                              style="cursor:pointer"
+                            ></i>
+                            Faire sa facture</a
+                          >
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -343,81 +353,83 @@
   </div>
 </template>
 <script>
-import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 
+import loader from "../../../components/loader.vue";
+
 export default {
-  name: "ajoutdepartement",
   data() {
     return {
+      patients: [],
+      identifiant: null,
+      status: "",
+      preload: false,
       success: false,
       errors: false,
       message: "",
-      preloader: false,
-      nom: "",
-      entreprise: "",
-      pourcentage : "",
     };
   },
   components: {
     loader,
   },
+  created() {
+    this.charge();
+  },
   methods: {
-    renitialiser() {
-      (this.nom = ""), (this.entreprise = ""),(this.pourcentage = "");
+    charge: function() {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listeFileAttentes")
+        .then((response) => {
+          console.log(" liste d'attente :", response.data); 
+            this.patients = response.data;
+            this.preload = false;
+        });
     },
-    ajouter() {
-      if (
-        this.nom === "" ||
-        this.entreprise === "" ||
-        this.pourcentage === "" 
-      ) {
-        // this.errors = true
-        // this.message = "Veuillez saisir le nom du departement"
-      } else {
-        this.preloader = true;
-        var assurance = {
-          nom: this.nom,
-          entreprise: this.entreprise,
-          pourcentage : this.pourcentage
-        };
-        console.log(assurance);
-        axios
-          .create({
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "*",
-            },
-          })  
-          .post(chemin + "/creationAssurance", assurance)
-          .then((response) => {
-            console.log(response.data);
-            if (response.data.state === true) {
-              this.preloader = false;
-              this.success = true;
-              this.message = response.data.message;
-              console.log("reussie");
-
-              this.nom = "";
-              this.description = "";
-              this.pourcentage = "";
-            } else {
-              this.preloader = false;
-              this.errors = true;
-              this.message = response.data.message;
-            }
-          })
-          .catch((err) => {
-            this.preloader = false;
+    faire_facture(pk) {
+      this.$router.push("/facture/" + pk);
+    },
+    calendrier(pk) {
+      this.$router.push("/employe/calendrier/" + pk);
+    },
+    activer(pk) {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/activerDesactiverUtilisateur/", {
+          id: pk,
+          statut: "actif",
+        })
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preload = false;
+            this.success = true;
+            this.message = response.data.message;
+            this.charge();
+          } else {
+            this.preload = false;
             this.errors = true;
-            console.log(err);
-          });
-      }
-    },
-    retourner() {
-      this.$router.push("/admin/assurance");
+            this.message = response.data.message;
+          }
+        })
+        .catch((err) => {
+          this.preload = false;
+          console.log(err);
+        });
     },
   },
 };
