@@ -464,6 +464,8 @@ export default {
             this.message_success = "Un nouveau médicament ajouté";
             console.log("reussie");
 
+            this.$router.push("/pharmacie/medicament")
+
             this.nom = "";
             this.prix = "";
             this.categorie = "";

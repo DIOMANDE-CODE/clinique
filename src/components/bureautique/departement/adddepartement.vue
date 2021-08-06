@@ -385,11 +385,12 @@ export default {
 
             this.nom = "";
             this.description = "";
+            this.$router.push("/admin/departement")
           } else {
             this.preloader = false;
             this.errors = true;
             this.message = response.data.message;
-          }
+          } 
         })
         .catch((err) => {
           this.preloader = false;

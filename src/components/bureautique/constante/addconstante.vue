@@ -378,10 +378,13 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = "Une nouvelle constante ajoutée";
+            this.$router.push("/constante");
             console.log("reussie");
 
             this.nom = "";
             this.type = "";
+
+
           })
           .catch((err) => {
             this.preloader = false;

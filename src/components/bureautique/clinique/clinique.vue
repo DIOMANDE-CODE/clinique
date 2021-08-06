@@ -57,7 +57,7 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table mb-0 datatable">
+              <table id="example" class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
                     <th>Nom des cliniques</th>
@@ -147,7 +147,55 @@ import { chemin } from "../../../assets/js/chemin.js";
 import { identifiant } from "../../../assets/js/info.js";
 import loader from "../../../components/loader.vue";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
+  mounted() {
+    this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listClinique")
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.cliniques = response.data.data;
+              setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 5,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+            });
+          }, 1000);
+          } else {
+            this.preloader = false;
+            this.message = "Aucune cliniques existantes";
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  },
   data() {
     return {
       cliniques: [],
@@ -170,36 +218,7 @@ export default {
   components: {
     loader,
   },
-  created() {
-    this.charge();
-  },
   methods: {
-    charge: function() {
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listClinique")
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.cliniques = response.data.data;
-          } else {
-            this.preloader = false;
-            this.message = "Aucune cliniques existantes";
-            console.log("erreur de chargement");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     retourner() {
       this.$router.push("/bureautique");
     },

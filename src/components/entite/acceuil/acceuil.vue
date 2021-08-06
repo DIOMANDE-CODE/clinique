@@ -145,7 +145,7 @@ export default {
           Authorization: "Bearer " + localStorage.getItem("token"),
           "Access-Control-Allow-Origin": "*",
         },
-      })
+      })  
       .get(chemin + "/listerPatients")
       .then((response) => {
         console.log("Patients :",response.data);

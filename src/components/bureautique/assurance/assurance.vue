@@ -53,7 +53,7 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table mb-0 datatable">
+              <table id="example" class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
                     <th>Assurances</th>
@@ -386,25 +386,21 @@ import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import { assurance } from "../../../assets/js/info.js";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
-  data() {
-    return {
-      preloader: false,
-      success: false,
-      errors: false,
-      assurances: [],
-      message: "",
-    };
-  },
-  components: {
-    loader,
-  },
-  created() {
-    this.charge();
-  },
-  methods: {
-    charge: function() {
-      this.preloader = true;
+  mounted() {
+    this.preloader = true;
       axios
         .create({
           headers: {
@@ -419,13 +415,36 @@ export default {
           if (response.data.state === true) {
             this.preloader = false;
             this.assurances = response.data.data;
+               setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 5,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+            });
+          }, 1000);
           } else {
             this.preloader = false;
             this.message = "Aucune assurances existantes";
             console.log("erreur de chargement");
           }
         });
-    },
+  },
+  data() {
+    return {
+      preloader: false,
+      success: false,
+      errors: false,
+      assurances: [],
+      message: "",
+    };
+  },
+  components: {
+    loader,
+  },
+  methods: {
     modifier(pk) {
       axios
         .create({

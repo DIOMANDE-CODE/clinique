@@ -51,40 +51,10 @@
             >
           </div>
         </div>
-        <div class="row filter-row">
-                    <div class="col-sm-6 col-md-3">
-                        <div class="form-group form-focus">
-                            <label class="focus-label">Employee ID</label>
-                            <input type="text" class="form-control floating">
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="form-group form-focus">
-                            <label class="focus-label">Employee Name</label>
-                            <input type="text" class="form-control floating">
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="form-group form-focus select-focus">
-                            <label class="focus-label">Role</label>
-                            <select class="select floating">
-                                <option>Select Role</option>
-                                <option>Nurse</option>
-                                <option>Pharmacist</option>
-                                <option>Laboratorist</option>
-                                <option>Accountant</option>
-                                <option>Receptionist</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <a href="#" class="btn btn-success btn-block"> Search </a>
-                    </div>
-                </div>
         <div class="row">
           <div class="col-md-12">
             <div class="table-responsive">
-              <table class="table table-striped custom-table mb-0 datatable">
+              <table id="example" class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
                     <th>Nom des services</th>
@@ -169,7 +139,54 @@ import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import loader from "../../../components/loader.vue";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
+  mounted() {
+    this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listService")
+      .then((response) => {
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.services = response.data.data;
+          setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 5,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+            });
+          }, 1000);
+        } else {
+          this.preloader = false;
+          this.message = "Aucun services existants";
+          console.log("erreur de chargement");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   data() {
     return {
       services: [],
@@ -185,36 +202,7 @@ export default {
   components: {
     loader,
   },
-  created() {
-    this.charge();
-  },
   methods: {
-    charge: function() {
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listService")
-        .then((response) => {
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.services = response.data.data;
-          } else {
-            this.preloader = false;
-            this.message = "Aucun services existants";
-            console.log("erreur de chargement");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
     retourner() {
       this.$router.push("/bureautique");
     },

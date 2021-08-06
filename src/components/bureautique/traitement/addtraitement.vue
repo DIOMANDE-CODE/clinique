@@ -365,6 +365,7 @@ export default {
               this.preloader = false;
               this.success = true;
               this.message = "Une nouveau traitement ajoutée";
+              this.$router.push("/traitement");
               console.log("reussie");
 
               this.nom = "";

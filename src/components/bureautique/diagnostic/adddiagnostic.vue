@@ -416,6 +416,8 @@ export default {
             this.type = "";
             this.dosage = "";
             this.quantite = "";
+
+            this.$router.push("/diagnostic")
           })
           .catch((err) => {
             this.preloader = false;

@@ -53,7 +53,7 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table">
+              <table id="example" class="table table-striped custom-table">
                 <thead>
                   <tr>
                     <th style="min-width:200px;">Noms</th>
@@ -418,27 +418,21 @@ import { identifiant } from "../../../assets/js/info.js";
 
 import loader from "../../../components/loader.vue";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
-  data() {
-    return {
-      employes: [],
-      identifiant: null,
-      status: "",
-      preload: false,
-      success: false,
-      errors: false,
-      message: "",
-    };
-  },
-  components: {
-    loader,
-  },
-  created() {
-    this.charge();
-  },
-  methods: {
-    charge: function() {
-      this.preload = true;
+  mounted() {
+          this.preload = true;
       axios
         .create({
           headers: {
@@ -453,13 +447,38 @@ export default {
           if (response.data.state === true) {
             this.preload = false;
             this.employes = response.data.data;
+               setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 5,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+            });
+          }, 1000);
           } else {
             this.preload = false;
             this.message = "Aucun employés existants";
             console.log("erreur de chargement");
           }
         });
-    },
+  },
+  data() {
+    return {
+      employes: [],
+      identifiant: null,
+      status: "",
+      preload: false,
+      success: false,
+      errors: false,
+      message: "",
+    };
+  },
+  components: {
+    loader,
+  },
+  methods: {
     voir(pk) {
       identifiant.user_id = pk;
       this.$router.push("/employe/profil/" + pk);

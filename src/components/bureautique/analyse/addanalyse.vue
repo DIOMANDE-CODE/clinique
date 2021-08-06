@@ -379,6 +379,8 @@ export default {
 
             this.libelle = "";
             this.prix = "";
+
+            this.$router.push("/admin/analyse");
           } else {
             this.preloader = false;
             this.errors = true;

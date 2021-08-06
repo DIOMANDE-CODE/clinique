@@ -59,7 +59,7 @@
                   <div class="m-t-20 text-center">
                     <button
                       class="btn btn-primary submit-btn"
-                      v-on:click="cliquer"
+                      v-on:click="ajouter_profil"
                     >
                       Créer
                     </button>
@@ -215,13 +215,13 @@ export default {
         });
     },
 
-    cliquer() {
+    ajouter_profil() {
       this.preloader = true;
-      var service = {
+      var profil = {
         nom: this.nom,
         description: this.description,
       };
-      console.log(service);
+      console.log(profil);
       axios
         .create({
           headers: {
@@ -230,17 +230,18 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/creationService", service)
+        .post(chemin + "/creationService", profil)
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
+            this.$router.push("/admin/profil");
             console.log("reussie");
-            this.charge();
 
             this.nom = "";
             this.description = "";
+
           } else {
             this.preloader = false;
             this.errors = true;

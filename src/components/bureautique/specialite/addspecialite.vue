@@ -411,6 +411,7 @@ export default {
               console.log("reussie");
               this.nom = "";
               this.description = "";
+              this.$router.push("/admin/specialite");
             } else {
               this.preloader = false;
               this.errors = true;

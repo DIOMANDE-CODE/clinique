@@ -53,10 +53,10 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table mb-0 datatable">
+              <table id="example" class="table table-striped custom-table mb-0 datatable">
                 <thead>
                   <tr>
-                    <th>Libellex</th>
+                    <th>Libelle</th>
                     <th>prix</th>
                     <th class="text-right">Actions</th>
                   </tr>
@@ -361,24 +361,20 @@ import loader from "../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
-  data() {
-    return {
-      preloader: false,
-      success: false,
-      errors: false,
-      analyses: [],
-      message: "",
-    };
-  },
-  components: {
-    loader,
-  },
-  created() {
-    this.charge();
-  },
-  methods: {
-    charge: function() {
+  mounted() {
       this.preloader = true;
       axios
         .create({
@@ -393,8 +389,31 @@ export default {
           console.log("analyses :", response.data);
             this.preloader = false;
             this.analyses = response.data;
+            setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 5,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+            });
+          }, 1000);
         });
-    },
+  },
+  data() {
+    return {
+      preloader: false,
+      success: false,
+      errors: false,
+      analyses: [],
+      message: "",
+    };
+  },
+  components: {
+    loader,
+  },
+  methods: {
     modifier(pk) {
       this.$router.push("/edit/analyse/" + pk);
     },

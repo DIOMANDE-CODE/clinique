@@ -57,7 +57,10 @@
           <div class="col-md-12">
             <p>{{ message_vide }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table mb-0 datatable">
+              <table
+                id="example"
+                class="table table-striped custom-table mb-0 datatable"
+              >
                 <thead>
                   <tr>
                     <th>Nom des departements</th>
@@ -365,7 +368,46 @@ import loader from "../../../../components/loader.vue";
 import axios from "axios";
 import { chemin } from "../../../../assets/js/chemin.js";
 
+import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
+import "jquery/dist/jquery.min.js";
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
+  mounted() {
+    this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listerCategorieMedoc")
+      .then((response) => {
+        console.log(response.data);
+        this.preloader = false;
+        this.categories = response.data;
+             setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 5,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+            });
+          }, 1000);
+      });
+  },
   data() {
     return {
       preloader: false,
@@ -379,27 +421,7 @@ export default {
   components: {
     loader,
   },
-  created() {
-    this.charge();
-  },
   methods: {
-    charge: function() {
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listerCategorieMedoc")
-        .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.categories = response.data;
-        });
-    },
     modifier(pk) {
       this.$router.push("/pharmacie/categorie/edit/" + pk);
     },

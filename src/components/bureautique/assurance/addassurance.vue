@@ -403,6 +403,7 @@ export default {
               this.nom = "";
               this.description = "";
               this.pourcentage = "";
+              this.$router.push("/admin/assurance");
             } else {
               this.preloader = false;
               this.errors = true;

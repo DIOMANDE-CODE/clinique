@@ -499,6 +499,8 @@ export default {
           this.code = "";
           this.role = "";
           this.profile = "";
+
+          this.$router.push("/admin/employe")
         })
         .catch((err) => {
           this.preloader = false;

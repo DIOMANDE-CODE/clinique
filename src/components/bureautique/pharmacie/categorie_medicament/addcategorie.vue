@@ -382,10 +382,12 @@ export default {
               this.preloader = false;
               this.success = true;
               this.message = "Une nouvelle catégorie ajoutée";
+              this.$router.push("/pharmacie/categorie")
               console.log("reussie");
 
               this.nom = "";
               this.description = "";
+
           })
           .catch((err) => {
             this.preloader = false;
