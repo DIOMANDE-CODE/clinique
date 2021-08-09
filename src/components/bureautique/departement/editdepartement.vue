@@ -398,6 +398,7 @@ export default {
             this.success = true
             this.message = 'Modification effectuée avec succès'
             console.log("modification réussie reussie");
+            this.$router.push("/admin/departement")
           } else {
             this.preloader = false
             this.errors = true

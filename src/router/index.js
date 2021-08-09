@@ -47,6 +47,7 @@ import editassurance from '../views/bureautique/assurance/editassurance.vue'
 // route workflow
 import profil from '../views/bureautique/profil/profil.vue'
 import addprofil from '../views/bureautique/profil/addprofil.vue'
+import editprofil from '../views/bureautique/profil/editprofil.vue'
 
 // route des droits d'accès
 import droit from '../views/bureautique/droit/droit.vue'
@@ -299,6 +300,11 @@ const routes = [
     path:'/profil/ajouter',
     name:'addprofil',
     component:addprofil
+  },
+  {
+    path:'/profil/edit/:id',
+    name:'editprofil',
+    component:editprofil
   },
   // route des droits
   {

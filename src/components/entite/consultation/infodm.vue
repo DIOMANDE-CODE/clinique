@@ -174,9 +174,7 @@
                       v-for="diagnostic in pensements"
                       v-bind:key="diagnostic.id"
                     >
-                      <div
-                        class="col-md-10"
-                      >
+                      <div class="col-md-10">
                         <div class="checkbox">
                           <input
                             type="checkbox"
@@ -215,46 +213,36 @@
                             <th>Medicament</th>
                             <th>Quantié</th>
                             <th>Quantité</th>
-                            <th>Posologie</th>
                             <th>Date</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr
+                          <td
                             v-for="employe in ordonnances"
                             v-bind:key="employe.id"
                           >
-                            <td
+                            <tr
                               v-for="medicament in employe.medicaments"
                               :key="medicament.id"
                             >
-                              {{ medicament.libelle }}
-                            </td>
-                            <td
+                              {{
+                                medicament.libelle
+                              }}
+                            </tr>
+                          </td>
+                             <td
+                            v-for="employe in ordonnances"
+                            v-bind:key="employe.id"
+                          >
+                            <tr
                               v-for="medicament in employe.medicaments"
                               :key="medicament.id"
                             >
-                              {{ medicament.dosage }}
-                            </td>
-                            <td
-                              v-for="medicament in employe.medicaments"
-                              :key="medicament.id"
-                            >
-                              {{ medicament.pivot.quantity }}
-                            </td>
-                            <td
-                              v-for="medicament in employe.medicaments"
-                              :key="medicament.id"
-                            >
-                              {{ medicament.pivot.posologie }}
-                            </td>
-                            <td
-                              v-for="medicament in employe.medicaments"
-                              :key="medicament.id"
-                            >
-                              {{ medicament.created_at }}
-                            </td>
-                          </tr>
+                              {{
+                                medicament.dosage
+                              }}
+                            </tr>
+                          </td>
                         </tbody>
                       </table>
                     </div>
@@ -302,7 +290,7 @@ export default {
       quantite: "",
       posologie: "",
       ordonnances: [],
-      pensements : [],
+      pensements: [],
       id: "",
 
       activer_diagnostic: false,
@@ -456,7 +444,7 @@ export default {
     },
     charger_examen() {
       console.log("loading......................");
-          console.log("params :",this.$route.params);
+      console.log("params :", this.$route.params);
 
       axios
         .create({

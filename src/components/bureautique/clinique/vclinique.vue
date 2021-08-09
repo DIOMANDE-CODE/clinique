@@ -962,7 +962,7 @@ export default {
     this.workflow();
   },
   methods: {
-    // fonction des chargements
+    // fonction des chargements 
     actualiser() {
       window.location.reload();
     },

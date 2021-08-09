@@ -21,7 +21,7 @@
           class="alert alert-success alert-dismissible fade show"
           role="alert"
         >
-          {{ message_success }}
+          {{ message }}
           <button
             type="button"
             class="close"
@@ -50,7 +50,7 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="form-group">
-                <label>Libéllé <span class="text-danger">*</span></label>
+                <label>Nom du profil <span class="text-danger">*</span></label>
                 <input
                   class="form-control"
                   type="text"
@@ -59,23 +59,29 @@
                 />
               </div>
               <div class="form-group">
-                <label class="col-form-label ">
-                  Type <span class="text-danger">*</span>
-                </label>
-                <div class="col-md-12">
-                  <select required class="form-control clinique" v-model="type">
-                    <option value="checkbox">checkbox</option>
-                    <option value="text">text</option>
-                    >
-                  </select>
-                </div>
+                <label>Description</label>
+                <textarea
+                  cols="30"
+                  rows="4"
+                  class="form-control"
+                  v-model="description"
+                ></textarea>
+              </div>
+              <div class="m-t-20 text-center">
+                <button
+                  class="btn btn-danger submit-btn"
+                  v-on:click="renitialiser"
+                >
+                  Réinitialiser</button
+                >&nbsp;&nbsp;
+                <button
+                  class="btn btn-success submit-btn"
+                  v-on:click="modifier"
+                >
+                  modifier
+                </button>
               </div>
             </form>
-            <div class="m-t-20 text-center">
-              <button class="btn btn-success submit-btn" v-on:click="modifier">
-                modifier
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -344,62 +350,37 @@ export default {
       message: "",
       preloader: false,
       nom: "",
-      dosage: "",
-      type: "",
-      categorie: "",
-      categories: [],
-      message_success: "",
+      description: "",
     };
-  },
-  created() {
-    this.charger_medicament();
   },
   components: {
     loader,
   },
+  created() {
+    this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/profil/" + this.$route.params.id)
+      .then((response) => {
+        console.log("profil response :", response.data);
+        this.preloader = false;
+        this.nom = response.data.data.titre;
+        this.description = response.data.data.description;
+        console.log(this.nom, this.description);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   methods: {
-    charger_medicament: function() {
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listerCategorieMedoc")
-        .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.categories = response.data;
-          this.charger();
-        });
-    },
-    charger() {
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/diagnostic/" + this.$route.params.id)
-        .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.nom = response.data.libelle;
-          this.type = response.data.type;
-        })
-        .catch((err) => {
-          this.preloader = false;
-          this.errors = true;
-          console.log(err);
-        });
-    },
     renitialiser() {
-      (this.nom = ""), (this.type = "");
+      (this.nom = ""), (this.description = "");
     },
     modifier() {
       if (this.nom === "") {
@@ -407,11 +388,11 @@ export default {
         // this.message = "Veuillez saisir le nom du departement"
       } else {
         this.preloader = true;
-        var diagnostic = {
-          libelle: this.nom,
-          type: this.type,
+        var profil = {
+          titre: this.nom,
+          description: this.description,
         };
-        console.log(diagnostic);
+        console.log(profil);
         axios
           .create({
             headers: {
@@ -420,17 +401,17 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           })
-          .put(chemin + "/diagnostic/" + this.$route.params.id, diagnostic)
+          .put(chemin + "/profil/" + this.$route.params.id, profil)
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
             this.success = true;
-            this.message_success = "Modification effectuée avec succès";
+            this.message = response.data.message;
+            this.$router.push("/admin/profil");
             console.log("reussie");
-            this.$router.push("/diagnostic/");
+
             this.nom = "";
             this.description = "";
-            this.charger();
           })
           .catch((err) => {
             this.preloader = false;
@@ -440,7 +421,7 @@ export default {
       }
     },
     retourner() {
-      this.$router.push("/diagnostic");
+      this.$router.push("/admin/profil");
     },
   },
 };

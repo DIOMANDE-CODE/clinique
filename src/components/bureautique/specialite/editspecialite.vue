@@ -401,6 +401,7 @@ export default {
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
+            this.$router.push("/admin/special")
             this.message = "Modification effectuée avec succès";
             console.log("modification réussie reussie");
           } else {

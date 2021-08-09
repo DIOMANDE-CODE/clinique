@@ -416,6 +416,23 @@ export default {
     loader,
   },
   methods: {
+    charge: function() {
+      this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listeDesTraitementsUrgence")
+      .then((response) => {
+        console.log(response.data);
+        this.preloader = false;
+        this.constantes = response.data;
+      });
+    },
     modifier(pk) {
       this.$router.push("/traitement/edit/" + pk);
     },

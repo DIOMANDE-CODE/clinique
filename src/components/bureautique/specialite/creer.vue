@@ -200,13 +200,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {

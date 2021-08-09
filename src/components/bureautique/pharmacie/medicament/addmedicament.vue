@@ -76,7 +76,7 @@
                   required
                 />
               </div>
-                  <div class="form-group">
+              <div class="form-group">
                 <label> Prix <span class="text-danger">*</span></label>
                 <input
                   class="form-control"
@@ -85,7 +85,7 @@
                   required
                 />
               </div>
-                  <div class="form-group">
+              <div class="form-group">
                 <label>Quantité <span class="text-danger">*</span></label>
                 <input
                   class="form-control"
@@ -400,7 +400,7 @@ export default {
       quantite: "",
       categorie: "",
       categories: [],
-      message_success:""
+      message_success: "",
     };
   },
   created() {
@@ -431,7 +431,13 @@ export default {
         });
     },
     renitialiser() {
-      (this.libelle = ""), (this.dosage = ""),(this.dosage = ""),(this.type = ""),(this.prix = ""),(this.quantite = ""),(this.categorie = "");
+      (this.libelle = ""),
+        (this.dosage = ""),
+        (this.dosage = ""),
+        (this.type = ""),
+        (this.prix = ""),
+        (this.quantite = ""),
+        (this.categorie = "");
     },
     ajouter() {
       if (this.nom === "") {
@@ -445,7 +451,7 @@ export default {
           dosage: this.dosage,
           type: this.type,
           prix: this.prix,
-          quantity: this.quantite
+          quantity: this.quantite,
         };
         console.log(medicament);
         axios
@@ -464,7 +470,7 @@ export default {
             this.message_success = "Un nouveau médicament ajouté";
             console.log("reussie");
 
-            this.$router.push("/pharmacie/medicament")
+            this.$router.push("/pharmacie/medicament");
 
             this.nom = "";
             this.prix = "";

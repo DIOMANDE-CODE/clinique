@@ -51,7 +51,6 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <p>{{ message }}</p>
             <div class="table-responsive">
               <table id="example" class="table table-striped custom-table">
                 <thead>
@@ -67,7 +66,7 @@
                     <td>
                       <h2>{{ profil.titre }}</h2>
                     </td>
-                    <td>{{profil.description}}</td>
+                    <td>{{ profil.description }}</td>
                     <td v-if="profil.statut === 'actif'">
                       <span class="custom-badge status-green">{{
                         profil.statut
@@ -94,8 +93,18 @@
                             href="#"
                             data-toggle="modal"
                             data-target="#delete_employee"
-                            v-on:click="desactiver(profil.id)"
-                            ><i class="fa fa-trash-o m-r-5"></i>Desactiver le
+                            v-on:click="modifier(profil.id)"
+                            ><i class="fa fa-pencil m-r-5"></i>Modifier le
+                            profil
+                          </a>
+                          <a
+                            v-if="profil.statut === 'actif'"
+                            class="dropdown-item "
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#delete_employee"
+                            v-on:click="supprimer(profil.id)"
+                            ><i class="fa fa-trash-o m-r-5"></i>supprimer le
                             profil
                           </a>
                           <a
@@ -391,21 +400,21 @@ export default {
   name: "employe",
   mounted() {
     this.preload = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/getListeProfile")
-        .then((response) => {
-          console.log(" getListeProfile :",response.data.data);
-          if (response.data.state === true) {
-            this.preload = false;
-            this.profils = response.data.data;
-            setTimeout(function() {
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/getListeProfile")
+      .then((response) => {
+        console.log(" getListeProfile :", response.data.data);
+        if (response.data.state === true) {
+          this.preload = false;
+          this.profils = response.data.data;
+          setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
               pageLength: 5,
@@ -415,12 +424,12 @@ export default {
               order: [],
             });
           }, 1000);
-          } else {
-            this.preload = false;
-            this.message = "Aucun employés existants";
-            console.log("erreur de chargement");
-          }
-        });
+        } else {
+          this.preload = false;
+          this.message = "Aucun employés existants";
+          console.log("erreur de chargement");
+        }
+      });
   },
   data() {
     return {
@@ -437,7 +446,7 @@ export default {
     loader,
   },
   methods: {
-    desactiver(pk) {
+    charge() {
       this.preload = true;
       axios
         .create({
@@ -447,21 +456,37 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/activerDesactiverProfile/", {
-          id: pk,
-          statut: "inactif",
-        })
+        .get(chemin + "/getListeProfile")
         .then((response) => {
+          console.log(" getListeProfile :", response.data.data);
           if (response.data.state === true) {
             this.preload = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.charge();
+            this.profils = response.data.data;
           } else {
             this.preload = false;
-            this.errors = true;
-            this.message = response.data.message;
+            this.message = "Aucun employés existants";
+            console.log("erreur de chargement");
           }
+        });
+    },
+    modifier(pk) {
+      this.$router.push("/profil/edit/" + pk);
+    },
+    supprimer(pk) {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .delete(chemin + "/deleteProfil/" + pk)
+        .then(() => {
+          this.preload = false;
+          this.success = true;
+          this.charge();
         })
         .catch((err) => {
           this.preload = false;

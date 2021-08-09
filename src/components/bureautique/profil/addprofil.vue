@@ -381,6 +381,7 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
+            this.$router.push("/admin/profil");
             console.log("reussie");
 
             this.nom = "";

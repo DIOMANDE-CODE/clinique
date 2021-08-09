@@ -68,6 +68,15 @@
                 />
               </div>
               <div class="form-group">
+                <label>Quantité <span class="text-danger">*</span></label>
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="quantite"
+                  required
+                />
+              </div>
+              <div class="form-group">
                 <label>Type <span class="text-danger">*</span></label>
                 <input
                   class="form-control"
@@ -400,7 +409,7 @@ export default {
     loader,
   },
   methods: {
-      charger_medicament: function() {
+    charger_medicament: function() {
       this.preloader = true;
       axios
         .create({
@@ -415,7 +424,7 @@ export default {
           console.log(response.data);
           this.preloader = false;
           this.categories = response.data;
-          this.charger()
+          this.charger();
         });
     },
     charger() {
@@ -435,6 +444,7 @@ export default {
           this.dosage = response.data.dosage;
           this.type = response.data.type;
           this.prix = response.data.prix;
+          this.quantite = response.data.quantity;
           this.categorie = response.data.categorie_medicament_id;
         })
         .catch((err) => {
@@ -452,12 +462,13 @@ export default {
         // this.message = "Veuillez saisir le nom du departement"
       } else {
         this.preloader = true;
-       var medicament = {
+        var medicament = {
           categorie_medicament_id: this.categorie,
           libelle: this.nom,
           dosage: this.dosage,
           type: this.type,
           prix: this.prix,
+          quantity: this.quantite,
         };
         console.log(medicament);
         axios
@@ -479,7 +490,7 @@ export default {
             this.nom = "";
             this.description = "";
 
-            this.charger();
+            this.$router.push("/pharmacie/medicament");
           })
           .catch((err) => {
             this.preloader = false;

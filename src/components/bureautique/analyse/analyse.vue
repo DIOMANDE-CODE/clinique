@@ -414,6 +414,23 @@ export default {
     loader,
   },
   methods: {
+    charger(){
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listeDesExamens")
+        .then((response) => {
+          console.log("analyses :", response.data);
+            this.preloader = false;
+            this.analyses = response.data;
+        });
+    },
     modifier(pk) {
       this.$router.push("/edit/analyse/" + pk);
     },
@@ -427,20 +444,13 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/activerDesactiverAnalyse", {
-          id: pk,
-          statut: "inactif",
-        })
+        .delete(chemin + "/examen/" + pk)
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {
@@ -465,13 +475,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {

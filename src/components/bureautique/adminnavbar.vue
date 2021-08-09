@@ -76,7 +76,7 @@
               <router-link to="/admin/employe"
                 ><a
                   ><i class="fa fa-user-o"></i>
-                  <span style="color:black;">Employes</span></a
+                  <span style="color:black;">Personnels</span></a
                 ></router-link
               >
             </li>

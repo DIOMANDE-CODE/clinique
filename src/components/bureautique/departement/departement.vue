@@ -51,7 +51,7 @@
 
         <div class="row">
           <div class="col-md-12">
-            <p>{{ message }}</p>
+            <p>{{ message_vide }}</p>
             <div class="table-responsive">
               <table id="example" class="table table-striped custom-table mb-0 datatable">
                 <thead>
@@ -423,7 +423,7 @@ export default {
           }, 1000);
           } else {
             this.preloader = false;
-            this.message = "Aucun departements existants";
+            this.message_vide = "Aucun departements existants";
             console.log("erreur de chargement");
           }
         });
@@ -435,12 +435,35 @@ export default {
       errors: false,
       departements: [],
       message: "",
+      message_vide: "",
     };
   },
   components: {
     loader,
   },
   methods: {
+    charge(){
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listDepartement")
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.departements = response.data.data;
+          } else {
+            this.preloader = false;
+            this.message_vide = "Aucun departements existants";
+            console.log("erreur de chargement");
+          }
+        });
+    },
     modifier(pk) {
       this.$router.push("/departement/modifier/" + pk);
     },
@@ -461,13 +484,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {
@@ -492,13 +511,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {

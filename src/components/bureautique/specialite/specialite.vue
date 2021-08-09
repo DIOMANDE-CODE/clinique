@@ -54,7 +54,10 @@
         <div class="row">
           <div class="col-md-12">
             <div class="table-responsive">
-              <table id="example" class="table table-striped custom-table mb-0 datatable">
+              <table
+                id="example"
+                class="table table-striped custom-table mb-0 datatable"
+              >
                 <thead>
                   <tr>
                     <th>Nom des services</th>
@@ -175,6 +178,30 @@ export default {
               dom: "Bfrtip",
               buttons: ["copy", "csv", "print"],
               order: [],
+              language: {
+                décimal: "",
+                emptyTable: "Aucune donnée disponible dans le tableau",
+                info: "Affichage du _Début_ à la _Fin_ des entrées _TOTAL_",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Afficher les entrées du _MENU_",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Chercher :",
+                zeroRecords: "Aucun enregistrement correspondant trouvé",
+                paginate: {
+                  first: "Premier",
+                  last: "Dernier",
+                  next: "Suivant",
+                  previous: "Précédent",
+                },
+                aria: {
+                  sortAscending: ": activate to sort column ascending",
+                  sortDescending: ": activate to sort column descending",
+                },
+              },
             });
           }, 1000);
         } else {
@@ -203,6 +230,31 @@ export default {
     loader,
   },
   methods: {
+    charge() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listService")
+        .then((response) => {
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.services = response.data.data;
+          } else {
+            this.preloader = false;
+            this.message = "Aucun services existants";
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     retourner() {
       this.$router.push("/bureautique");
     },
@@ -226,13 +278,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {
@@ -257,13 +305,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {

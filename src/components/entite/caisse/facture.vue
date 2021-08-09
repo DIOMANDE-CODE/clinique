@@ -64,7 +64,7 @@
               <div class="row">
                 <div class="col-md-12" v-if="factures.pensements != 0">
                   <h4 class="m-b-10">
-                    <strong>Dépense en Pensements</strong>
+                    <strong>Prestation en Pensements</strong>
                   </h4>
 
                   <div class="table-responsive">
@@ -74,11 +74,12 @@
                           <th style="min-width:200px;">Désignations</th>
                           <th>Coût de l'assurance</th>
                           <th>Coût du patient</th>
+                          <th class="text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr
-                          v-for="facture in factures.pensements"
+                          v-for="facture in pensements"
                           :key="facture.id"
                         >
                           <td>
@@ -97,8 +98,34 @@
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
                                 currency: "CFA",
-                              }).format(prix_examens_T)
+                              }).format(facture.prix)
                             }}
+                          </td>
+                          <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                              <a
+                                href="#"
+                                class="action-icon dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-expanded="false"
+                                ><i class="fa fa-minus-circle"></i
+                              ></a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a
+                                  class="dropdown-item"
+                                  style="color:black; cursor:pointer"
+                                  v-on:click="
+                                    effacer_pensement(facture.id, facture.prix)
+                                  "
+                                  v-bind:identifiant="identifiant"
+                                  ><i
+                                    class="fa fa-minus-circle  m-r-5"
+                                    style="cursor:pointer"
+                                  ></i>
+                                  Rétirer</a
+                                >
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -118,19 +145,21 @@
                 </div>
                 <br /><br /><br /><br />
                 <div class="col-md-12" v-if="factures.examens != 0">
-                  <h4 class="m-b-10"><strong>Dépense en examens</strong></h4>
+                  <h4 class="m-b-10"><strong>Prestation en examens</strong></h4>
 
                   <div class="table-responsive">
                     <table class="table table-striped custom-table">
                       <thead>
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
-                          <th>Prix</th>
+                          <th>Coût de l'assurance</th>
+                          <th>Coût du patient</th>
+                          <th class="text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr
-                          v-for="facture in factures.examens"
+                          v-for="facture in examens"
                           :key="facture.id"
                         >
                           <td>
@@ -143,6 +172,38 @@
                                 currency: "CFA",
                               }).format(prix_examens_T)
                             }}
+                          </td>
+                          <td>
+                            {{
+                              new Intl.NumberFormat("de-DE", {
+                                style: "currency",
+                                currency: "CFA",
+                              }).format(facture.prix)
+                            }}
+                          </td>
+                          <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                              <a
+                                href="#"
+                                class="action-icon dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-expanded="false"
+                                ><i class="fa fa-minus-circle"></i
+                              ></a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a
+                                  class="dropdown-item"
+                                  style="color:black; cursor:pointer"
+                                  v-on:click="effacer_examens(facture.id,facture.prix)"
+                                  v-bind:identifiant="identifiant"
+                                  ><i
+                                    class="fa fa-minus-circle  m-r-5"
+                                    style="cursor:pointer"
+                                  ></i>
+                                  Rétirer</a
+                                >
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -163,7 +224,7 @@
                 <br /><br /><br /><br />
                 <div class="col-md-12" v-if="factures.ordonnances != 0">
                   <h4 class="m-b-10">
-                    <strong>Dépense en ordonnances</strong>
+                    <strong>Prestation en ordonnances</strong>
                   </h4>
 
                   <div class="table-responsive">
@@ -171,14 +232,15 @@
                       <thead>
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
-                          <th>Prix unitaire</th>
+                          <th>Coût unitaire</th>
                           <th>Quantité</th>
-                          <th>Prix Total</th>
+                          <th>Coût total</th>
+                          <th class="text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr
-                          v-for="facture in factures.ordonnances"
+                          v-for="facture in ordonnances"
                           :key="facture.id"
                         >
                           <td
@@ -216,6 +278,32 @@
                                 medicament.prix * medicament.pivot.quantity
                               )
                             }}
+                          </td>
+                          <td class="text-right">
+                            <div class="dropdown dropdown-action">
+                              <a
+                                href="#"
+                                class="action-icon dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-expanded="false"
+                                ><i class="fa fa-minus-circle"></i
+                              ></a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a
+                                  v-for="medicament in facture.medicaments"
+                                  :key="medicament.id"
+                                  class="dropdown-item"
+                                  style="color:black; cursor:pointer"
+                                  v-on:click="effacer_ordonnance(medicament.id,medicament.prix)"
+                                  v-bind:identifiant="identifiant"
+                                  ><i
+                                    class="fa fa-minus-circle  m-r-5"
+                                    style="cursor:pointer"
+                                  ></i>
+                                  Rétirer</a
+                                >
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -525,6 +613,9 @@ export default {
       prix_pensement_T: 0,
       prix_T: 0,
       factures: [],
+      examens: [],
+      ordonnances: [],
+      pensements: [],
       destination: "",
       payer: 0,
 
@@ -543,6 +634,45 @@ export default {
     this.charger_donnee();
   },
   methods: {
+    effacer_pensement(pk, prix) {
+      console.log("pensements :", this.pensements);
+      console.log(pk, prix);
+      this.factures.pensementCost = this.factures.pensementCost - prix;
+      this.pensements = this.pensements.filter(
+        (item) => {
+          console.log(item.id);
+          item.id != this.pensements[pk]
+        }
+      );
+    },
+       effacer_examens(pk, prix) {
+      console.log("examens :", this.pensements);
+      console.log(pk, prix);
+      this.factures.examenCost = this.factures.examenCost - prix;
+      this.examens = this.examens.filter(
+        (item) => {
+          console.log(item.id);
+          item.id === pk
+        }
+      );
+    },
+    effacer_ordonnance(pk,prix) {
+      console.log(pk, prix);
+      console.log("ordonnances :", this.ordonnances);
+      this.factures.ordornnanceCost = this.factures.ordornnanceCost - prix
+      this.ordonnances = this.ordonnances.forEach((item) => {
+        item.medicaments.filter((medoc) => {
+          console.log(medoc);
+          medoc.id != this.ordonnances[pk]
+          console.log("ok");
+        })
+      });
+      // console.log(pk, prix);
+      // this.prix_ordonnances_T = this.prix_ordonnances_T - prix;
+      // this.ordonnances = this.ordonnances.filter(
+      //   (item) => item != this.ordonnances[pk]
+      // );
+    },
     charger_donnee() {
       this.preloader = true;
       console.log("workflow");
@@ -560,6 +690,9 @@ export default {
           this.nom =
             response.data.client.nom + " " + response.data.client.prenoms;
           this.factures = response.data;
+          this.examens = response.data.examens;
+          this.ordonnances = response.data.ordonnances;
+          this.pensements = response.data.pensements;
           this.prix_examens_T = Number(response.data.examenCost);
           this.prix_ordonnances_T = Number(response.data.ordornnanceCost);
           this.prix_pensement_T = Number(response.data.pensementCost);

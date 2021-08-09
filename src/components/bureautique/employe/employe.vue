@@ -36,7 +36,7 @@
         <div class="row">
           <div class="col-sm-4 col-3">
             <h4 class="page-title" style="color:black; font-weight:bold;">
-              EMPLOYES
+              PERSONNELS
             </h4>
           </div>
           <div class="col-sm-8 col-4 text-right m-b-20">
@@ -44,14 +44,13 @@
               ><a
                 style="color:white"
                 class="btn btn-primary float-right btn-rounded"
-                ><i class="fa fa-plus"></i> Ajouter un employé</a
+                ><i class="fa fa-plus"></i> Ajouter un personnel</a
               ></router-link
             >
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <p>{{ message }}</p>
             <div class="table-responsive">
               <table id="example" class="table table-striped custom-table">
                 <thead>
@@ -432,22 +431,22 @@ import $ from "jquery";
 
 export default {
   mounted() {
-          this.preload = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listeUtilisateur")
-        .then((response) => {
-          console.log(response.data.data);
-          if (response.data.state === true) {
-            this.preload = false;
-            this.employes = response.data.data;
-               setTimeout(function() {
+    this.preload = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listeUtilisateur")
+      .then((response) => {
+        console.log(response.data.data);
+        if (response.data.state === true) {
+          this.preload = false;
+          this.employes = response.data.data;
+          setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
               pageLength: 5,
@@ -457,12 +456,12 @@ export default {
               order: [],
             });
           }, 1000);
-          } else {
-            this.preload = false;
-            this.message = "Aucun employés existants";
-            console.log("erreur de chargement");
-          }
-        });
+        } else {
+          this.preload = false;
+          this.message = "Aucun employés existants";
+          console.log("erreur de chargement");
+        }
+      });
   },
   data() {
     return {
@@ -479,6 +478,29 @@ export default {
     loader,
   },
   methods: {
+    charge() {
+      this.preload = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listeUtilisateur")
+        .then((response) => {
+          console.log(response.data.data);
+          if (response.data.state === true) {
+            this.preload = false;
+            this.employes = response.data.data;
+          } else {
+            this.preload = false;
+            this.message = "Aucun employés existants";
+            console.log("erreur de chargement");
+          }
+        });
+    },
     voir(pk) {
       identifiant.user_id = pk;
       this.$router.push("/employe/profil/" + pk);
@@ -504,20 +526,11 @@ export default {
           id: pk,
           statut: "inactif",
         })
-        .then((response) => {
-          if (response.data.state === true) {
-            this.preload = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.charge();
-          } else {
-            this.preload = false;
-            this.errors = true;
-            this.message = response.data.message;
-          }
+        .then(() => {
+          this.preload = false;
+          this.charge();
         })
         .catch((err) => {
-          this.preload = false;
           console.log(err);
         });
     },
@@ -538,17 +551,9 @@ export default {
           id: pk,
           statut: "actif",
         })
-        .then((response) => {
-          if (response.data.state === true) {
-            this.preload = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.charge();
-          } else {
-            this.preload = false;
-            this.errors = true;
-            this.message = response.data.message;
-          }
+        .then(() => {
+          this.preload = false;
+          this.charge();
         })
         .catch((err) => {
           this.preload = false;

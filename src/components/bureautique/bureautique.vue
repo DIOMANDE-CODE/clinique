@@ -92,7 +92,7 @@
                   ><i class="fa fa-user-o"></i
                 ></span>
                 <div class="dash-widget-info text-right">
-                  <span class="widget-title1"> Employés </span>
+                  <span class="widget-title1"> Personnels </span>
                 </div>
               </div></router-link
             >

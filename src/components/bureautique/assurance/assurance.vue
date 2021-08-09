@@ -51,9 +51,11 @@
 
         <div class="row">
           <div class="col-md-12">
-            <p>{{ message }}</p>
             <div class="table-responsive">
-              <table id="example" class="table table-striped custom-table mb-0 datatable">
+              <table
+                id="example"
+                class="table table-striped custom-table mb-0 datatable"
+              >
                 <thead>
                   <tr>
                     <th>Assurances</th>
@@ -89,7 +91,7 @@
                         ></a>
                         <div class="dropdown-menu dropdown-menu-right">
                           <a
-                             v-if="assurance.statut === 'actif'"
+                            v-if="assurance.statut === 'actif'"
                             class="dropdown-item"
                             href="#"
                             data-toggle="modal"
@@ -401,21 +403,21 @@ import $ from "jquery";
 export default {
   mounted() {
     this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listAssurances")
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.assurances = response.data.data;
-               setTimeout(function() {
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listAssurances")
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.assurances = response.data.data;
+          setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
               pageLength: 5,
@@ -425,12 +427,12 @@ export default {
               order: [],
             });
           }, 1000);
-          } else {
-            this.preloader = false;
-            this.message = "Aucune assurances existantes";
-            console.log("erreur de chargement");
-          }
-        });
+        } else {
+          this.preloader = false;
+          this.message = "Aucune assurances existantes";
+          console.log("erreur de chargement");
+        }
+      });
   },
   data() {
     return {
@@ -445,6 +447,29 @@ export default {
     loader,
   },
   methods: {
+    charge(){
+      this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listAssurances")
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.assurances = response.data.data;
+        } else {
+          this.preloader = false;
+          this.message = "Aucune assurances existantes";
+          console.log("erreur de chargement");
+        }
+      });
+    },
     modifier(pk) {
       axios
         .create({
@@ -489,13 +514,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {
@@ -520,13 +541,9 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
             this.charge();
           } else {
             this.preloader = false;
-            this.errors = true;
-            this.message = response.data.message;
           }
         })
         .catch((err) => {

@@ -389,6 +389,7 @@ export default {
           console.log(response.data);
           this.preloader = false;
           this.success = true;
+          this.$router.push("/admin/analyse");
           this.message = "Modification effectuée avec succès";
           console.log("modification réussie reussie");
         });

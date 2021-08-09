@@ -100,7 +100,7 @@
                             data-toggle="modal"
                             data-target="#delete_department"
                             v-on:click="desactiver(depart.id)"
-                            ><i class="fa fa-trash-o m-r-5"></i> Désactiver</a
+                            ><i class="fa fa-trash-o m-r-5"></i>Supprimer</a
                           >
                         </div>
                       </div>
@@ -422,6 +422,23 @@ export default {
     loader,
   },
   methods: {
+    charge() {
+      this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listerCategorieMedoc")
+      .then((response) => {
+        console.log(response.data);
+        this.preloader = false;
+        this.categories = response.data;
+      });
+    },
     modifier(pk) {
       this.$router.push("/pharmacie/categorie/edit/" + pk);
     },

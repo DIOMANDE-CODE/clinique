@@ -428,6 +428,23 @@ export default {
     loader,
   },
   methods: {
+    charge() {
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listerMedoc")
+        .then((response) => {
+          console.log(response.data);
+          this.preloader = false;
+          this.medicaments = response.data;
+        });
+    },
     modifier(pk) {
       this.$router.push("/pharmacie/medicament/edit/" + pk);
     },

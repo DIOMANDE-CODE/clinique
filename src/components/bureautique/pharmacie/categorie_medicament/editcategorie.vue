@@ -76,7 +76,7 @@
                 Réinitialiser</button
               >&nbsp;&nbsp;
               <button class="btn btn-success submit-btn" v-on:click="modifier">
-                creer
+                modifier
               </button>
             </div>
           </div>
@@ -412,7 +412,7 @@ export default {
               this.nom = "";
               this.description = "";
 
-              this.charger()
+              this.$router.push("/pharmacie/categorie")
           })
           .catch((err) => {
             this.preloader = false;
