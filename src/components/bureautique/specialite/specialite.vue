@@ -181,8 +181,8 @@ export default {
               language: {
                 décimal: "",
                 emptyTable: "Aucune donnée disponible dans le tableau",
-                info: "Affichage du _Début_ à la _Fin_ des entrées _TOTAL_",
                 infoEmpty: "Showing 0 to 0 of 0 entries",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
                 infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
                 infoPostFix: "",
                 thousands: ",",

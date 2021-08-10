@@ -396,7 +396,7 @@ export default {
         console.log(response.data);
         this.preloader = false;
         this.categories = response.data;
-             setTimeout(function() {
+        setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
               pageLength: 5,
@@ -404,6 +404,30 @@ export default {
               dom: "Bfrtip",
               buttons: ["copy", "csv", "print"],
               order: [],
+              language: {
+                décimal: "",
+                emptyTable: "Aucune donnée disponible dans le tableau",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Afficher les entrées du _MENU_",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Chercher :",
+                zeroRecords: "Aucun enregistrement correspondant trouvé",
+                paginate: {
+                  first: "Premier",
+                  last: "Dernier",
+                  next: "Suivant",
+                  previous: "Précédent",
+                },
+                aria: {
+                  sortAscending: ": activate to sort column ascending",
+                  sortDescending: ": activate to sort column descending",
+                },
+              },
             });
           }, 1000);
       });
@@ -424,20 +448,20 @@ export default {
   methods: {
     charge() {
       this.preloader = true;
-    axios
-      .create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .get(chemin + "/listerCategorieMedoc")
-      .then((response) => {
-        console.log(response.data);
-        this.preloader = false;
-        this.categories = response.data;
-      });
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listerCategorieMedoc")
+        .then((response) => {
+          console.log(response.data);
+          this.preloader = false;
+          this.categories = response.data;
+        });
     },
     modifier(pk) {
       this.$router.push("/pharmacie/categorie/edit/" + pk);
