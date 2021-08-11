@@ -93,10 +93,10 @@
                   </div>
                 </div>
                 <div class="form-group col-sm-6" v-if="checkedAssurance">
-                  <label class="col-form-label ">
-                    Nom de l'assurance<span class="text-danger">*</span>
+                  <label class="">
+                    Maison d'assurance<span class="text-danger">*</span>
                   </label>
-                  <div class="col-md-12">
+                  <div class="col-md-12 pl-0">
                     <select class="form-control" v-model="assurance_nom">
                       <option value="0" disabled
                         >Choisissez son assurance</option
@@ -113,21 +113,11 @@
                 </div>
                 <div class="col-sm-6" v-if="checkedAssurance">
                   <div class="form-group">
-                    <label> Matricule de l'assurance</label>
+                  <label> Matricule de l'assurance ou N° de Bon</label>
                     <input
                       class="form-control"
                       type="text"
                       v-model="matricule_assurance"
-                    />
-                  </div>
-                </div>
-                <div class="col-sm-6" v-if="checkedAssurance">
-                  <div class="form-group">
-                    <label> Numéro de bon</label>
-                    <input
-                      class="form-control"
-                      type="number"
-                      v-model="bon_assurance"
                     />
                   </div>
                 </div>

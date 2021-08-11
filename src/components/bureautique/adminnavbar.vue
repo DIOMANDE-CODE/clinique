@@ -218,7 +218,7 @@ export default {
         })
         .get(chemin + `/getListeProfile`)
         .then((response) => {
-          console.log("profil :", response.data);
+          console.log("profil:", response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.profiles = response.data.data;
@@ -250,7 +250,6 @@ export default {
           console.log("information about user", response.data);
           if (response.data.state === true) {
             const role = response.data.data.role;
-
             console.log("admin :", role);
             if (role === "admin") {
               this.admin = true;
@@ -262,7 +261,7 @@ export default {
               switch (profil + "|" + service) {
                 case "sécrétaire|Accueil":
                   this.secretaire = true;
-                  break; //
+                  break; 
                 case "infirmière|Prise De Constante":
                   this.infirmiere = true;
                   break; //

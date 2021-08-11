@@ -54,8 +54,9 @@
               <table id="example" class="table table-striped custom-table">
                 <thead>
                   <tr>
-                    <th style="min-width:200px;">Noms</th>
-                    <th>Prenoms</th>
+                    <th style="min-width:200px;">matricule</th>
+                    <th v-show="false">noms</th>
+                    <th v-show="false">Prenoms</th>
                     <th>Sexes</th>
                     <th class="text-right">Actions</th>
                   </tr>
@@ -70,9 +71,10 @@
                         class="rounded-circle"
                         alt=""
                       />
-                      <h2>{{ employe.nom }}</h2>
+                      <h2>{{ employe.matricule }}</h2>
                     </td>
-                    <td>{{ employe.prenoms }}</td>
+                    <td v-show="false">{{ employe.nom }}</td>
+                    <td v-show="false">{{ employe.prenoms }}</td>
                     <td>{{ employe.sexe }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
@@ -136,33 +138,7 @@ import "datatables.net-buttons/js/buttons.print.js";
 import $ from "jquery";
 
 export default {
-  mounted() {
-    this.preload = true;
-    axios
-      .create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "*",
-        },
-      })  
-      .get(chemin + "/listerPatients")
-      .then((response) => {
-        console.log("Patients :",response.data);
-        this.preload = false;
-        this.clients = response.data;
-        setTimeout(function() {
-          $("#example").DataTable({
-            pagingType: "full_numbers",
-            pageLength: 5,
-            processing: true,
-            dom: "Bfrtip",
-            buttons: ["copy", "csv", "print"],
-            "order": []
-          });
-        }, 1000);
-      });
-  },
+  
   data() {
     return {
       clients: [],
@@ -175,7 +151,37 @@ export default {
     };
   },
   components: {},
+  mounted() {
+    this.lister()
+  },
   methods: {
+    lister: function(){
+        this.preload = true;
+        axios
+          .create({
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })  
+          .get(chemin + "/listerPatients")
+          .then((response) => {
+            console.log("Patients :",response.data);
+            this.preload = false;
+            this.clients = response.data;
+            setTimeout(function() {
+              $("#example").DataTable({
+                pagingType: "full_numbers",
+                pageLength: 5,
+                processing: true,
+                dom: "Bfrtip",
+                buttons: ["copy", "csv", "print"],
+                "order": []
+              });
+            }, 1000);
+          });
+    },
     charge: function() {
       this.preload = true;
       axios
@@ -188,7 +194,6 @@ export default {
         })
         .get(chemin + "/listerPatients")
         .then((response) => {
-          console.log(response.data);
           this.preload = false;
           this.clients = response.data;
           this.table.rows = this.clients;

@@ -32,7 +32,7 @@
               class="btn btn-secondary"
               data-dismiss="modal"
             >
-              Close
+              Fermer
             </button>
           </div>
         </div>
@@ -230,6 +230,8 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import loader from "../../../components/loader.vue";
+import moment from 'moment';
+moment.locale('fr');
 
 export default {
   name: "profilemploye",
@@ -302,7 +304,7 @@ export default {
         });
     },
     charger_info() {
-      console.log(chemin);
+      
       this.preloader = true;
       axios
         .create({
@@ -334,9 +336,13 @@ export default {
           this.activite = response.data.etat_professionnel;
           this.instruction = response.data.instruction;
           this.matrimoniale = response.data.status_matrimonial;
-          this.dossiers = response.data.dossiers;
-
+          
+          response.data.created_at = moment(response.data.created_at).format('Do MMMM YYYY, H:mm:ss ')
           console.log("dossiers :", this.dossiers);
+          response.data.dossiers.forEach(element => {
+              element.created_at = moment(element.created_at).format('Do MMMM YYYY, H:mm:ss ')
+          });
+          this.dossiers = response.data.dossiers;
         })
         .catch((err) => {
           this.preload = false;

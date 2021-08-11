@@ -67,7 +67,8 @@
                 <tbody>
                   <tr v-for="depart in diagnostics" v-bind:key="depart.id">
                     <td>{{ depart.libelle }}</td>
-                    <td>{{ depart.type }}</td>
+                    <td v-if="depart.type == 'text' ">Texte</td>
+                    <td v-if="depart.type == 'checkbox' ">Case à cocher</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a

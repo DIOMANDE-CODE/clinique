@@ -66,6 +66,7 @@
                     <th>Nom des departements</th>
                     <th>Dosage(Gr)</th>
                     <th>Type</th>
+                    <th>Pathologie</th>
                     <th>Prix</th>
                     <th>Quantité</th>
                     <th class="text-right">Actions</th>
@@ -76,6 +77,7 @@
                     <td>{{ depart.libelle }}</td>
                     <td>{{ depart.dosage }}</td>
                     <td>{{ depart.type }}</td>
+                    <td>{{ depart.categorie.libelle }}</td>
                     <td>{{ depart.prix }}</td>
                     <td>{{ depart.quantity }}</td>
                     <td class="text-right">
@@ -388,31 +390,7 @@ import $ from "jquery";
 
 export default {
   mounted() {
-    this.preloader = true;
-    axios
-      .create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .get(chemin + "/listerMedoc")
-      .then((response) => {
-        console.log(response.data);
-        this.preloader = false;
-        this.medicaments = response.data;
-        setTimeout(function() {
-          $("#example").DataTable({
-            pagingType: "full_numbers",
-            pageLength: 5,
-            processing: true,
-            dom: "Bfrtip",
-            buttons: ["copy", "csv", "print"],
-            order: [],
-          });
-        }, 1000);
-      });
+    this.charge()
   },
   data() {
     return {
@@ -431,19 +409,29 @@ export default {
     charge() {
       this.preloader = true;
       axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listerMedoc")
-        .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.medicaments = response.data;
-        });
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listerMedoc")
+      .then((response) => {
+        setTimeout(function() {
+          $("#example").DataTable({
+            pagingType: "full_numbers",
+            pageLength: 5,
+            processing: true,
+            dom: "Bfrtip",
+            buttons: ["copy", "csv", "print"],
+            order: [],
+          });
+        }, 1000);
+        console.log('list:',response.data);
+        this.preloader = false;
+        this.medicaments = response.data;
+      });
     },
     modifier(pk) {
       this.$router.push("/pharmacie/medicament/edit/" + pk);
