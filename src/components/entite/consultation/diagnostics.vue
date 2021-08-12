@@ -56,8 +56,7 @@
                     @change="activerdiagnostic()"
                   />
                 </h4>
-
-                <form action="#" v-if="activer_diagnostic">
+                <form v-if="activer_diagnostic">
                   <div class="form-group row">
                     <div
                       class="col-4"
@@ -77,8 +76,8 @@
                           />
                           {{ diagnostic.libelle }}
                         </div>
-                        <br />
-                        <div class="form-group row">
+                        <br/>
+                        <div v-if="diagnostic.value" class="form-group row">
                           <div class="col-md-12">
                             <textarea
                               type="text"
@@ -91,10 +90,9 @@
                         </div>
                         <br />
                       </div>
-
                       <div class="col-md-10" v-if="diagnostic.type === 'text'">
                         <div class="form-group row">
-                          <label class="col-form-label col-md-2">{{
+                          <label class="col-form-label col-md-12">{{
                             diagnostic.libelle
                           }}</label>
                           <div class="col-md-12">
@@ -146,7 +144,7 @@
               </div>
               <div class="card-box">
                 <h4 class="card-title">
-                  Pensements
+                  Pansements
                   <input
                     type="checkbox"
                     name="radio"
@@ -304,15 +302,25 @@
                 <label class="col-form-label col-md-3"
                   >Service destinataire</label
                 >
-                <div class="col-md-9">
-                  <select class="form-control" v-model="destination">
+                <div class="col-md-9" v-for="workflow in workflows"
+                      v-bind:key="workflow.id">
+                  <!-- <select class="form-control" v-model="destination">
                     <option
                       :value="workflow.service.id"
                       v-for="workflow in workflows"
                       v-bind:key="workflow.id"
                       >{{ workflow.service.nom }}</option
                     >
-                  </select>
+                  </select> -->
+                      <div class="checkbox">
+                          <input
+                            type="checkbox"
+                            name="checkbox"
+                            v-model="workflow.value"
+                            :value="workflow.id"
+                          />
+                          {{ workflow.service.nom }}
+                      </div>
                 </div>
               </div>
               <div class="m-t-20 text-center">
@@ -565,7 +573,15 @@ export default {
       console.log("examens :", this.examens);
       console.log("pensements :", this.medocs);
       console.log("destination id", this.destination);
-      if (this.destination === "") {
+      console.log("workflow id", this.workflows);
+      let count=0
+      this.workflows.forEach(element => {
+        
+        if (element.value) {
+          count++
+        }
+      });
+      if (count === 0) {
         this.errors = true;
         this.message = "Veuillez indiquer un destinataire";
         this.preloader = false;
@@ -584,7 +600,7 @@ export default {
             examens: this.examens,
             pensements: this.medocs,
             ordonnances: this.ordonnances,
-            destination_service_id: this.destination,
+            workflows: this.workflows,
           })
           .then((response) => {
             console.log(response.data);

@@ -52,14 +52,14 @@
         <div class="row">
           <div class="col-md-12">
             <div class="table-responsive">
-              <table id="example" class="table table-striped custom-table">
+              <table id="example" class="table table-striped custom-table" style="width:100%;">
                 <thead>
                   <tr>
                     <th style="min-width:200px;">Noms</th>
                     <th>Prenoms</th>
                     <th>Sexes</th>
                     <th>Contacts</th>
-                    <th>Profils</th>
+                    <th>Profil</th>
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
@@ -78,16 +78,7 @@
                     <td>{{ employe.prenoms }}</td>
                     <td>{{ employe.genre }}</td>
                     <td>{{ employe.telephone }}</td>
-                    <td v-if="employe.statut === 'actif'">
-                      <span class="custom-badge status-green">{{
-                        employe.role
-                      }}</span>
-                    </td>
-                    <td v-else>
-                      <span class="custom-badge status-red">{{
-                        employe.role
-                      }}</span>
-                    </td>
+                    <td v-for="profil in employe.profile" :key="profil.id">{{ profil.titre }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -449,7 +440,7 @@ export default {
           setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
-              pageLength: 5,
+              pageLength: 10,
               processing: true,
               dom: "Bfrtip",
               buttons: ["copy", "csv", "print"],
@@ -466,6 +457,7 @@ export default {
                 loadingRecords: "Loading...",
                 processing: "Processing...",
                 search: "Chercher :",
+                stateSave : true,
                 zeroRecords: "Aucun enregistrement correspondant trouvé",
                 paginate: {
                   first: "Premier",

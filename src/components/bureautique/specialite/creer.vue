@@ -232,7 +232,7 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
-            this.$router.push("/admin/profil");
+            this.$router.push("/admin/specialite");
             console.log("reussie");
 
             this.nom = "";

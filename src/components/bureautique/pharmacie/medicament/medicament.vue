@@ -66,6 +66,7 @@
                     <th>Nom des departements</th>
                     <th>Dosage(Gr)</th>
                     <th>Type</th>
+                    <th>Pathologie</th>
                     <th>Prix</th>
                     <th>Quantité</th>
                     <th class="text-right">Actions</th>
@@ -76,6 +77,7 @@
                     <td>{{ depart.libelle }}</td>
                     <td>{{ depart.dosage }}</td>
                     <td>{{ depart.type }}</td>
+                    <td>{{ depart.categorie.libelle }}</td>
                     <td>{{ depart.prix }}</td>
                     <td>{{ depart.quantity }}</td>
                     <td class="text-right">
@@ -388,55 +390,7 @@ import $ from "jquery";
 
 export default {
   mounted() {
-    this.preloader = true;
-    axios
-      .create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-      .get(chemin + "/listerMedoc")
-      .then((response) => {
-        console.log(response.data);
-        this.preloader = false;
-        this.medicaments = response.data;
-        setTimeout(function() {
-            $("#example").DataTable({
-              pagingType: "full_numbers",
-              pageLength: 5,
-              processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
-              order: [],
-              language: {
-                décimal: "",
-                emptyTable: "Aucune donnée disponible dans le tableau",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
-                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
-                infoPostFix: "",
-                thousands: ",",
-                lengthMenu: "Afficher les entrées du _MENU_",
-                loadingRecords: "Loading...",
-                processing: "Processing...",
-                search: "Chercher :",
-                zeroRecords: "Aucun enregistrement correspondant trouvé",
-                paginate: {
-                  first: "Premier",
-                  last: "Dernier",
-                  next: "Suivant",
-                  previous: "Précédent",
-                },
-                aria: {
-                  sortAscending: ": activate to sort column ascending",
-                  sortDescending: ": activate to sort column descending",
-                },
-              },
-            });
-          }, 1000);
-      });
+    this.charge()
   },
   data() {
     return {
@@ -455,19 +409,29 @@ export default {
     charge() {
       this.preloader = true;
       axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listerMedoc")
-        .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.medicaments = response.data;
-        });
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listerMedoc")
+      .then((response) => {
+        setTimeout(function() {
+          $("#example").DataTable({
+            pagingType: "full_numbers",
+            pageLength: 5,
+            processing: true,
+            dom: "Bfrtip",
+            buttons: ["copy", "csv", "print"],
+            order: [],
+          });
+        }, 1000);
+        console.log('list:',response.data);
+        this.preloader = false;
+        this.medicaments = response.data;
+      });
     },
     modifier(pk) {
       this.$router.push("/pharmacie/medicament/edit/" + pk);

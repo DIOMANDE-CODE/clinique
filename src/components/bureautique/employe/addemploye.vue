@@ -288,7 +288,6 @@
                   </label>
                   <div class="col-md-12">
                     <select class="form-control" v-model="service">
-                      <option value="0" disabled>Choisissez son service</option>
                       <option
                         required
                         :value="serv.service_id"
@@ -301,11 +300,10 @@
                 </div>
                 <div class="form-group col-sm-6">
                   <label class="col-form-label ">
-                    Fonction <span class="text-danger">*</span>
+                    Profil <span class="text-danger">*</span>
                   </label>
                   <div class="col-md-12">
-                    <select class="form-control" v-model="profile">
-                      <option value="0" disabled>Choisissez sa fonction</option>
+                    <select class="form-control" v-model="profile" multiple>
                       <option
                         required
                         :value="profil.id"
@@ -318,7 +316,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                   <label class="display-block"
-                    >Profil <span class="text-danger">*</span></label
+                    >Rôle <span class="text-danger">*</span></label
                   >
                   <div class="form-check form-check-inline">
                     <input
@@ -401,7 +399,7 @@ export default {
       service: "",
       selectedClinique: false,
       profiles: [],
-      profile: "",
+      profile: [],
     };
   },
   components: {
@@ -442,7 +440,7 @@ export default {
         this.nationnalite === "" ||
         this.nationnalite === "" ||
         this.telephone === "" ||
-        this.date === "" ||
+        this.date === "" || 
         this.addresse === "" ||
         this.situation === "" ||
         this.genre === "" ||
@@ -498,7 +496,7 @@ export default {
           this.email = "";
           this.code = "";
           this.role = "";
-          this.profile = "";
+          this.profile = [];
 
           this.$router.push("/admin/employe")
         })

@@ -393,7 +393,7 @@ export default {
         setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
-              pageLength: 5,
+              pageLength: 10,
               processing: true,
               dom: "Bfrtip",
               buttons: ["copy", "csv", "print"],
@@ -410,6 +410,7 @@ export default {
                 loadingRecords: "Loading...",
                 processing: "Processing...",
                 search: "Chercher :",
+                stateSave : true,
                 zeroRecords: "Aucun enregistrement correspondant trouvé",
                 paginate: {
                   first: "Premier",

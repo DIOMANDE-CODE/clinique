@@ -97,7 +97,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="secretaire">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(4) && service_id.includes(3)">
             <router-link to="/acceuil"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"><i class="fa fa-home"></i></span>
@@ -143,7 +143,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="infirmiere">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(5) && service_id.includes(1)">
             <router-link to="/entite/constante"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -155,7 +155,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="medecin">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(1) && service_id.includes(4)">
             <router-link to="/consultation"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -179,7 +179,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="examinateur">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(6) && service_id.includes(5)">
             <router-link to="/laboratoire"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -191,7 +191,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="soignant">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(8) && service_id.includes(6)">
             <router-link to="/pensement"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -203,7 +203,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="urgence">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(1) && service_id.includes(7)">
             <router-link to="/urgence"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -215,7 +215,7 @@
               </div></router-link
             >
           </div>
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="caisse">
+          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="profil_id.includes(2) && service_id.includes(2)">
             <router-link to="/caisse"
               ><div class="dash-widget">
                 <span class="dash-widget-bg1"
@@ -248,16 +248,46 @@ export default {
       soignant: false,
       urgence: false,
       caisse: false,
+      profiles:[],
+      profil_id:[],
+      service_id:[]
     };
   },
   created() {
-    this.charger_utilsateur();
+    this.listProfil()
   },
   methods: {
+    listProfil() {
+      console.log("service");
+      axios
+        .create({
+          headers: {
+            // "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + `/getListeProfile`)
+        .then((response) => {
+          console.log("profil:", response.data.data);
+          
+           
+          if (response.data.state === true) {
+            this.preloader = false;
+            this.profiles = response.data.data;
+            this.charger_utilsateur();
+          } else {
+            this.preloader = false;
+            console.log("erreur de chargement");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     charger_utilsateur() {
       this.identifiant = this.$store.getters.getCurrentIdentifiant;
-      console.log("identifiant", this.identifiant);
-      console.log("listes des profile :", this.profiles);
+
       axios
         .create({
           headers: {
@@ -275,6 +305,14 @@ export default {
             if (role === "admin") {
               this.admin = true;
             } else {
+              response.data.data.profile.forEach(element => {
+                this.profil_id.push(element.id)
+              });
+              response.data.data.service.forEach(element => {
+                this.service_id.push(element.id)
+              });
+              console.log('profil_id',this.profil_id)
+              console.log('service_id',this.service_id)
               const profil = response.data.data.profile[0].titre;
               const service = response.data.data.service[0].nom;
               console.log("profile :", profil);

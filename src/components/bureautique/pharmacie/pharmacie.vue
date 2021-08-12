@@ -10,7 +10,7 @@
                   ><i class="fa fa-suitcase" aria-hidden="true"></i
                 ></span>
                 <div class="dash-widget-info text-right">
-                  <span class="widget-title3">Categories</span>
+                  <span class="widget-title3">Pathologies</span>
                 </div>
               </div></router-link
             >

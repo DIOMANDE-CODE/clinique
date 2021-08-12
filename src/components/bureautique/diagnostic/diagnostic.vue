@@ -67,7 +67,8 @@
                 <tbody>
                   <tr v-for="depart in diagnostics" v-bind:key="depart.id">
                     <td>{{ depart.libelle }}</td>
-                    <td>{{ depart.type }}</td>
+                    <td v-if="depart.type == 'text' ">Texte</td>
+                    <td v-if="depart.type == 'checkbox' ">Case à cocher</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -393,39 +394,15 @@ export default {
         this.preloader = false;
         this.diagnostics = response.data;
         setTimeout(function() {
-            $("#example").DataTable({
-              pagingType: "full_numbers",
-              pageLength: 5,
-              processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
-              order: [],
-              language: {
-                décimal: "",
-                emptyTable: "Aucune donnée disponible dans le tableau",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
-                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
-                infoPostFix: "",
-                thousands: ",",
-                lengthMenu: "Afficher les entrées du _MENU_",
-                loadingRecords: "Loading...",
-                processing: "Processing...",
-                search: "Chercher :",
-                zeroRecords: "Aucun enregistrement correspondant trouvé",
-                paginate: {
-                  first: "Premier",
-                  last: "Dernier",
-                  next: "Suivant",
-                  previous: "Précédent",
-                },
-                aria: {
-                  sortAscending: ": activate to sort column ascending",
-                  sortDescending: ": activate to sort column descending",
-                },
-              },
-            });
-          }, 1000);
+          $("#example").DataTable({
+            pagingType: "full_numbers",
+            pageLength: 5,
+            processing: true,
+            dom: "Bfrtip",
+            buttons: ["copy", "csv", "print"],
+            order: [],
+          });
+        }, 1000);
       });
   },
   data() {

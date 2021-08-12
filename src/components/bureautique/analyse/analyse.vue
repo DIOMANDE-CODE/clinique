@@ -409,6 +409,7 @@ export default {
                 loadingRecords: "Loading...",
                 processing: "Processing...",
                 search: "Chercher :",
+                stateSave : true,
                 zeroRecords: "Aucun enregistrement correspondant trouvé",
                 paginate: {
                   first: "Premier",

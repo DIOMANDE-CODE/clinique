@@ -57,6 +57,7 @@
               <table
                 id="example"
                 class="table table-striped custom-table mb-0 datatable"
+                style="width: 100%"
               >
                 <thead>
                   <tr>
@@ -173,15 +174,16 @@ export default {
           setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
-              pageLength: 5,
+              pageLength: 10,
               processing: true,
               dom: "Bfrtip",
               buttons: ["copy", "csv", "print"],
+              stateSave : true,
               order: [],
               language: {
                 décimal: "",
                 emptyTable: "Aucune donnée disponible dans le tableau",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoEmpty: "Affichage de 0 à 0 sur 0 entrées",
                 info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
                 infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
                 infoPostFix: "",

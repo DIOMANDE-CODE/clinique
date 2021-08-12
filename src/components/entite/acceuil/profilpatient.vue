@@ -24,7 +24,7 @@
             </button>
           </div>
           <div class="modal-body">
-            {{message_assurance}}
+            {{ message_assurance }}
           </div>
           <div class="modal-footer">
             <button
@@ -32,7 +32,7 @@
               class="btn btn-secondary"
               data-dismiss="modal"
             >
-              Close
+              Fermer
             </button>
           </div>
         </div>
@@ -43,6 +43,16 @@
         <button class="btn btn-primary btn-rounded" v-on:click="retourner">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </button>
+        <button class="btn btn-primary btn-rounded" v-on:click="retourner">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </button>
+        <div class="col-sm-8 col-9 text-right m-b-20">
+          <a
+            href="add-doctor.html"
+            class="btn btn-primary btn-rounded float-right"
+            ><i class="fa fa-plus"></i> Nouvelle consultation</a
+          >
+        </div>
         <br /><br />
         <div class="row">
           <div class="col-sm-7 col-6">
@@ -202,9 +212,7 @@
                 /></a>
               </div>
               <h4 class="doctor-name text-ellipsis">
-                <a>{{
-                  dossier.num
-                }}</a>
+                <a>{{ dossier.num }}</a>
               </h4>
               <div class="doc-prof">{{ dossier.objet }}</div>
               <div class="user-country">
@@ -214,8 +222,8 @@
                 v-on:click="voir(dossier.id)"
                 type="button"
                 class="btn btn-info"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
+                data-toggle="modal"
+                data-target="#exampleModal"
               >
                 Voir +
               </button>
@@ -230,6 +238,8 @@
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
 import loader from "../../../components/loader.vue";
+import moment from "moment";
+moment.locale("fr");
 
 export default {
   name: "profilemploye",
@@ -256,7 +266,7 @@ export default {
       matrimoniale: "",
       preloader: false,
       dossiers: [],
-      assurances : [],
+      assurances: [],
       message_assurance: "",
     };
   },
@@ -270,7 +280,7 @@ export default {
     retourner() {
       this.$router.push("/acceuil");
     },
-    voir(pk){
+    voir(pk) {
       console.log(pk);
       axios
         .create({
@@ -284,17 +294,15 @@ export default {
         .then((response) => {
           const dossiers = response.data.dossiers;
           dossiers.forEach((dossier) => {
-            if(dossier.id === pk){
+            if (dossier.id === pk) {
               console.log("id du dossiers", dossier.assurance);
               this.assurances = dossier.assurance;
-              console.log(" assurance :",dossier.assurance);
-              if(this.assurance === 0){
+              console.log(" assurance :", dossier.assurance);
+              if (this.assurance === 0) {
                 this.message_assurance = "Aucune assurance";
               }
             }
-          })
-
-
+          });
         })
         .catch((err) => {
           this.preload = false;
@@ -302,7 +310,6 @@ export default {
         });
     },
     charger_info() {
-      console.log(chemin);
       this.preloader = true;
       axios
         .create({
@@ -334,9 +341,17 @@ export default {
           this.activite = response.data.etat_professionnel;
           this.instruction = response.data.instruction;
           this.matrimoniale = response.data.status_matrimonial;
-          this.dossiers = response.data.dossiers;
 
+          response.data.created_at = moment(response.data.created_at).format(
+            "Do MMMM YYYY, H:mm:ss "
+          );
           console.log("dossiers :", this.dossiers);
+          response.data.dossiers.forEach((element) => {
+            element.created_at = moment(element.created_at).format(
+              "Do MMMM YYYY, H:mm:ss "
+            );
+          });
+          this.dossiers = response.data.dossiers;
         })
         .catch((err) => {
           this.preload = false;

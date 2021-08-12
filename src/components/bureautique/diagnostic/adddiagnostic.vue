@@ -68,8 +68,8 @@
                     class="form-control clinique"
                     v-model="type"
                   >
-                    <option value="checkbox">checkbox</option>
-                    <option value="text">text</option>
+                    <option value="checkbox">case à cocher</option>
+                    <option value="text">texte</option>
                     >
                   </select>
                 </div>

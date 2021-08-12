@@ -12,6 +12,17 @@
               PROFIL
             </h4>
           </div>
+          <div class="float-right">
+            <a
+            class="dropdown-item btn btn-primary"
+            style="color:black; cursor:pointer"
+            v-on:click="faire_diagnostic(dm.dossier.id)"
+            v-bind:identifiant="identifiant"
+            ><i class="fa fa-plus"></i>
+            Faire une nouvelle consultation</a
+          >
+          </div>
+          
         </div>
         <div class="card-box profile-header">
           <div class="row">
@@ -32,9 +43,9 @@
                   <div class="row">
                     <div class="col-md-5">
                       <div class="profile-info-left">
-                        <h3 class="user-name m-t-0 mb-0">{{ nom }}</h3>
+                        <h3 class="user-name m-t-0 mb-0">{{ dm.nom }}</h3>
                         <small class="text-muted" style="font-size:20px;">{{
-                          prenom
+                          dm.prenoms
                         }}</small>
                         <div class="staff-msg">
                           <!--<router-link to="/admin/permission"
@@ -49,10 +60,10 @@
                       <ul class="personal-info">
                         <li>
                           <span class="title" style="font-weight: bold;"
-                            >Telephone:</span
+                            >Matricule:</span
                           >
                           <span class="text" style="color:black">{{
-                            telephone
+                            dm.matricule
                           }}</span>
                         </li>
                         <li>
@@ -60,7 +71,7 @@
                             >Email:</span
                           >
                           <span class="text" style="color:black">{{
-                            mail
+                            dm.email
                           }}</span>
                         </li>
                         <li>
@@ -68,7 +79,7 @@
                             >Né le:</span
                           >
                           <span class="text" style="color:black">{{
-                            date
+                            dm.date_naissance
                           }}</span>
                         </li>
                         <li>
@@ -76,7 +87,7 @@
                             >Nationalité:</span
                           >
                           <span class="text" style="color:black">{{
-                            nationnalite
+                            dm.nationalite
                           }}</span>
                         </li>
                         <li>
@@ -84,7 +95,7 @@
                             >Ethnie:</span
                           >
                           <span class="text" style="color:black">{{
-                            ethnie
+                            dm.ethnie
                           }}</span>
                         </li>
                         <li>
@@ -92,7 +103,7 @@
                             >Genre:</span
                           >
                           <span class="text" style="color:black">{{
-                            sexe
+                            dm.sexe
                           }}</span>
                         </li>
                         <li>
@@ -100,7 +111,7 @@
                             >Téléphone:</span
                           >
                           <span class="text" style="color:black">{{
-                            telephone
+                           dm.contacts_cel
                           }}</span>
                         </li>
                         <li>
@@ -108,7 +119,7 @@
                             >Résidence:</span
                           >
                           <span class="text" style="color:black">{{
-                            residence
+                            dm.residence_ville
                           }}</span>
                         </li>
                         <li>
@@ -116,7 +127,7 @@
                             >Quartier:</span
                           >
                           <span class="text" style="color:black">{{
-                            quartier
+                            dm.quartier
                           }}</span>
                         </li>
                         <li>
@@ -124,7 +135,7 @@
                             >status:</span
                           >
                           <span class="text" style="color:black">{{
-                            matrimoniale
+                            dm.status_matrimonial
                           }}</span>
                         </li>
                         <li>
@@ -132,7 +143,7 @@
                             >Profession:</span
                           >
                           <span class="text" style="color:black">{{
-                            profession
+                            dm.profession
                           }}</span>
                         </li>
                       </ul>
@@ -154,10 +165,10 @@
         <div class="row doctor-grid">
           <div
             class="col-md-4 col-sm-4  col-lg-3"
-            v-for="dossier in dossiers"
+            v-for="dossier in dm.dossiers"
             v-bind:key="dossier.id"
           >
-            <div class="profile-widget">
+            <div class="profile-widget" v-if="day == dossier.updated_at" id="new" style="background-color:#98FB98">
               <div class="doctor-img">
                 <a class="avatar" style="cursor:default;"
                   ><img alt="" src="../../../assets/image/medical.png"
@@ -170,7 +181,30 @@
               </h4>
               <div class="doc-prof">{{ dossier.objet }}</div>
               <div class="user-country">
-                {{ dossier.created_at }}
+                {{ dossier.created_at }} <br>
+              </div>
+              <button
+                v-on:click="voir(dossier.id)"
+                type="button"
+                class="btn btn-info"
+              >
+                Voir +
+              </button>
+            </div>
+            <div v-else class="profile-widget">
+              <div class="doctor-img">
+                <a class="avatar" style="cursor:default;"
+                  ><img alt="" src="../../../assets/image/medical.png"
+                /></a>
+              </div>
+              <h4 class="doctor-name text-ellipsis">
+                <a>{{
+                  dossier.num
+                }}</a>
+              </h4>
+              <div class="doc-prof">{{ dossier.objet }}</div>
+              <div class="user-country">
+                {{ dossier.created_at }} <br>
               </div>
               <button
                 v-on:click="voir(dossier.id)"
@@ -189,6 +223,8 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
+import moment from 'moment';
+moment.locale('fr');
 
 export default {
   name: "profilemploye",
@@ -217,6 +253,8 @@ export default {
       dossiers: [],
       assurances : [],
       message_assurance: "",
+      day:null,
+      dm:{}
     };
   },
   created() {
@@ -225,6 +263,9 @@ export default {
   methods: {
     retourner() {
       this.$router.push("/consultation");
+    },
+    faire_diagnostic(pk) {
+      this.$router.push("/consultation/diagnostic/" + pk);
     },
     voir(pk){
       console.log(pk);
@@ -243,28 +284,15 @@ export default {
         })
         .get(chemin + `/patient/${this.$route.params.id}`)
         .then((response) => {
-          console.log("dossiers medical :", response.data);
           this.preloader = false;
           console.log(response.data);
-          this.nom = response.data.nom;
-          this.prenom = response.data.prenoms;
-          this.sexe = response.data.sexe;
-          this.date = response.data.date_naissance;
-          this.nationnalite = response.data.nationalite;
-          this.lieu_naissance = response.data.lieu_naissance;
-          this.ethnie = response.data.ethnie;
-          this.residence = response.data.residence_ville;
-          this.quartier = response.data.quartier;
-          this.fix = response.data.contacts_fixe;
-          this.telephone = response.data.contacts_cel;
-          this.mail = response.data.email;
-          this.assurance = response.data.assurance;
-          this.profession = response.data.profession;
-          this.formation = response.data.formation;
-          this.activite = response.data.etat_professionnel;
-          this.instruction = response.data.instruction;
-          this.matrimoniale = response.data.status_matrimonial;
-          this.dossiers = response.data.dossiers;
+          this.dm = response.data;
+          response.data.dossiers.forEach(element => {
+              element.created_at = moment(element.created_at).format('Do MMMM YYYY')
+              element.updated_at = moment(element.updated_at).format('Do MMMM YYYY')
+          });
+          this.day = moment().format('Do MMMM YYYY')
+          console.log("dossiers medical :", response.data);
 
         })
         .catch((err) => {
@@ -275,3 +303,14 @@ export default {
   },
 };
 </script>
+<style scoped>
+#new {
+  animation-name: example;
+  animation-duration: 10s;
+}
+
+@keyframes example {
+  from {background-color: rgb(255, 0, 149);}
+  to {background-color:  #98FB98;}
+}
+</style>

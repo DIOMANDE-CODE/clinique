@@ -260,6 +260,7 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
+            this.$router.push("/admin/clinique");
             console.log("modification réussie reussie");
           } else {
             this.preloader = false;

@@ -537,7 +537,7 @@ export default {
         .get(chemin + "/getListeModule")
         .then((response) => {
           console.log("Modules du système charger module:", response.data.data);
-          this.preloader = false;
+          this.preload = false;
           if (response.data.state === true) {
             this.modules = response.data.data;
             this.modules.forEach((module) => {
@@ -586,6 +586,7 @@ export default {
             droits.forEach((permission) => {
               console.log("permission", permission.pivot);
               console.log("module write_permission :", permission.pivot.write);
+                this.preload = false;
               if (module.id === permission.id) {
                 if (permission.pivot.read === 1) {
                   module.read_permission = true;
@@ -615,7 +616,7 @@ export default {
                   module.update_permission = true;
                 }
               }
-              this.preload = false;
+            
             });
           });
           console.log("new modules :", this.modules);

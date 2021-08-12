@@ -542,7 +542,7 @@ export default {
                 (this.fax = ""),
                 (this.coche = []);
               console.log("reussie");
-
+              this.$router.push("/admin/clinique");
               this.nom = "";
               this.description = "";
             } else {
