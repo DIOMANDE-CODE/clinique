@@ -89,17 +89,6 @@
                           <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
-                            v-on:click="faire_diagnostic(employe.dossier.id)"
-                            v-bind:identifiant="identifiant"
-                            ><i
-                              class="fa fa-search m-r-5"
-                              style="cursor:pointer"
-                            ></i>
-                            Faire une consultation</a
-                          >
-                          <a
-                            class="dropdown-item"
-                            style="color:black; cursor:pointer"
                             v-on:click="voir_dm(employe.dossier.client_id)"
                             v-bind:identifiant="identifiant"
                             ><i
@@ -159,11 +148,36 @@ export default {
           setTimeout(function() {
             $("#example").DataTable({
               pagingType: "full_numbers",
-              pageLength: 5,
+              pageLength: 10,
               processing: true,
               dom: "Bfrtip",
               buttons: ["copy", "csv", "print"],
               order: [],
+              language: {
+                décimal: "",
+                emptyTable: "Aucune donnée disponible dans le tableau",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Afficher les entrées du _MENU_",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Chercher :",
+                stateSave : true,
+                zeroRecords: "Aucun enregistrement correspondant trouvé",
+                paginate: {
+                  first: "Premier",
+                  last: "Dernier",
+                  next: "Suivant",
+                  previous: "Précédent",
+                },
+                aria: {
+                  sortAscending: ": activate to sort column ascending",
+                  sortDescending: ": activate to sort column descending",
+                },
+              },
             });
           }, 1000);
         } else {
@@ -188,9 +202,6 @@ export default {
     loader,
   },
   methods: {
-    faire_diagnostic(pk) {
-      this.$router.push("/consultation/diagnostic/" + pk);
-    },
     voir_dm(pk) {
       console.log(pk);
       this.$router.push("/consultation/dossier_medical/" + pk);

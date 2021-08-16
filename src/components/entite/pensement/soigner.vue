@@ -7,9 +7,6 @@
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
-          <button style="position: relative; left:85%;" class="btn btn-success btn-rounded" v-on:click="terminer">
-           Terminer
-          </button>
         </div>
         <br />
         <div
@@ -212,7 +209,8 @@ export default {
               this.preloader = false;
               this.success = true;
               this.message = "transfert effectué";
-              this.destination = "";
+              this.destination = ""
+              this.$router.push('/pensement');
             } else {
               this.errors = true;
               this.message = "transfert non enregistré";

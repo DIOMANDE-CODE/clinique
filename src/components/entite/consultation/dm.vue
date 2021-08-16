@@ -5,25 +5,8 @@
         <button class="btn btn-primary btn-rounded" v-on:click="retourner">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </button>
+
         <br /><br />
-        <div class="row">
-          <div class="col-sm-7 col-6">
-            <h4 class="page-title" style="color:black; font-weight: bold;">
-              PROFIL
-            </h4>
-          </div>
-          <div class="float-right">
-            <a
-            class="dropdown-item btn btn-primary"
-            style="color:black; cursor:pointer"
-            v-on:click="faire_diagnostic(dm.dossier.id)"
-            v-bind:identifiant="identifiant"
-            ><i class="fa fa-plus"></i>
-            Faire une nouvelle consultation</a
-          >
-          </div>
-          
-        </div>
         <div class="card-box profile-header">
           <div class="row">
             <div class="col-md-12">
@@ -111,7 +94,7 @@
                             >Téléphone:</span
                           >
                           <span class="text" style="color:black">{{
-                           dm.contacts_cel
+                            dm.contacts_cel
                           }}</span>
                         </li>
                         <li>
@@ -168,21 +151,22 @@
             v-for="dossier in dm.dossiers"
             v-bind:key="dossier.id"
           >
-            <div class="profile-widget" v-if="day == dossier.updated_at" id="new" style="background-color:#98FB98">
+            <div
+              class="profile-widget"
+              v-if="day == dossier.updated_at"
+              id="new"
+              style="background-color:#98FB98"
+            >
               <div class="doctor-img">
                 <a class="avatar" style="cursor:default;"
                   ><img alt="" src="../../../assets/image/medical.png"
                 /></a>
               </div>
               <h4 class="doctor-name text-ellipsis">
-                <a>{{
-                  dossier.num
-                }}</a>
+                <a>{{ dossier.num }}</a>
               </h4>
               <div class="doc-prof">{{ dossier.objet }}</div>
-              <div class="user-country">
-                {{ dossier.created_at }} <br>
-              </div>
+              <div class="user-country">{{ dossier.created_at }} <br /></div>
               <button
                 v-on:click="voir(dossier.id)"
                 type="button"
@@ -198,14 +182,10 @@
                 /></a>
               </div>
               <h4 class="doctor-name text-ellipsis">
-                <a>{{
-                  dossier.num
-                }}</a>
+                <a>{{ dossier.num }}</a>
               </h4>
               <div class="doc-prof">{{ dossier.objet }}</div>
-              <div class="user-country">
-                {{ dossier.created_at }} <br>
-              </div>
+              <div class="user-country">{{ dossier.created_at }} <br /></div>
               <button
                 v-on:click="voir(dossier.id)"
                 type="button"
@@ -223,8 +203,8 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import moment from 'moment';
-moment.locale('fr');
+import moment from "moment";
+moment.locale("fr");
 
 export default {
   name: "profilemploye",
@@ -251,10 +231,10 @@ export default {
       matrimoniale: "",
       preloader: false,
       dossiers: [],
-      assurances : [],
+      assurances: [],
       message_assurance: "",
-      day:null,
-      dm:{}
+      day: null,
+      dm: {},
     };
   },
   created() {
@@ -267,7 +247,7 @@ export default {
     faire_diagnostic(pk) {
       this.$router.push("/consultation/diagnostic/" + pk);
     },
-    voir(pk){
+    voir(pk) {
       console.log(pk);
       this.$router.push("/consultation/info_medical/" + pk);
     },
@@ -287,17 +267,20 @@ export default {
           this.preloader = false;
           console.log(response.data);
           this.dm = response.data;
-          response.data.dossiers.forEach(element => {
-              element.created_at = moment(element.created_at).format('Do MMMM YYYY')
-              element.updated_at = moment(element.updated_at).format('Do MMMM YYYY')
+          response.data.dossiers.forEach((element) => {
+            element.created_at = moment(element.created_at).format(
+              "Do MMMM YYYY"
+            );
+            element.updated_at = moment(element.updated_at).format(
+              "Do MMMM YYYY"
+            );
           });
-          this.day = moment().format('Do MMMM YYYY')
+          this.day = moment().format("Do MMMM YYYY");
           console.log("dossiers medical :", response.data);
-
         })
         .catch((err) => {
           this.preload = false;
-          console.log(err); 
+          console.log(err);
         });
     },
   },
@@ -310,7 +293,11 @@ export default {
 }
 
 @keyframes example {
-  from {background-color: rgb(255, 0, 149);}
-  to {background-color:  #98FB98;}
+  from {
+    background-color: rgb(255, 0, 149);
+  }
+  to {
+    background-color: #98fb98;
+  }
 }
 </style>

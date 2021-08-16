@@ -57,7 +57,7 @@
                     <th style="min-width:200px;">matricule</th>
                     <th v-show="false">noms</th>
                     <th v-show="false">Prenoms</th>
-                    <th>Sexes</th>
+                    <th v-show="false">Sexes</th>
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
@@ -75,7 +75,7 @@
                     </td>
                     <td v-show="false">{{ employe.nom }}</td>
                     <td v-show="false">{{ employe.prenoms }}</td>
-                    <td>{{ employe.sexe }}</td>
+                    <td v-show="false">{{ employe.sexe }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -171,15 +171,40 @@ export default {
             this.preload = false;
             this.clients = response.data;
             setTimeout(function() {
-              $("#example").DataTable({
-                pagingType: "full_numbers",
-                pageLength: 5,
-                processing: true,
-                dom: "Bfrtip",
-                buttons: ["copy", "csv", "print"],
-                "order": []
-              });
-            }, 1000);
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 10,
+              processing: true,
+              dom: "Bfrtip",
+              buttons: ["copy", "csv", "print"],
+              order: [],
+              language: {
+                décimal: "",
+                emptyTable: "Aucune donnée disponible dans le tableau",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Afficher les entrées du _MENU_",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Chercher :",
+                stateSave : true,
+                zeroRecords: "Aucun enregistrement correspondant trouvé",
+                paginate: {
+                  first: "Premier",
+                  last: "Dernier",
+                  next: "Suivant",
+                  previous: "Précédent",
+                },
+                aria: {
+                  sortAscending: ": activate to sort column ascending",
+                  sortDescending: ": activate to sort column descending",
+                },
+              },
+            });
+          }, 1000);
           });
     },
     charge: function() {

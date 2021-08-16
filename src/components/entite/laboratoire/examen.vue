@@ -42,7 +42,7 @@
 
         <div class="content">
           <div class="row doctor-grid">
-              <p>{{ message_diagnostic }}</p>
+            <p>{{ message_diagnostic }}</p>
             <div
               class="col-md-4 col-sm-4  col-lg-4"
               v-for="examen in examens.examens"
@@ -66,13 +66,13 @@
                   <div class="col-md-10">
                     <br />
                     <div class="checkbox">
-                      Payé
+                      assurance
                       <input
                         type="checkbox"
                         :name="examen.id + '_checkbox'"
-                        :value="examen.pivot.purchased"
-                        v-model="examen.pivot.purchased"
-                        @change="paye(examen.id, examen.pivot.purchased)"
+                        :value="examen.pivot.assurance"
+                        v-model="examen.pivot.assurance"
+                        @change="paye(examen.id, examen.pivot.assurance)"
                       />
                     </div>
                     <br />
@@ -86,7 +86,7 @@
                       valider(
                         examen.id,
                         examen.pivot.id,
-                        examen.pivot.purchased
+                        examen.pivot.assurance
                       )
                     "
                   >
@@ -129,6 +129,7 @@ var solde = "";
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
+
 export default {
   data() {
     return {
@@ -205,11 +206,13 @@ export default {
         })
         .get(chemin + "/listeExamenByDossier/" + this.$route.params.id)
         .then((response) => {
-          console.log("examen dossier :", response.data.examens);
+          console.log("examen dossier :", response.data);
+          response.data.examens.forEach((element) => {
+            if (element.pivot.assurance === 1) {
+              element.pivot.assurance = true;
+            }
+          });
           this.examens = response.data;
-          if (this.examens.examens.length === 0) {
-            this.message_diagnostic = "Aucun n'examen pour ce patient";
-          }
         })
         .catch((err) => {
           this.preloader = false;
@@ -250,6 +253,7 @@ export default {
               this.success = true;
               this.message = "transfert effectué";
               this.destination = "";
+              this.$router.push('/laboratoire');
             } else {
               this.errors = true;
               this.message = "transfert non enregistré";
@@ -261,9 +265,9 @@ export default {
           });
       }
     },
-    valider(pk, ligne_id, solder) {
-      if (solder === true) {
-        solder = 1;
+    valider(pk, ligne_id, assurance) {
+      if (assurance === true) {
+        assurance = 1;
       }
       console.log("purchased", this.achat);
       const data = new FormData();
@@ -271,10 +275,10 @@ export default {
       data.append("purchased", pk);
       data.append("id", ligne_id);
       data.append("resultat", pk);
+      data.append("assurance", assurance);
 
       console.log(pk, ligne_id);
       this.preloader = true;
-      console.log("image :", solder);
       if (this.destination === "") {
         this.errors = true;
         this.message = "Veuillez indiquer un destinataire";

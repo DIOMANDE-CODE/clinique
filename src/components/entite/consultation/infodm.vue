@@ -13,6 +13,14 @@
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
+          <button
+            v-if="consultation"
+            style="position:relative; left:80%"
+            class="btn btn-success btn-rounded"
+            v-on:click="faire_diagnostic"
+          >
+            <i class="fa fa-plus" aria-hidden="true"></i> nouvelle consultation
+          </button>
         </div>
         <br />
         <div
@@ -230,7 +238,8 @@
                               }}
                             </tr>
                           </td>
-                             <td
+
+                          <td
                             v-for="employe in ordonnances"
                             v-bind:key="employe.id"
                           >
@@ -292,6 +301,8 @@ export default {
       ordonnances: [],
       pensements: [],
       id: "",
+      dossier_id : 0,
+      consultation : false,
 
       activer_diagnostic: false,
       activer_examens: false,
@@ -306,6 +317,9 @@ export default {
     this.charger_diagnostic();
   },
   methods: {
+    faire_diagnostic() {
+      this.$router.push("/consultation/diagnostic/" + this.dossier_id);
+    },
     activerdiagnostic() {
       if (this.activer_diagnostic === false) {
         this.activer_diagnostic = true;
@@ -457,6 +471,7 @@ export default {
         .get(chemin + "/dossiersByClient/" + this.$route.params.id)
         .then((response) => {
           console.log("examens list :", response.data.data);
+          this.dossier_id = response.data.data.client_id;
           this.examens = response.data.data.examens;
           if (this.examens.length === 0) {
             this.info_message_examen = "Aucun examen fait ce jour";
@@ -484,6 +499,9 @@ export default {
           this.pensements = response.data.data.pensements;
           if (this.pensements.length === 0) {
             this.info_message_pensements = "Aucun pensement fait ce jour";
+          }
+          if(this.pensements.length === 0 && this.ordonnances.length === 0 && this.examens.length === 0 && this.diagnostics.length === 0) {
+            this.consultation = true;
           }
         })
         .catch((err) => {

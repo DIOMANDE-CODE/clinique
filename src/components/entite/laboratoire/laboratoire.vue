@@ -44,7 +44,7 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table class="table table-striped custom-table">
+              <table class="table table-striped custom-table" id="example">
                 <thead>
                   <tr>
                     <th style="min-width:200px;">Noms</th>
@@ -358,6 +358,16 @@ import { chemin } from "../../../assets/js/chemin.js";
 
 import loader from "../../../components/loader.vue";
 
+//Datatable Modules
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import "datatables.net-buttons/js/dataTables.buttons.js";
+import "datatables.net-buttons/js/buttons.colVis.js";
+import "datatables.net-buttons/js/buttons.flash.js";
+import "datatables.net-buttons/js/buttons.html5.js";
+import "datatables.net-buttons/js/buttons.print.js";
+import $ from "jquery";
+
 export default {
   data() {
     return {
@@ -393,6 +403,41 @@ export default {
           if (response.data.state === "true") {
             this.preload = false;
             this.patients = response.data.data;
+            setTimeout(function() {
+              $("#example").DataTable({
+                pagingType: "full_numbers",
+                pageLength: 10,
+                processing: true,
+                dom: "Bfrtip",
+                buttons: ["copy", "csv", "print"],
+                order: [],
+                language: {
+                  décimal: "",
+                  emptyTable: "Aucune donnée disponible dans le tableau",
+                  infoEmpty: "Showing 0 to 0 of 0 entries",
+                  info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                  infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+                  infoPostFix: "",
+                  thousands: ",",
+                  lengthMenu: "Afficher les entrées du _MENU_",
+                  loadingRecords: "Loading...",
+                  processing: "Processing...",
+                  search: "Chercher :",
+                  stateSave: true,
+                  zeroRecords: "Aucun enregistrement correspondant trouvé",
+                  paginate: {
+                    first: "Premier",
+                    last: "Dernier",
+                    next: "Suivant",
+                    previous: "Précédent",
+                  },
+                  aria: {
+                    sortAscending: ": activate to sort column ascending",
+                    sortDescending: ": activate to sort column descending",
+                  },
+                },
+              });
+            }, 1000);
           } else {
             this.preload = false;
             this.message = "Aucun employés existants";

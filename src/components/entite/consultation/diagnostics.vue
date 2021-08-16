@@ -7,9 +7,6 @@
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
-          <button style="position: relative; left:85%;" class="btn btn-success btn-rounded" v-on:click="terminer">
-           Terminer
-          </button>
         </div>
         <br />
         <div
@@ -76,7 +73,7 @@
                           />
                           {{ diagnostic.libelle }}
                         </div>
-                        <br/>
+                        <br />
                         <div v-if="diagnostic.value" class="form-group row">
                           <div class="col-md-12">
                             <textarea
@@ -300,36 +297,39 @@
               </div>
               <div class="form-group row">
                 <label class="col-form-label col-md-3"
-                  >Service destinataire</label
+                  >Service destinataire :</label
                 >
-                <div class="col-md-9" v-for="workflow in workflows"
-                      v-bind:key="workflow.id">
-                  <!-- <select class="form-control" v-model="destination">
-                    <option
-                      :value="workflow.service.id"
-                      v-for="workflow in workflows"
-                      v-bind:key="workflow.id"
-                      >{{ workflow.service.nom }}</option
-                    >
-                  </select> -->
-                      <div class="checkbox">
-                          <input
-                            type="checkbox"
-                            name="checkbox"
-                            v-model="workflow.value"
-                            :value="workflow.id"
-                          />
-                          {{ workflow.service.nom }}
-                      </div>
+                <div
+                  class="col-md-3"
+                  v-for="workflow in workflows"
+                  v-bind:key="workflow.id"
+                >
+                  <div class="checkbox">
+                    <input
+                      type="checkbox"
+                      name="checkbox"
+                      v-model="workflow.value"
+                      :value="workflow.id"
+                    />
+                    {{ workflow.service.nom }}
+                  </div>
                 </div>
               </div>
               <div class="m-t-20 text-center">
                 <button
                   type="button"
-                  class="btn btn-success submit-btn"
+                  class="btn btn-warning submit-btn"
                   v-on:click="valider"
+                  style="color:white;"
                 >
-                  Transferer
+                  Transferer le patient</button
+                >&nbsp; &nbsp; &nbsp;
+                <button
+                  type="button"
+                  class="btn btn-success submit-btn"
+                  v-on:click="terminer"
+                >
+                  Terminer
                 </button>
               </div>
             </div>
@@ -456,37 +456,38 @@ export default {
           console.log(err);
         });
     },
-    terminer(){
+    terminer() {
       console.log("destination :", this.destination);
       console.log("examens :", this.examens);
       this.preloader = true;
-        axios
-          .create({
-            headers: {
-              "Content-Type": "application/json,multipart/form-data",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
-          .put(chemin + "/modifierFileAttente/" + this.$route.params.id, {
-            status : "termine"
-          })
-          .then((response) => {
-            console.log(response.data);
-            if (response.data.state === "true") {
-              this.preloader = false;
-              this.success = true;
-              this.message = "transfert effectué";
-              this.destination = "";
-            } else {
-              this.errors = true;
-              this.message = "transfert non enregistré";
-            }
-          })
-          .catch((err) => {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json,multipart/form-data",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .put(chemin + "/modifierFileAttente/" + this.$route.params.id, {
+          status: "termine",
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.state === "true") {
             this.preloader = false;
-            console.log(err);
-          });
+            this.success = true;
+            this.message = "transfert effectué";
+            this.destination = "";
+            this.$router.push("/consultation");
+          } else {
+            this.errors = true;
+            this.message = "transfert non enregistré";
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
     },
     charger_workfow() {
       console.log("workflow");
@@ -565,7 +566,9 @@ export default {
       console.log("liste constante :", this.liste_constantes);
     },
     retourner() {
-      this.$router.push("/consultation");
+      this.$router.push(
+        "/consultation/dossier_medical/" + this.$route.params.id
+      );
     },
     valider() {
       this.preloader = true;
@@ -574,11 +577,10 @@ export default {
       console.log("pensements :", this.medocs);
       console.log("destination id", this.destination);
       console.log("workflow id", this.workflows);
-      let count=0
-      this.workflows.forEach(element => {
-        
+      let count = 0;
+      this.workflows.forEach((element) => {
         if (element.value) {
-          count++
+          count++;
         }
       });
       if (count === 0) {
@@ -609,6 +611,7 @@ export default {
             location.reload();
             this.message = "Consultation terminée";
             this.ordonnances = [];
+            this.$router.push("/consultation");
           })
           .catch((err) => {
             this.preloader = false;

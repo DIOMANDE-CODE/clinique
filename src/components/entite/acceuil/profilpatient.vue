@@ -43,16 +43,6 @@
         <button class="btn btn-primary btn-rounded" v-on:click="retourner">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
         </button>
-        <button class="btn btn-primary btn-rounded" v-on:click="retourner">
-          <i class="fa fa-arrow-left" aria-hidden="true"></i>
-        </button>
-        <div class="col-sm-8 col-9 text-right m-b-20">
-          <a
-            href="add-doctor.html"
-            class="btn btn-primary btn-rounded float-right"
-            ><i class="fa fa-plus"></i> Nouvelle consultation</a
-          >
-        </div>
         <br /><br />
         <div class="row">
           <div class="col-sm-7 col-6">
