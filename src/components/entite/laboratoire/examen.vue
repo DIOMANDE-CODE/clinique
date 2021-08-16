@@ -39,7 +39,6 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-
         <div class="content">
           <div class="row doctor-grid">
               <p>{{ message_diagnostic }}</p>
@@ -66,13 +65,13 @@
                   <div class="col-md-10">
                     <br />
                     <div class="checkbox">
-                      Payé
+                      assurance
                       <input
                         type="checkbox"
                         :name="examen.id + '_checkbox'"
-                        :value="examen.pivot.purchased"
-                        v-model="examen.pivot.purchased"
-                        @change="paye(examen.id, examen.pivot.purchased)"
+                        :value="examen.pivot.assurance"
+                        v-model="examen.pivot.assurance"
+                        @change="paye(examen.id, examen.pivot.assurance)"
                       />
                     </div>
                     <br />
@@ -86,7 +85,7 @@
                       valider(
                         examen.id,
                         examen.pivot.id,
-                        examen.pivot.purchased
+                        examen.pivot.assurance
                       )
                     "
                   >
@@ -205,7 +204,13 @@ export default {
         })
         .get(chemin + "/listeExamenByDossier/" + this.$route.params.id)
         .then((response) => {
-          console.log("examen dossier :", response.data.examens);
+          console.log("examen dossier :", response.data);
+          response.data.examens.forEach(element => {
+            if (element.pivot.assurance === 1) {
+                element.pivot.assurance= true
+            }
+              
+          });
           this.examens = response.data;
           if (this.examens.examens.length === 0) {
             this.message_diagnostic = "Aucun n'examen pour ce patient";
@@ -261,9 +266,9 @@ export default {
           });
       }
     },
-    valider(pk, ligne_id, solder) {
-      if (solder === true) {
-        solder = 1;
+    valider(pk, ligne_id, assurance) {
+      if (assurance === true) {
+        assurance = 1;
       }
       console.log("purchased", this.achat);
       const data = new FormData();
@@ -271,10 +276,10 @@ export default {
       data.append("purchased", pk);
       data.append("id", ligne_id);
       data.append("resultat", pk);
+      data.append("assurance", assurance);
 
       console.log(pk, ligne_id);
       this.preloader = true;
-      console.log("image :", solder);
       if (this.destination === "") {
         this.errors = true;
         this.message = "Veuillez indiquer un destinataire";

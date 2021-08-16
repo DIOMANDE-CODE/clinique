@@ -269,7 +269,6 @@ export default {
         })
         .get(chemin + `/getListeProfile`)
         .then((response) => {
-          console.log("profil:", response.data.data);
           
            
           if (response.data.state === true) {
@@ -298,10 +297,8 @@ export default {
         })
         .get(chemin + "/utilisateur/" + localStorage.getItem("identifiant"))
         .then((response) => {
-          console.log("information about user", response.data);
           if (response.data.state === true) {
             const role = response.data.data.role;
-            console.log("admin :", role);
             if (role === "admin") {
               this.admin = true;
             } else {
@@ -311,12 +308,8 @@ export default {
               response.data.data.service.forEach(element => {
                 this.service_id.push(element.id)
               });
-              console.log('profil_id',this.profil_id)
-              console.log('service_id',this.service_id)
               const profil = response.data.data.profile[0].titre;
               const service = response.data.data.service[0].nom;
-              console.log("profile :", profil);
-              console.log("service :", service);
               switch (profil + "|" + service) {
                 case "sécrétaire|Accueil":
                   this.secretaire = true;

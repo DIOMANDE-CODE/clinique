@@ -207,7 +207,6 @@ export default {
   },
   methods: {
     listProfil() {
-      console.log("service");
       axios
         .create({
           headers: {
@@ -218,7 +217,6 @@ export default {
         })
         .get(chemin + `/getListeProfile`)
         .then((response) => {
-          console.log("profil:", response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.profiles = response.data.data;
@@ -235,8 +233,6 @@ export default {
 
     charger_utilsateur() {
       this.identifiant = this.$store.getters.getCurrentIdentifiant;
-      console.log("identifiant", this.identifiant);
-      console.log("listes des profile :", this.profiles);
       axios
         .create({
           headers: {
@@ -247,17 +243,13 @@ export default {
         })
         .get(chemin + "/utilisateur/" + localStorage.getItem("identifiant"))
         .then((response) => {
-          console.log("information about user", response.data);
           if (response.data.state === true) {
             const role = response.data.data.role;
-            console.log("admin :", role);
             if (role === "admin") {
               this.admin = true;
             } else {
               const profil = response.data.data.profile[0].titre;
               const service = response.data.data.service[0].nom;
-              console.log("profile :", profil);
-              console.log("service :", service);
               switch (profil + "|" + service) {
                 case "sécrétaire|Accueil":
                   this.secretaire = true;
