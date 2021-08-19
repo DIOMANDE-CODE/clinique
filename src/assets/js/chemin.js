@@ -1,4 +1,4 @@
-var chemin = "http://192.168.1.2:8000/api";
+var chemin = "http://192.168.1.3:8000/api";
 
 // "https://gescline-backend.lce-ci.com/public/api"
 

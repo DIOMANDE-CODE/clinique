@@ -266,15 +266,21 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.preloader = false;
-          this.success = true;
-          this.message = "nouveau dossier ajouté avec success";
-        
-          this.assurance = "";
-          this.assurance_nom = "";
-          this.bon_assurance = "";
-          this.acte_assurance = "";
-          this.matricule_assurance = "";
-          this.objet = "";
+          if (response.data.state == false) {
+            this.errors = true;
+            this.message = response.data.message
+          }else{
+            this.success = true;
+            this.message = "nouveau dossier ajouté avec success";
+          
+            this.assurance = "";
+            this.assurance_nom = "";
+            this.bon_assurance = "";
+            this.acte_assurance = "";
+            this.matricule_assurance = "";
+            this.objet = "";
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;

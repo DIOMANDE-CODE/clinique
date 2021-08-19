@@ -49,14 +49,13 @@
                   <tr>
                     <th style="min-width:200px;">Noms</th>
                     <th>Prenoms</th>
-                    <th>Status</th>
+                    <th>numero de facture</th>
                     <th>Motif</th>
-
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="employe in patients" v-bind:key="employe.id">
+                  <tr v-for="patient in patients" v-bind:key="patient.id">
                     <td>
                       <img
                         width="28"
@@ -65,11 +64,11 @@
                         class="rounded-circle"
                         alt=""
                       />
-                      <h2>{{ employe.dossier.client.nom }}</h2>
+                      <h2>{{ patient.dossier.client.nom }}</h2>
                     </td>
-                    <td>{{ employe.dossier.client.prenoms }}</td>
-                    <td>{{ employe.status }}</td>
-                    <td>{{ employe.dossier.objet }}</td>
+                    <td>{{ patient.dossier.client.prenoms }}</td>
+                    <td>#{{ patient.num_facture }}</td>
+                    <td>{{ patient.dossier.objet }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -83,7 +82,7 @@
                           <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
-                            v-on:click="faire_facture(employe.dossier.id)"
+                            v-on:click="faire_facture(patient.dossier.id)"
                             v-bind:identifiant="identifiant"
                             ><i class="fa fa-money" style="cursor:pointer"></i>
                             Voir sa facture</a
