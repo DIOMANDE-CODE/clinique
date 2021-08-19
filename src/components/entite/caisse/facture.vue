@@ -17,7 +17,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" id="test">
           <div class="col-md-12" id="test">
             <div class="card-box">
               <h4 class="payslip-title">
@@ -38,9 +38,7 @@
                 </div>
                 <div class="col-sm-6 m-b-20">
                   <div class="invoice-details">
-                    <h3 class="text-uppercase" v-if="factures.factures">
-                      Facture #{{ factures.factures[0].num_facture }}
-                    </h3>
+                    <h3 class="text-uppercase" v-if="factures.factures">Facture #{{factures.factures[0].num_facture}}</h3>
                     <ul class="list-unstyled">
                       <li>
                         <b>Patient:</b> <span>{{ nom }}</span>
@@ -73,10 +71,10 @@
                       <thead>
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
-                          <th>Coût de initial</th>
-                          <th>Coût de l'assurance</th>
-                          <th>Coût du patient</th>
-                          <th class="text-right">Actions</th>
+                          <th class="text-center">Coût de initial</th>
+                          <th class="text-center">Coût de l'assurance</th>
+                          <th class="text-center">Coût du patient</th>
+                          <th class="text-right">Etat</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -85,9 +83,9 @@
                           :key="pensement.id"
                         >
                           <td>
-                            <h2>{{ facture.libelle }}</h2>
+                            <h2>{{ pensement.libelle }}</h2>
                           </td>
-                          <td>
+                          <td class="text-center">
                             {{
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
@@ -95,15 +93,23 @@
                               }).format(pensement.prix)
                             }}
                           </td>
-                          <td>
+                          <td class="text-center">
                             {{
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
                                 currency: "CFA",
-                              }).format(facture.prix)
+                              }).format(pensement.prixAssurance)
                             }}
                           </td>
-                          <td class="text-right">
+                          <td class="text-center">
+                            {{
+                              new Intl.NumberFormat("de-DE", {
+                                style: "currency",
+                                currency: "CFA",
+                              }).format(pensement.prix-pensement.prixAssurance)
+                            }}
+                          </td>
+                          <td class="text-right" v-if="pensement.pivot.purchased === 0">
                             <div class="dropdown dropdown-action">
                               <a
                                 href="#"
@@ -117,10 +123,7 @@
                                   class="dropdown-item"
                                   style="color:black; cursor:pointer"
                                   v-on:click="
-                                    payerPensement(
-                                      pensement.id,
-                                      pensement.pivot.dossier_id
-                                    )
+                                    payerPensement(pensement.id, pensement.pivot.dossier_id)
                                   "
                                   v-bind:identifiant="identifiant"
                                   ><i
@@ -132,22 +135,24 @@
                               </div>
                             </div>
                           </td>
+                          <td class="text-right" v-else>Payé</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
+                  <div class="col-sm-12">
+                    <p>
+                      <strong>Total:</strong>
+                      {{
+                        new Intl.NumberFormat("de-DE", {
+                          style: "currency",
+                          currency: "CFA",
+                        }).format(factures.pensementCost)
+                      }}
+                    </p>
+                  </div>
                 </div>
-                <div class="col-sm-12">
-                  <p>
-                    <strong>Total:</strong>
-                    {{
-                      new Intl.NumberFormat("de-DE", {
-                        style: "currency",
-                        currency: "CFA",
-                      }).format(factures.pensementCost)
-                    }}
-                  </p>
-                </div>
+                
                 <br /><br /><br /><br />
                 <div class="col-md-12" v-if="factures.examens != 0">
                   <h4 class="m-b-10"><strong>Prestation en examens</strong></h4>
@@ -157,17 +162,21 @@
                       <thead>
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
-                          <th>Coût de l'assurance</th>
-                          <th>Coût du patient</th>
-                          <th class="text-right">Actions</th>
+                          <th class="text-center">Coût de initial</th>
+                          <th class="text-center">Coût de l'assurance</th>
+                          <th class="text-center">Coût du patient</th>
+                          <th class="text-right">Etat</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="examen in factures.examens" :key="examen.id">
-                          <td>
+                        <tr
+                          v-for="examen in factures.examens"
+                          :key="examen.id"
+                        >
+                          <td >
                             <h2>{{ examen.libelle }}</h2>
                           </td>
-                          <td>
+                          <td class="text-center">
                             {{
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
@@ -175,7 +184,7 @@
                               }).format(Number(examen.prix))
                             }}
                           </td>
-                          <td>
+                          <td class="text-center">
                             {{
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
@@ -183,17 +192,15 @@
                               }).format(examen.prixAssurance)
                             }}
                           </td>
-                          <td>
+                          <td class="text-center">
                             {{
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
                                 currency: "CFA",
-                              }).format(
-                                examen.prix - Number(examen.prixAssurance)
-                              )
+                              }).format(examen.prix-Number(examen.prixAssurance))
                             }}
                           </td>
-                          <td class="text-right">
+                          <td class="text-right" v-if="examen.pivot.purchased === 0">
                             <div class="dropdown dropdown-action">
                               <a
                                 href="#"
@@ -206,12 +213,7 @@
                                 <a
                                   class="dropdown-item"
                                   style="color:black; cursor:pointer"
-                                  v-on:click="
-                                    payerExamen(
-                                      examen.id,
-                                      examen.pivot.dossier_id
-                                    )
-                                  "
+                                  v-on:click="payerExamen(examen.id,examen.pivot.dossier_id)"
                                   v-bind:identifiant="identifiant"
                                   ><i
                                     class="fa fa-minus-circle  m-r-5"
@@ -222,21 +224,22 @@
                               </div>
                             </div>
                           </td>
+                          <td class="text-center" v-else> Payé</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                </div>
-                <div class="col-sm-12">
-                  <p>
-                    <strong>Total:</strong>
-                    {{
-                      new Intl.NumberFormat("de-DE", {
-                        style: "currency",
-                        currency: "CFA",
-                      }).format(factures.examenCost)
-                    }}
-                  </p>
+                  <div class="col-sm-12">
+                    <p>
+                      <strong>Total:</strong>
+                      {{
+                        new Intl.NumberFormat("de-DE", {
+                          style: "currency",
+                          currency: "CFA",
+                        }).format(factures.examenCost)
+                      }}
+                    </p>
+                  </div>
                 </div>
                 <br /><br /><br /><br />
                 <div class="col-md-12" v-if="factures.ordonnances != 0">
@@ -256,7 +259,10 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="medoc in medocs" :key="medoc.id">
+                        <tr
+                          v-for="medoc in medocs"
+                          :key="medoc.id"
+                        >
                           <td>
                             <h2>{{ medoc.libelle }}</h2>
                           </td>
@@ -268,7 +274,8 @@
                               }).format(medoc.prix)
                             }}
                           </td>
-                          <td>
+                          <td
+                          >
                             {{ medoc.pivot.quantity }}
                           </td>
                           <td>
@@ -276,10 +283,10 @@
                               new Intl.NumberFormat("de-DE", {
                                 style: "currency",
                                 currency: "CFA",
-                              }).format(medoc.prix * medoc.pivot.quantity)
+                              }).format(medoc.prix*medoc.pivot.quantity)
                             }}
                           </td>
-                          <td class="text-right">
+                          <td class="text-right" v-if="medoc.pivot.purchased === 0">
                             <div class="dropdown dropdown-action">
                               <a
                                 href="#"
@@ -288,26 +295,123 @@
                                 aria-expanded="false"
                                 ><i class="fa fa-minus-circle"></i
                               ></a>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                              ></div>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a
+                                  class="dropdown-item"
+                                  style="color:black; cursor:pointer"
+                                  v-on:click="payerMedoc(medoc.id,medoc.pivot.ordonnance_id)"
+                                  v-bind:identifiant="identifiant"
+                                  ><i
+                                    class="fa fa-minus-circle  m-r-5"
+                                    style="cursor:pointer"
+                                  ></i>
+                                  Payer</a
+                                >
+                              </div>
                             </div>
+                          </td>
+                          <td v-else class="text-right"> Payé</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-sm-12">
+                    <p>
+                      <strong>Total:</strong>
+                      {{
+                        new Intl.NumberFormat("de-DE", {
+                          style: "currency",
+                          currency: "CFA",
+                        }).format(factures.ordornnanceCost)
+                      }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-12" v-if="factures.consultation != 0">
+                  <h4 class="m-b-10">
+                    <strong>Autres prestation</strong>
+                  </h4>
+                  <div class="table-responsive">
+                    <table class="table table-striped custom-table">
+                      <thead>
+                        <tr>
+                          <th style="min-width:200px;">Désignations</th>
+                          <th>Coût initial</th>
+                          <th>Coût assurance</th>
+                          <th>Coût patient</th>
+                          <th class="text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="consulte in factures.consultation"
+                          :key="consulte.id"
+                        >
+                        <td>
+                            <h2>{{ consulte.libelle }}</h2>
+                          </td>
+                          <td>
+                            <h2>{{ consulte.prix }}</h2>
+                          </td>
+                          <td>
+                            {{
+                              new Intl.NumberFormat("de-DE", {
+                                style: "currency",
+                                currency: "CFA",
+                              }).format(consulte.prixAssurance)
+                            }}
+                          </td>
+                         
+                          <td>
+                            {{
+                              new Intl.NumberFormat("de-DE", {
+                                style: "currency",
+                                currency: "CFA",
+                              }).format(consulte.prix-consulte.prixAssurance)
+                            }}
+                          </td>
+                          <td class="text-right" v-if="consulte.pivot.purchased === 0">
+                            <div class="dropdown dropdown-action">
+                              <a
+                                href="#"
+                                class="action-icon dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-expanded="false"
+                                ><i class="fa fa-minus-circle"></i
+                              ></a>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                <a
+                                  class="dropdown-item"
+                                  style="color:black; cursor:pointer"
+                                  v-on:click="payerConsulte(consulte.id,consulte.pivot.dossier_id)"
+                                  v-bind:identifiant="identifiant"
+                                  ><i
+                                    class="fa fa-minus-circle  m-r-5"
+                                    style="cursor:pointer"
+                                  ></i>
+                                  Payer</a
+                                >
+                              </div>
+                            </div>
+                          </td>
+                          <td v-else class="text-right"> 
+                            Payé
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                </div>
-                <div class="col-sm-12">
-                  <p>
-                    <strong>Total:</strong>
-                    {{
-                      new Intl.NumberFormat("de-DE", {
-                        style: "currency",
-                        currency: "CFA",
-                      }).format(factures.ordornnanceCost)
-                    }}
-                  </p>
+                  <div class="col-sm-12">
+                    <p>
+                      <strong>Total:</strong>
+                      {{
+                        new Intl.NumberFormat("de-DE", {
+                          style: "currency",
+                          currency: "CFA",
+                        }).format(factures.consultationCost)
+                      }}
+                    </p>
+                  </div>
                 </div>
                 <div style="position:relative; left:70%;">
                   <div class="invoice-details">
@@ -345,6 +449,19 @@
                   </div>
                 </div>
               </div>
+              <div class="text-left">
+                    {{  day}}
+              </div>
+              <div class="text-right">
+                <div v-if="factures.factures && factures.factures[0].sold" class="text-uppercase text-center font-weight-bold text-danger">
+                  soldé
+                </div>
+                <div v-else>
+                  <button class="btn btn-secondary" @click="solderFacture(factures.factures[0].num_facture,factures.id)">
+                    <i class="fa fa-money"></i> Solder
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -356,6 +473,8 @@
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
+import moment from 'moment';
+moment.locale('fr');
 export default {
   data() {
     return {
@@ -371,7 +490,8 @@ export default {
       medocs: [],
       destination: "",
       payer: 0,
-
+      day:null,
+      sold:false,
       preloader: false,
       success: false,
       errors: false,
@@ -387,19 +507,19 @@ export default {
     this.charger_donnee();
   },
   methods: {
-    printfacture(test) {
-      console.log(test);
+    printfacture(test){
+      console.log(test)
       var printContents = document.getElementById(test).innerHTML;
       var originalContents = document.body.innerHTML;
       document.body.innerHTML = printContents;
       if (printContents) {
         window.print();
       }
-
+      
       document.body.innerHTML = originalContents;
     },
-    payerPensement(pensementId, dossierId) {
-      console.log("examen", pensementId, "dossier", dossierId);
+    solderFacture(num_facture, dossierId) {
+      console.log("num facture",num_facture,"dossier", dossierId);
       this.preloader = true;
       axios
         .create({
@@ -409,22 +529,82 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/payerPensement", {
-          dossier_id: dossierId,
-          medicament_id: pensementId,
-          purchased: 1,
+        .post(chemin + "/solderFacture",{
+          dossier_id:dossierId,
+          num_facture:num_facture,
+          sold:1
         })
         .then((response) => {
-          console.log(response);
+          this.sold = true
+          console.log(response)
           this.charger_donnee();
-        })
+          
+          })
         .catch((err) => {
           this.preloader = false;
           console.log(err);
         });
+    },
+    payerConsulte(consulteId, dossierId) {
+      console.log("examen",consulteId,"dossier", dossierId);
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/payerConsultation",{
+          dossier_id:dossierId,
+          consultation_id:consulteId,
+          purchased:1
+        })
+        .then((response) => {
+          console.log(response)
+          this.charger_donnee();
+          })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    payerPensement(pensementId, dossierId) {
+      console.log("examen",pensementId,"dossier", dossierId);
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/payerPensement",{
+          dossier_id:dossierId,
+          medicament_id:pensementId,
+          purchased:1
+        })
+        .then((response) => {
+          console.log(response)
+          this.charger_donnee();
+          })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+      console.log(pensementId, dossierId);
+      this.factures.pensementCost = this.factures.pensementCost - dossierId;
+      this.pensements = this.pensements.filter(
+        (item) => {
+          console.log(item.id);
+          item.id != this.pensements[pensementId]
+        }
+      );
     },
     payerExamen(ExamenId, dossierId) {
-      console.log("examen", ExamenId, "dossier", dossierId);
+      console.log("examen",ExamenId,"dossier", dossierId);
       this.preloader = true;
       axios
         .create({
@@ -434,31 +614,61 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/payerExamen", {
-          dossier_id: dossierId,
-          examen_id: ExamenId,
-          purchased: 1,
+        .post(chemin + "/payerExamen",{
+          dossier_id:dossierId,
+          examen_id:ExamenId,
+          purchased:1
         })
         .then((response) => {
-          console.log(response);
+          console.log(response)
           this.charger_donnee();
-        })
+          })
         .catch((err) => {
           this.preloader = false;
           console.log(err);
         });
     },
-    effacer_ordonnance(pk, prix) {
+    payerMedoc(medocId, ordoId) {
+      console.log("medoc Id",medocId,"ordonnance ID", ordoId);
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .post(chemin + "/payerMedoc",{
+          medicament_id:medocId,
+          ordonnance_id:ordoId,
+          purchased:1
+        })
+        .then((response) => {
+          console.log(response)
+          this.charger_donnee();
+          })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    effacer_ordonnance(pk,prix) {
       console.log(pk, prix);
       console.log("ordonnances :", this.ordonnances);
-      this.factures.ordornnanceCost = this.factures.ordornnanceCost - prix;
+      this.factures.ordornnanceCost = this.factures.ordornnanceCost - prix
       this.ordonnances = this.ordonnances.forEach((item) => {
         item.medicaments.filter((medoc) => {
           console.log(medoc);
-          medoc.id != this.ordonnances[pk];
+          medoc.id != this.ordonnances[pk]
           console.log("ok");
-        });
+        })
       });
+      // console.log(pk, prix);
+      // this.prix_ordonnances_T = this.prix_ordonnances_T - prix;
+      // this.ordonnances = this.ordonnances.filter(
+      //   (item) => item != this.ordonnances[pk]
+      // );
     },
     charger_donnee() {
       this.preloader = true;
@@ -473,21 +683,22 @@ export default {
         })
         .get(chemin + "/getDossierFacture/" + this.$route.params.id)
         .then((response) => {
-          console.log("facture", response.data);
+          console.log('facture',response.data)
           this.nom =
             response.data.client.nom + " " + response.data.client.prenoms;
           this.factures = response.data;
-          let merge = [];
-          response.data.ordonnances.forEach((ordo) => {
-            ordo.medicaments.forEach((medoc) => {
-              merge.push(medoc);
-            });
+          
+          let merge= []
+          response.data.ordonnances.forEach(ordo => {
+              ordo.medicaments.forEach(medoc => {
+                  merge.push(medoc)
+              });
           });
-          this.medocs = merge;
-          this.payer =
-            Number(response.data.total) - Number(response.data.total_assurance);
+          this.day =moment(new Date).format('Do-MM-YYYY H:mm:s')
+          this.medocs= merge
+          this.payer = Number(response.data.total) - Number(response.data.total_assurance);
           this.preloader = false;
-        })
+          })
         .catch((err) => {
           this.preloader = false;
           console.log(err);
@@ -517,12 +728,10 @@ export default {
     prise_constante(id, val) {
       console.log("constante id:", id);
       console.log("constante value:", val);
-
       const valeur = {
         constante_id: id,
         value: val,
       };
-
       this.liste_constantes.push(valeur);
       console.log("liste constante :", this.liste_constantes);
     },
@@ -579,4 +788,4 @@ export default {
     top: 0;
   }
 }
-</style> 
+</style>

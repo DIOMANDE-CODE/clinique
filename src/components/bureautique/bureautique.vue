@@ -258,7 +258,6 @@ export default {
   },
   methods: {
     listProfil() {
-      console.log("service");
       axios
         .create({
           headers: {
@@ -297,7 +296,6 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             const role = response.data.data.role;
-            console.log("admin :", role);
             if (role === "admin") {
               this.admin = true;
             } else {

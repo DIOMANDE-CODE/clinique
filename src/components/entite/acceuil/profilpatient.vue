@@ -13,7 +13,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Dossier</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Assurance</h5>
             <button
               type="button"
               class="close"
@@ -25,6 +25,7 @@
           </div>
           <div class="modal-body">
             {{ message_assurance }}
+            <p v-for="assur in assurances" :key="assur.id">{{assur.nom}}</p>
           </div>
           <div class="modal-footer">
             <button
@@ -42,6 +43,13 @@
       <div class="content">
         <button class="btn btn-primary btn-rounded" v-on:click="retourner">
           <i class="fa fa-arrow-left" aria-hidden="true"></i>
+        </button>
+        <button
+          style="position:relative; left:80%"
+          class="btn btn-success btn-rounded"
+          v-on:click="faire_dossier"
+        >
+          <i class="fa fa-plus" aria-hidden="true"></i> nouveau dossier
         </button>
         <br /><br />
         <div class="row">
@@ -267,6 +275,9 @@ export default {
     this.charger_info();
   },
   methods: {
+       faire_dossier() {
+      this.$router.push("/acceuil/dossier/" + this.$route.params.id);
+    },
     retourner() {
       this.$router.push("/acceuil");
     },
@@ -289,7 +300,7 @@ export default {
               this.assurances = dossier.assurance;
               console.log(" assurance :", dossier.assurance);
               if (this.assurance === 0) {
-                this.message_assurance = "Aucune assurance";
+                this.message_assurance = "Aucune assurance envoyée ce jour";
               }
             }
           });

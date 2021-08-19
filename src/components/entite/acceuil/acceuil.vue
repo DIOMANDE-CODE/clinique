@@ -97,17 +97,6 @@
                             ></i>
                             Voir +</a
                           >
-                          <a
-                            class="dropdown-item"
-                            style="color:black; cursor:pointer"
-                            v-on:click="consultation(employe.id)"
-                            v-bind:identifiant="identifiant"
-                            ><i
-                              class="fa fa-plus m-r-5"
-                              style="cursor:pointer"
-                            ></i>
-                            nouvelle consultation</a
-                          >
                         </div>
                       </div>
                     </td>

@@ -298,6 +298,7 @@ export default {
           })
           .post(chemin + "/modifierExamenDossier", data)
           .then((response) => {
+            console.log("data :",data);
             console.log(response.data);
             if (response.data.state === "true") {
               this.preloader = false;

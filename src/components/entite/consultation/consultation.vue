@@ -156,7 +156,7 @@ export default {
               language: {
                 décimal: "",
                 emptyTable: "Aucune donnée disponible dans le tableau",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoEmpty: "Aucun patient en liste d'attente",
                 info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
                 infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
                 infoPostFix: "",
@@ -166,7 +166,7 @@ export default {
                 processing: "Processing...",
                 search: "Chercher :",
                 stateSave : true,
-                zeroRecords: "Aucun enregistrement correspondant trouvé",
+                zeroRecords: "Aucun enregistrement correspondant",
                 paginate: {
                   first: "Premier",
                   last: "Dernier",

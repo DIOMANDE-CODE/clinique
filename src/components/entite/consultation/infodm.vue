@@ -1,6 +1,50 @@
 <template>
   <div>
     <loader v-if="preloader"></loader>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Fiche d'examen</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <iframe
+              id="inlineFrameExample"
+              title="Inline Frame Example"
+              width="450"
+              height="200"
+              src="img.png"
+            >
+            </iframe>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <img
       src="../../../assets/img/clock.png"
       alt="examen"
@@ -16,7 +60,7 @@
           <button
             v-if="consultation"
             style="position:relative; left:80%"
-            class="btn btn-success btn-rounded"
+            class="btn btn-warning btn-rounded"
             v-on:click="faire_diagnostic"
           >
             <i class="fa fa-plus" aria-hidden="true"></i> nouvelle consultation
@@ -60,12 +104,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Diagnostics
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerDiagnostic"
+                  <i
+                    v-if="activer_diagnostic === false"
                     @change="activerdiagnostic()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerdiagnostic()"
+                  ></i>
+                  <i
+                    v-if="activer_diagnostic"
+                    @change="activerdiagnostic()"
+                    style="cursor:pointer;"
+                    v-on:click="activerdiagnostic()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <form action="#" v-if="activer_diagnostic">
                   <p>{{ info_message_diagnostic }}</p>
@@ -131,12 +183,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Examens
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerExamens"
+                  <i
+                    v-if="activer_examens === false"
                     @change="activerexamen()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerexamen()"
+                  ></i>
+                  <i
+                    v-if="activer_examens"
+                    @change="activerexamen()"
+                    style="cursor:pointer;"
+                    v-on:click="activerexamen()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <div class="row doctor-grid" v-if="activer_examens">
                   <p>{{ info_message_examen }}</p>
@@ -151,7 +211,7 @@
                       </h4>
                       <br />
                       <button
-                        v-on:click="voir_examen(examen.pivot.examen_id)"
+                        v-on:click="voir_examen(examen)"
                         type="button"
                         class="btn btn-info"
                         data-toggle="modal"
@@ -166,12 +226,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Pensements
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerPensements"
+                  <i
+                    v-if="activer_pensements === false"
                     @change="activerpensement()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerpensement()"
+                  ></i>
+                  <i
+                    v-if="activer_pensements"
+                    @change="activerpensement()"
+                    style="cursor:pointer;"
+                    v-on:click="activerpensement()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <form action="#" v-if="activer_pensements">
                   <p>{{ info_message_pensements }}</p>
@@ -204,12 +272,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Ordonnance
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerOrdonnance"
+                  <i
+                    v-if="activer_ordonnances === false"
                     @change="activerordonnance()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerordonnance()"
+                  ></i>
+                  <i
+                    v-if="activer_ordonnances"
+                    @change="activerordonnance()"
+                    style="cursor:pointer;"
+                    v-on:click="activerordonnance()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <div class="row">
                   <div class="col-md-12" v-if="activer_ordonnances">
@@ -259,6 +335,14 @@
                 </div>
               </div>
             </div>
+            <button
+              style="position:relative; left:38%;"
+              type="button"
+              class="btn btn-success submit-btn"
+              v-on:click="terminer"
+            >
+              Terminer
+            </button>
           </div>
         </div>
       </div>
@@ -301,8 +385,8 @@ export default {
       ordonnances: [],
       pensements: [],
       id: "",
-      dossier_id : 0,
-      consultation : false,
+      dossier_id: 0,
+      consultation: false,
 
       activer_diagnostic: false,
       activer_examens: false,
@@ -317,8 +401,44 @@ export default {
     this.charger_diagnostic();
   },
   methods: {
+    voir_examen(id) {
+      console.log("id :", id);
+    },
+    terminer() {
+      console.log("destination :", this.destination);
+      console.log("examens :", this.examens);
+      this.preloader = true;
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json,multipart/form-data",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .put(chemin + "/modifierFileAttente/" + this.$route.params.id, {
+          status: "termine",
+        })
+        .then((response) => {
+          console.log(response.data);
+          if (response.data.state === "true") {
+            this.preloader = false;
+            this.success = true;
+            this.$router.push("/consultation");
+            this.message = "transfert effectué";
+            this.destination = "";
+          } else {
+            this.errors = true;
+            this.message = "transfert non enregistré";
+          }
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
     faire_diagnostic() {
-      this.$router.push("/consultation/diagnostic/" + this.dossier_id);
+      this.$router.push("/consultation/diagnostic/" + this.$route.params.id);
     },
     activerdiagnostic() {
       if (this.activer_diagnostic === false) {
@@ -500,7 +620,12 @@ export default {
           if (this.pensements.length === 0) {
             this.info_message_pensements = "Aucun pensement fait ce jour";
           }
-          if(this.pensements.length === 0 && this.ordonnances.length === 0 && this.examens.length === 0 && this.diagnostics.length === 0) {
+          if (
+            this.pensements.length === 0 &&
+            this.ordonnances.length === 0 &&
+            this.examens.length === 0 &&
+            this.diagnostics.length === 0
+          ) {
             this.consultation = true;
           }
         })
@@ -559,9 +684,9 @@ export default {
             console.log(response.data);
             this.preloader = false;
             this.success = true;
-            location.reload();
             this.message = "Consultation terminée";
             this.ordonnances = [];
+            this.$router.push("/consultation");
           })
           .catch((err) => {
             this.preloader = false;

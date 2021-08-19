@@ -80,7 +80,7 @@
                 ></router-link
               >
             </li>
-            <li v-if="secretaire">
+            <li v-if="profil_id.includes(4) && service_id.includes(3)">
               <router-link to="/acceuil"
                 ><a
                   ><i class="fa fa-home"></i>
@@ -120,7 +120,7 @@
                 ></router-link
               >
             </li>
-            <li v-if="infirmiere">
+            <li v-if="profil_id.includes(5) && service_id.includes(1)">
               <router-link to="/entite/constante"
                 ><a
                   ><i class="fa fa-thermometer"></i>
@@ -128,7 +128,7 @@
                 ></router-link
               >
             </li>
-            <li v-if="medecin">
+            <li v-if="profil_id.includes(1) && service_id.includes(4)">
               <router-link to="/consultation"
                 ><a
                   ><i class="fa fa-code-fork"></i>
@@ -144,15 +144,15 @@
                 ></router-link
               >
             </li>
-            <li v-if="examinateur">
+            <li v-if="profil_id.includes(6) && service_id.includes(5)">
               <router-link to="/laboratoire"
                 ><a
                   ><i class="fa fa-heartbeat"></i>
-                  <span style="color:black;">Laboratoire</span></a
+                  <span style="color:black;">Examens</span></a
                 ></router-link
               >
             </li>
-            <li v-if="soignant">
+            <li v-if="profil_id.includes(8) && service_id.includes(6)">
               <router-link to="/pensement"
                 ><a
                   ><i class="fa fa-signing"></i>
@@ -160,7 +160,7 @@
                 ></router-link
               >
             </li>
-            <li v-if="urgence">
+            <li v-if="profil_id.includes(1) && service_id.includes(7)">
               <router-link to="/pensement"
                 ><a
                   ><i class="fa fa-signing"></i>
@@ -168,7 +168,7 @@
                 ></router-link
               >
             </li>
-              <li v-if="caisse">
+            <li v-if="profil_id.includes(2) && service_id.includes(2)">
               <router-link to="/caisse"
                 ><a
                   ><i class="fa fa-money"></i>
@@ -199,6 +199,8 @@ export default {
       caisse: false,
       identifiant: "",
       profiles: [],
+      profil_id: [],
+      service_id: [],
     };
   },
   mounted() {
@@ -231,6 +233,7 @@ export default {
     },
     charger_utilsateur() {
       this.identifiant = this.$store.getters.getCurrentIdentifiant;
+
       axios
         .create({
           headers: {
@@ -246,29 +249,36 @@ export default {
             if (role === "admin") {
               this.admin = true;
             } else {
+              response.data.data.profile.forEach((element) => {
+                this.profil_id.push(element.id);
+              });
+              response.data.data.service.forEach((element) => {
+                this.service_id.push(element.id);
+              });
               const profil = response.data.data.profile[0].titre;
               const service = response.data.data.service[0].nom;
               switch (profil + "|" + service) {
                 case "sécrétaire|Accueil":
                   this.secretaire = true;
-                  break; 
+                  break;
                 case "infirmière|Prise De Constante":
                   this.infirmiere = true;
-                  break; //
+                  break;
                 case "medecin|Consultation Générale":
                   this.medecin = true;
-                  break; //
+                  break;
                 case "examinateur|Laboratoire":
                   this.examinateur = true;
-                  break; //
+                  break;
                 case "soignant|Pensement":
                   this.soignant = true;
-                  break; //
+                  break;
                 case "medecin|Urgence":
                   this.urgence = true;
-                  break; //
+                  break;
                 case "caissière|Caisse":
                   this.caisse = true;
+                  break;
               }
             }
           } else {

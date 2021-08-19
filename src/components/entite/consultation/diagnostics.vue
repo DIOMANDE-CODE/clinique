@@ -46,12 +46,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Diagnostics
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerDiagnostic"
+                  <i
+                    v-if="activer_diagnostic === false"
                     @change="activerdiagnostic()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerdiagnostic()"
+                  ></i>
+                  <i
+                    v-if="activer_diagnostic"
+                    @change="activerdiagnostic()"
+                    style="cursor:pointer;"
+                    v-on:click="activerdiagnostic()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <form v-if="activer_diagnostic">
                   <div class="form-group row">
@@ -110,12 +118,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Examens
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerExamens"
+                  <i
+                    v-if="activer_examens === false"
                     @change="activerexamen()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerexamen()"
+                  ></i>
+                  <i
+                    v-if="activer_examens"
+                    @change="activerexamen()"
+                    style="cursor:pointer;"
+                    v-on:click="activerexamen()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <form action="#" v-if="activer_examens">
                   <div class="form-group row">
@@ -142,12 +158,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Pansements
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerPensements"
+                  <i
+                    v-if="activer_pensements === false"
                     @change="activerpensement()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerpensement()"
+                  ></i>
+                  <i
+                    v-if="activer_pensements"
+                    @change="activerpensement()"
+                    style="cursor:pointer;"
+                    v-on:click="activerpensement()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <form action="#" v-if="activer_pensements">
                   <div class="form-group row">
@@ -174,12 +198,20 @@
               <div class="card-box">
                 <h4 class="card-title">
                   Ordonnance
-                  <input
-                    type="checkbox"
-                    name="radio"
-                    v-model="activerOrdonnance"
+                  <i
+                    v-if="activer_ordonnances === false"
                     @change="activerordonnance()"
-                  />
+                    class="fa fa-plus-circle"
+                    style="cursor:pointer;"
+                    v-on:click="activerordonnance()"
+                  ></i>
+                  <i
+                    v-if="activer_ordonnances"
+                    @change="activerordonnance()"
+                    style="cursor:pointer;"
+                    v-on:click="activerordonnance()"
+                    class="fa fa-minus-circle"
+                  ></i>
                 </h4>
                 <form action="#" v-if="activer_ordonnances">
                   <div class="form-group">
@@ -476,9 +508,9 @@ export default {
           if (response.data.state === "true") {
             this.preloader = false;
             this.success = true;
+            this.$router.push("/consultation");
             this.message = "transfert effectué";
             this.destination = "";
-            this.$router.push("/consultation");
           } else {
             this.errors = true;
             this.message = "transfert non enregistré";
@@ -566,9 +598,7 @@ export default {
       console.log("liste constante :", this.liste_constantes);
     },
     retourner() {
-      this.$router.push(
-        "/consultation/dossier_medical/" + this.$route.params.id
-      );
+      this.$router.push("/consultation");
     },
     valider() {
       this.preloader = true;
@@ -608,10 +638,9 @@ export default {
             console.log(response.data);
             this.preloader = false;
             this.success = true;
-            location.reload();
             this.message = "Consultation terminée";
             this.ordonnances = [];
-            this.$router.push("/consultation");
+            // this.$router.push("/consultation");
           })
           .catch((err) => {
             this.preloader = false;

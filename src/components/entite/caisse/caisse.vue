@@ -49,14 +49,13 @@
                   <tr>
                     <th style="min-width:200px;">Noms</th>
                     <th>Prenoms</th>
-                    <th>Status</th>
+                    <th>numero de facture</th>
                     <th>Motif</th>
-
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="employe in patients" v-bind:key="employe.id">
+                  <tr v-for="patient in patients" v-bind:key="patient.id">
                     <td>
                       <img
                         width="28"
@@ -65,11 +64,11 @@
                         class="rounded-circle"
                         alt=""
                       />
-                      <h2>{{ employe.dossier.client.nom }}</h2>
+                      <h2>{{ patient.dossier.client.nom }}</h2>
                     </td>
-                    <td>{{ employe.dossier.client.prenoms }}</td>
-                    <td>{{ employe.status }}</td>
-                    <td>{{ employe.dossier.objet }}</td>
+                    <td>{{ patient.dossier.client.prenoms }}</td>
+                    <td>#{{ patient.num_facture }}</td>
+                    <td>{{ patient.dossier.objet }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -83,7 +82,7 @@
                           <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
-                            v-on:click="faire_facture(employe.dossier.id)"
+                            v-on:click="faire_facture(patient.dossier.id)"
                             v-bind:identifiant="identifiant"
                             ><i class="fa fa-money" style="cursor:pointer"></i>
                             Voir sa facture</a
@@ -104,9 +103,7 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-
 import loader from "../../../components/loader.vue";
-
 import "bootstrap/dist/css/bootstrap.min.css"; //for table good looks
 import "jquery/dist/jquery.min.js";
 //Datatable Modules
@@ -118,7 +115,6 @@ import "datatables.net-buttons/js/buttons.flash.js";
 import "datatables.net-buttons/js/buttons.html5.js";
 import "datatables.net-buttons/js/buttons.print.js";
 import $ from "jquery";
-
 export default {
   mounted() {
     this.preload = true;
@@ -140,7 +136,6 @@ export default {
             pageLength: 5,
             processing: true,
             dom: "Bfrtip",
-            buttons: ["copy", "csv", "print"],
             order: [],
           });
         }, 1000);

@@ -141,7 +141,7 @@
                 Réinitialiser</button
               >&nbsp;&nbsp;
               <button class="btn btn-success submit-btn" v-on:click="ajouter">
-                Ajouter
+                Creer
               </button>
             </div>
           </div>
@@ -268,6 +268,7 @@ export default {
           this.preloader = false;
           this.success = true;
           this.message = "nouveau dossier ajouté avec success";
+          this.$router.push("/acceuil");
         
           this.assurance = "";
           this.assurance_nom = "";

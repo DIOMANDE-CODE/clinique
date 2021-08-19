@@ -475,7 +475,7 @@
                 Réinitialiser</button
               >&nbsp;&nbsp;
               <button class="btn btn-success submit-btn" v-on:click="ajouter">
-                Ajouter
+                Creer
               </button>
             </div>
           </div>
