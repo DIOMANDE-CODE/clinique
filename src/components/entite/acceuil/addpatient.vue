@@ -673,7 +673,7 @@ export default {
           this.activite = "";
           this.instruction = "";
           this.matrimoniale = "";
-          this.$router.push("/acceuil");
+          this.$router.push("/acceuil/profil/" + this.$route.params.id);
         })
         .catch((err) => {
           this.preloader = false;

@@ -64,8 +64,8 @@
                 </label>
                 <div class="col-md-12">
                   <select class="form-control" v-model="type">
-                    <option value="text">Text</option>
-                    <option value="number">Number</option>
+                    <option value="text">Texte</option>
+                    <option value="checkbox">case à cocher</option>
                   </select>
                 </div>
               </div>
@@ -383,8 +383,6 @@ export default {
 
             this.nom = "";
             this.type = "";
-
-
           })
           .catch((err) => {
             this.preloader = false;

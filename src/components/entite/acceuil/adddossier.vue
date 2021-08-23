@@ -16,7 +16,7 @@
             </h4>
           </div>
         </div>
-        <div 
+        <div
           v-if="success"
           class="alert alert-success alert-dismissible fade show"
           role="alert"
@@ -50,13 +50,13 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="row">
-                  <div class="col-sm-6">
+                <div class="col-sm-6">
                   <div class="form-group">
                     <label> Objet <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
-                      v-model="objet"
+                      v-model="dossier.objet"
                       required
                     />
                   </div>
@@ -97,7 +97,10 @@
                     Maison d'assurance<span class="text-danger">*</span>
                   </label>
                   <div class="col-md-12 pl-0">
-                    <select class="form-control" v-model="assurance_nom">
+                    <select
+                      class="form-control"
+                      v-model="dossier.assurance_nom"
+                    >
                       <option value="0" disabled
                         >Choisissez son assurance</option
                       >
@@ -113,21 +116,43 @@
                 </div>
                 <div class="col-sm-6" v-if="checkedAssurance">
                   <div class="form-group">
-                  <label> Matricule de l'assurance ou N° de Bon</label>
+                    <label> Pourcentage <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
-                      v-model="matricule_assurance"
+                      v-model="dossier.pourcentage"
                     />
                   </div>
                 </div>
-                <div class="col-sm-6" v-if="checkedAssurance">
+                <div class="form-group col-sm-6" v-if="checkedAssurance">
+                  <label class="">
+                    Matricule ou N° de Bon<span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12 pl-0">
+                    <select class="form-control" v-model="type_assurance">
+                      <option value="1">Numéro de l'assurance</option>
+                      <option value="2">Acte de l'assurance</option>
+                      >
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-6" v-if="type_assurance === '1'">
+                  <div class="form-group">
+                    <label> Numéro de l'assurance'</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="dossier.matricule_assurance"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-6" v-if="type_assurance === '2'">
                   <div class="form-group">
                     <label> Acte de l'assurance</label>
                     <input
                       class="form-control"
                       type="text"
-                      v-model="acte_assurance"
+                      v-model="dossier.acte_assurance"
                     />
                   </div>
                 </div>
@@ -159,14 +184,26 @@ export default {
   data() {
     return {
       // Data of patient
-      objet:'',
+      objet: "",
       assurance: "",
       assurance_nom: "",
       matricule_assurance: "",
       numero_assurance: "",
       acte_assurance: "",
       bon_assurance: "",
-      assurances:[],
+      assurances: [],
+      type_assurance: "",
+      dossier: {
+        objet: "",
+        client_id: this.$route.params.id,
+        assurance: null,
+        assurance_id: null,
+        numero_bon: null,
+        matricule: null,
+        acte: null,
+        pourcentage: null,
+        profile_id: localStorage.getItem("identifiant"),
+      },
 
       preloader: false,
       success: false,
@@ -178,31 +215,30 @@ export default {
   components: {
     loader,
   },
-  mounted(){
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listAssurances")
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.assurances = response.data.data;
-          } else {
-            this.preloader = false;
-            this.message = "Aucune assurances existantes";
-            console.log("erreur de chargement");
-          }
-        });
+  mounted() {
+    this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listAssurances")
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.state === true) {
+          this.preloader = false;
+          this.assurances = response.data.data;
+        } else {
+          this.preloader = false;
+          this.message = "Aucune assurances existantes";
+          console.log("erreur de chargement");
+        }
+      });
   },
   methods: {
-    
     retourner() {
       this.$router.push("/acceuil");
     },
@@ -224,36 +260,8 @@ export default {
       }
     },
     ajouter() {
-      if (
-        this.nom === "" ||
-        this.prenom === "" ||
-        this.nationnalite === "" ||
-        this.nationnalite === "" ||
-        this.telephone === "" ||
-        this.date === "" ||
-        this.addresse === "" ||
-        this.situation === "" ||
-        this.genre === "" ||
-        this.email === "" ||
-        this.code === "" ||
-        this.role === "" ||
-        this.clinique === "" ||
-        this.departement === "" ||
-        this.service === "" ||
-        this.profile === ""
-      )
-        this.preloader = true;
-      var dossier = {
-        objet: this.objet,
-        client_id : this.$route.params.id,
-        assurance: this.assurance,
-        assurance_id: this.assurance_nom,
-        numero_bon:this.bon_assurance,
-        matricule:this.matricule_assurance,
-        acte: this.acte_assurance,
-        profile_id: localStorage.getItem("identifiant"),
-      };
-      console.log("patient :", dossier);
+      this.preloader = true;
+      console.log(this.dossier);
       axios
         .create({
           headers: {
@@ -262,20 +270,35 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .post(chemin + "/ajouterNouveauDossier", dossier)
+        .post(chemin + "/ajouterNouveauDossier", this.dossier)
         .then((response) => {
           console.log(response.data);
-          this.preloader = false;
-          this.success = true;
-          this.message = "nouveau dossier ajouté avec success";
-          this.$router.push("/acceuil");
-        
-          this.assurance = "";
-          this.assurance_nom = "";
-          this.bon_assurance = "";
-          this.acte_assurance = "";
-          this.matricule_assurance = "";
-          this.objet = "";
+          if (response.data.state === false) {
+            this.preloader = false;
+            this.$swal({
+              html:
+                "Ce patient a une facture en attente, voulez vous continuer ?",
+              showDenyButton: true,
+              confirmButtonText: `Oui`,
+              denyButtonText: `Non`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.preloader = false;
+                this.dossier.confirm = true;
+                console.log("dossier :", this.dossier);
+                this.ajouter();
+                this.$router.push("/acceuil/profil/" + this.$route.params.id);
+              }
+            });
+          } else {
+            // this.$router.push("/acceuil/profil/" + this.$route.params.id);
+            this.assurance = "";
+            this.assurance_nom = "";
+            this.bon_assurance = "";
+            this.acte_assurance = "";
+            this.matricule_assurance = "";
+            this.objet = "";
+          }
         })
         .catch((err) => {
           this.preloader = false;

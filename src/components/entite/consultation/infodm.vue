@@ -58,7 +58,6 @@
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
           <button
-            v-if="consultation"
             style="position:relative; left:80%"
             class="btn btn-warning btn-rounded"
             v-on:click="faire_diagnostic"

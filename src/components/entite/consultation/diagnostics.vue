@@ -382,8 +382,11 @@ export default {
       // Data of constante
       assurances: [],
       diagnostics: [],
+      diagnostic: [],
       pensements: [],
+      pensement: [],
       examens: [],
+      examen: [],
       workflows: [],
       liste_constantes: [],
       destination: "",
@@ -482,6 +485,58 @@ export default {
           console.log(response.data);
           this.medocs = response.data;
           console.log("medoc :", this.medocs);
+          this.charger_info();
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    charger_info() {
+      console.log("loading......................");
+      console.log("params :", this.$route.params);
+
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/dossiersByClient/" + this.$route.params.id)
+        .then((response) => {
+          console.log("examens list :", response.data.data);
+          this.dossier_id = response.data.data.client_id;
+          const examens = response.data.data.examens;
+          examens.forEach((examen) => {
+            console.log("examens :", examen);
+          });
+
+          const diagnostics_fait = response.data.data.diagnostics;
+          diagnostics_fait.forEach((diag) => {
+            console.log("diag :", diag);
+            this.diagnostic.push(diag.id);
+          });
+
+          this.diagnostics.forEach((diagno) => {
+            console.log("diagnostics init :", diagno);
+            if (this.diagnostic.includes(diagno.id)) {
+              diagno.value = true;
+            }
+          });
+
+          const pansements_fait = response.data.data.pensements;
+          pansements_fait.forEach((pansement) => {
+            console.log("pansement", pansement);
+            this.pensement.push(pansement.id);
+          });
+
+          this.pensements.forEach((pensem) => {
+            if(this.pensement.includes(pensem.id)){
+              pensem.value = true;
+            }
+          })
         })
         .catch((err) => {
           this.preloader = false;

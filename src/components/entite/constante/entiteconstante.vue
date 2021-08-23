@@ -399,7 +399,7 @@ export default {
             pageLength: 5,
             processing: true,
             dom: "Bfrtip",
-            buttons: ["copy", "csv", "print"],
+            buttons: [],
             "order": []
           });
         }, 1000);

@@ -13,7 +13,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Assurance</h5>
+            <h5 class="modal-title" id="exampleModalLabel">N° du dossier: <b>{{num}}</b></h5>
             <button
               type="button"
               class="close"
@@ -25,7 +25,7 @@
           </div>
           <div class="modal-body">
             {{ message_assurance }}
-            <p v-for="assur in assurances" :key="assur.id">{{assur.nom}}</p>
+            <p v-for="assur in assurances" :key="assur.id">{{ assur.nom }}</p>
           </div>
           <div class="modal-footer">
             <button
@@ -93,6 +93,14 @@
                     </div>
                     <div class="col-md-7">
                       <ul class="personal-info">
+                         <li>
+                          <span class="title" style="font-weight: bold;"
+                            >Matricule :</span
+                          >
+                          <span class="text" style="color:black">{{
+                            matricule
+                          }}</span>
+                        </li>
                         <li>
                           <span class="title" style="font-weight: bold;"
                             >Telephone:</span
@@ -243,6 +251,7 @@ export default {
   name: "profilemploye",
   data() {
     return {
+      num:"",
       nom: "",
       prenom: "",
       sexe: "",
@@ -266,6 +275,7 @@ export default {
       dossiers: [],
       assurances: [],
       message_assurance: "",
+      matricule : "",
     };
   },
   components: {
@@ -275,7 +285,7 @@ export default {
     this.charger_info();
   },
   methods: {
-       faire_dossier() {
+    faire_dossier() {
       this.$router.push("/acceuil/dossier/" + this.$route.params.id);
     },
     retourner() {
@@ -298,6 +308,7 @@ export default {
             if (dossier.id === pk) {
               console.log("id du dossiers", dossier.assurance);
               this.assurances = dossier.assurance;
+              this.num  = dossier.num;
               console.log(" assurance :", dossier.assurance);
               if (this.assurance === 0) {
                 this.message_assurance = "Aucune assurance envoyée ce jour";
@@ -324,6 +335,7 @@ export default {
         .then((response) => {
           this.preloader = false;
           console.log(response.data);
+          this.matricule = response.data.matricule;
           this.nom = response.data.nom;
           this.prenom = response.data.prenoms;
           this.sexe = response.data.sexe;
