@@ -45,7 +45,7 @@
             <p>{{ message_diagnostic }}</p>
             <div
               class="col-md-4 col-sm-4  col-lg-4"
-              v-for="examen in examens.examens"
+              v-for="examen in examens"
               :key="examen.id"
             >
               <div class="profile-widget" v-if="examen.pivot.resultat === null">
@@ -65,7 +65,7 @@
                   </div>
                   <div class="col-md-10">
                     <br />
-                    <div class="checkbox">
+                    <div class="checkbox" v-if="verif_assurance.length !== 0">
                       assurance
                       <input
                         type="checkbox"
@@ -78,11 +78,12 @@
                     <br />
                   </div>
                 </div>
+
                 <div class="m-t-20 text-center">
                   <button
                     type="button"
                     class="btn btn-warning submit-btn"
-                    v-on:click="
+                    @click="
                       valider(
                         examen.id,
                         examen.pivot.id,
@@ -146,12 +147,14 @@ export default {
       achat: null,
       payee: "",
       message_diagnostic: "",
+      confirm: false,
 
       medicament: "",
       quantite: "",
       posologie: "",
       ordonnances: [],
       id: "",
+      verif_assurance: [],
 
       activer_diagnostic: false,
       activer_examens: false,
@@ -212,7 +215,8 @@ export default {
               element.pivot.assurance = true;
             }
           });
-          this.examens = response.data;
+          this.examens = response.data.examens;
+          this.verif_assurance = response.data.assurance;
         })
         .catch((err) => {
           this.preloader = false;
@@ -250,10 +254,16 @@ export default {
             console.log(response.data);
             if (response.data.state === "true") {
               this.preloader = false;
-              this.success = true;
-              this.message = "transfert effectué";
-              this.destination = "";
-              this.$router.push('/laboratoire');
+              this.$swal({
+                html: "Transfert effectué",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.preloader = false;
+                  this.$router.push("/laboratoire");
+                }
+              });
             } else {
               this.errors = true;
               this.message = "transfert non enregistré";
@@ -265,7 +275,8 @@ export default {
           });
       }
     },
-    valider(pk, ligne_id, assurance) {
+    valider(pk, ligneId, assurance) {
+      console.log("ligne id :", ligneId);
       if (assurance === true) {
         assurance = 1;
       }
@@ -273,11 +284,14 @@ export default {
       const data = new FormData();
       data.append("dossier_id", this.$route.params.id);
       data.append("purchased", pk);
-      data.append("id", ligne_id);
-      data.append("resultat", pk);
+      data.append("id", ligneId);
+      data.append("resultat", this.file);
       data.append("assurance", assurance);
-
-      console.log(pk, ligne_id);
+      if (this.confirm === true) {
+        data.append("confirm", true);
+        data.append("purchased", pk);
+      }
+      console.log(pk, ligneId);
       this.preloader = true;
       if (this.destination === "") {
         this.errors = true;
@@ -298,21 +312,38 @@ export default {
           })
           .post(chemin + "/modifierExamenDossier", data)
           .then((response) => {
-            console.log("data :",data);
+            console.log("data :", data);
             console.log(response.data);
             if (response.data.state === "true") {
               this.preloader = false;
               this.success = true;
               this.message = "examen effectué";
-              this.examens.examens.forEach((exam) => {
+              this.examens.forEach((exam) => {
                 console.log(exam);
-                this.examens.examens = this.examens.examens.filter(
-                  (item) => item.id !== pk
+                this.examens = this.examens.filter(
+                  (item) => item.id !== response.data.data.id
                 );
               });
             } else {
-              this.errors = true;
-              this.message = "examen non enregistré";
+              this.preloader = false;
+              this.$swal({
+                icon: "warning",
+                html:
+                  "Paiement pour cet examen non fait, voulez-vous continuez ?",
+                showDenyButton: true,
+                confirmButtonText: `Oui`,
+                denyButtonText: `Non`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.preloader = false;
+                  this.confirm = true;
+                  this.valider(
+                    response.data.data.purchased,
+                    response.data.data.id,
+                    response.data.data.assurance
+                  );
+                }
+              });
             }
           })
           .catch((err) => {

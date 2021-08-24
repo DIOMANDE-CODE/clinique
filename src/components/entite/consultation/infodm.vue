@@ -10,7 +10,7 @@
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Fiche d'examen</h5>
@@ -23,13 +23,13 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="height:500px;">
             <iframe
               id="inlineFrameExample"
               title="Inline Frame Example"
-              width="450"
-              height="200"
-              src="img.png"
+              width="1100"
+              height="450"
+              :src="'http://192.168.1.7:8000/' + fiche_examens"
             >
             </iframe>
           </div>
@@ -62,7 +62,7 @@
             class="btn btn-warning btn-rounded"
             v-on:click="faire_diagnostic"
           >
-            <i class="fa fa-plus" aria-hidden="true"></i> nouvelle consultation
+            <i class="fa fa-code-fork"></i> Consulter le patient
           </button>
         </div>
         <br />
@@ -210,7 +210,7 @@
                       </h4>
                       <br />
                       <button
-                        v-on:click="voir_examen(examen)"
+                        v-on:click="voir_examen(examen.pivot.resultat)"
                         type="button"
                         class="btn btn-info"
                         data-toggle="modal"
@@ -224,7 +224,7 @@
               </div>
               <div class="card-box">
                 <h4 class="card-title">
-                  Pensements
+                  Pansements
                   <i
                     v-if="activer_pensements === false"
                     @change="activerpensement()"
@@ -295,38 +295,28 @@
                           <tr>
                             <th>Medicament</th>
                             <th>Quantié</th>
-                            <th>Quantité</th>
-                            <th>Date</th>
+                            <th>Dosage</th>
+                            <th>Posologie</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <td
+                          <tr
                             v-for="employe in ordonnances"
                             v-bind:key="employe.id"
                           >
-                            <tr
-                              v-for="medicament in employe.medicaments"
-                              :key="medicament.id"
-                            >
-                              {{
-                                medicament.libelle
-                              }}
-                            </tr>
-                          </td>
-
-                          <td
-                            v-for="employe in ordonnances"
-                            v-bind:key="employe.id"
-                          >
-                            <tr
-                              v-for="medicament in employe.medicaments"
-                              :key="medicament.id"
-                            >
-                              {{
-                                medicament.dosage
-                              }}
-                            </tr>
-                          </td>
+                            <td>
+                              {{ employe.libelle }}
+                            </td>
+                            <td>
+                              {{ employe.pivot.quantity }}
+                            </td>
+                            <td>
+                              {{ employe.dosage }}
+                            </td>
+                            <td>
+                              {{ employe.pivot.posologie }}
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
                     </div>
@@ -377,6 +367,7 @@ export default {
       info_message_diagnostic: "",
       info_message_examens: "",
       info_message_pensements: "",
+      fiche_examens: null,
 
       medicament: "",
       quantite: "",
@@ -400,8 +391,9 @@ export default {
     this.charger_diagnostic();
   },
   methods: {
-    voir_examen(id) {
-      console.log("id :", id);
+    voir_examen(fiche) {
+      console.log("id :", fiche);
+      this.fiche_examens = fiche;
     },
     terminer() {
       console.log("destination :", this.destination);
@@ -422,10 +414,15 @@ export default {
           console.log(response.data);
           if (response.data.state === "true") {
             this.preloader = false;
-            this.success = true;
-            this.$router.push("/consultation");
-            this.message = "transfert effectué";
-            this.destination = "";
+            this.$swal({
+              html: "Consultation terminé",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/consultation");
+              }
+            });
           } else {
             this.errors = true;
             this.message = "transfert non enregistré";
@@ -562,8 +559,14 @@ export default {
         .get(chemin + "/dossiersByClient/" + this.$route.params.id)
         .then((response) => {
           console.log("ordonnance list :", response.data.data.ordonnances);
-          this.ordonnances = response.data.data.ordonnances;
-          console.log(this.ordonnances);
+          let merge = [];
+          response.data.data.ordonnances.forEach((ordo) => {
+            ordo.medicaments.forEach((medoc) => {
+              merge.push(medoc);
+            });
+          });
+          this.ordonnances = merge;
+          console.log("ordonnances :", this.ordonnances);
           if (this.ordonnances.length === 0) {
             this.message_info_ordonnance =
               "Aucune ordonnance prescrite fait ce jour";

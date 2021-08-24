@@ -151,7 +151,6 @@ export default {
               pageLength: 10,
               processing: true,
               dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
               order: [],
               language: {
                 décimal: "",

@@ -471,7 +471,7 @@ export default {
       this.filterResults();
       this.isOpen = true;
     },
-    charger_medicament() {
+    charger_pensement() {
       axios
         .create({
           headers: {
@@ -508,9 +508,18 @@ export default {
         .then((response) => {
           console.log("examens list :", response.data.data);
           this.dossier_id = response.data.data.client_id;
-          const examens = response.data.data.examens;
-          examens.forEach((examen) => {
-            console.log("examens :", examen);
+
+          const examens_fait = response.data.data.examens;
+          examens_fait.forEach((exam) => {
+            console.log("exam :", exam);
+            this.examen.push(exam.id);
+          });
+
+          this.examens.forEach((exa) => {
+            console.log("examens init :", exa);
+            if (this.examen.includes(exa.id)) {
+              exa.value = true;
+            }
           });
 
           const diagnostics_fait = response.data.data.diagnostics;
@@ -526,17 +535,18 @@ export default {
             }
           });
 
-          const pansements_fait = response.data.data.pensements;
-          pansements_fait.forEach((pansement) => {
-            console.log("pansement", pansement);
-            this.pensement.push(pansement.id);
+          const pensements_fait = response.data.data.pensements;
+          pensements_fait.forEach((pens) => {
+            console.log("pens :", pens);
+            this.pensement.push(pens.id);
           });
 
-          this.pensements.forEach((pensem) => {
-            if(this.pensement.includes(pensem.id)){
+          this.medocs.forEach((pensem) => {
+            console.log("pensements init :", pensem);
+            if (this.pensement.includes(pensem.id)) {
               pensem.value = true;
             }
-          })
+          });
         })
         .catch((err) => {
           this.preloader = false;
@@ -562,10 +572,16 @@ export default {
           console.log(response.data);
           if (response.data.state === "true") {
             this.preloader = false;
-            this.success = true;
-            this.$router.push("/consultation");
-            this.message = "transfert effectué";
-            this.destination = "";
+             this.$swal({
+              html: "Consultation terminé",
+              icon:"success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.preloader = false;
+                this.$router.push("/consultation");
+              }
+            });
           } else {
             this.errors = true;
             this.message = "transfert non enregistré";
@@ -590,7 +606,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.workflows = response.data.data;
-          this.charger_medicament();
+          this.charger_pensement();
           console.log("workflow :", this.workflows);
         })
         .catch((err) => {
@@ -692,10 +708,18 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message = "Consultation terminée";
-            this.ordonnances = [];
-            // this.$router.push("/consultation");
+            this.$swal({
+              html: "Transfert effectué",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.preloader = false;
+                this.success = true;
+                this.ordonnances = [];
+                this.$router.push("/consultation");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;
