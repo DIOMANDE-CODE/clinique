@@ -176,9 +176,7 @@ export default {
               pagingType: "full_numbers",
               pageLength: 10,
               processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
-              stateSave : true,
+              stateSave: true,
               order: [],
               language: {
                 décimal: "",
@@ -280,7 +278,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.charge();
+              this.$swal({
+              html: "Service désactivé",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charge();
+              }
+            })
           } else {
             this.preloader = false;
           }
@@ -307,7 +313,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.charge();
+            this.$swal({
+              html: "Service activé",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charge();
+              }
+            })
           } else {
             this.preloader = false;
           }

@@ -58,8 +58,7 @@
                   <div class="form-group">
                     <label>
                       {{ constante.libelle }}
-                     </label
-                    >
+                    </label>
                     <input
                       class="form-control"
                       type="text"
@@ -114,7 +113,7 @@ export default {
       constantes: [],
       liste_constantes: [],
       workflows: [],
-      destination:'',
+      destination: "",
 
       preloader: false,
       success: false,
@@ -191,7 +190,7 @@ export default {
       this.charge();
     },
     ajouter() {
-       console.log("destination id", this.destination);
+      console.log("destination id", this.destination);
       this.preloader = true;
       var constante_final = {
         dossier_id: this.$route.params.id,
@@ -211,9 +210,14 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.preloader = false;
-          this.success = true;
-          this.message = "Constante ajouté avec success";
-          this.$router.push("/entite/constante");
+          this.$swal({
+            html: "Transfert effectué",
+            confirmButtonText: `Oui`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push("/entite/constante");
+            }
+          });
         })
         .catch((err) => {
           this.preloader = false;

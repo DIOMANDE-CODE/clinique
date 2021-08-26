@@ -74,7 +74,7 @@
           {{ message }}
           <button
             type="button"
-            class="close"
+            class="close"   
             data-dismiss="alert"
             aria-label="Close"
           >

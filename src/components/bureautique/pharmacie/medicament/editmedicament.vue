@@ -483,14 +483,15 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message = "Modification effectuée avec succès";
-            console.log("reussie");
-
-            this.nom = "";
-            this.description = "";
-
-            this.$router.push("/pharmacie/medicament");
+            this.$swal({
+              html: "Médicament modifiée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/pharmacie/medicament");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

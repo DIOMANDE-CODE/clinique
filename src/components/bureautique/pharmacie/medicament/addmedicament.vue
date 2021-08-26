@@ -466,18 +466,15 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message_success = "Un nouveau médicament ajouté";
-            console.log("reussie");
-
-            this.$router.push("/pharmacie/medicament");
-
-            this.nom = "";
-            this.prix = "";
-            this.categorie = "";
-            this.type = "";
-            this.dosage = "";
-            this.quantite = "";
+             this.$swal({
+              html: "Médicament ajouté",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/pharmacie/medicament");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

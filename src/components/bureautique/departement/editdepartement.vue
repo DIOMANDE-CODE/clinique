@@ -3,14 +3,17 @@
     <loader v-if="preloader"></loader>
     <div class="page-wrapper">
       <div class="content">
-      <div class="m-t-15">
+        <div class="m-t-15">
           <button class="btn btn-primary btn-rounded" v-on:click="retourner">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
           </button>
-        </div><br>
+        </div>
+        <br />
         <div class="row">
           <div class="col-lg-8 offset-lg-2">
-            <h4 class="page-title" style="color:black; font-weight: bold;">MODIFIER</h4>
+            <h4 class="page-title" style="color:black; font-weight: bold;">
+              MODIFIER
+            </h4>
           </div>
         </div>
         <div
@@ -47,7 +50,9 @@
           <div class="col-lg-8 offset-lg-2">
             <form @submit.prevent="modifier">
               <div class="form-group">
-                <label>Nom du departement <span class="text-danger">*</span></label>
+                <label
+                  >Nom du departement <span class="text-danger">*</span></label
+                >
                 <input class="form-control" type="text" v-model="nom" />
               </div>
               <div class="form-group">
@@ -335,7 +340,7 @@ export default {
 
       nom: "",
       description: "",
-      id:""
+      id: "",
     };
   },
   components: {
@@ -369,14 +374,13 @@ export default {
   },
   methods: {
     retourner() {
-      this.$router.push("/admin/departement")
+      this.$router.push("/admin/departement");
     },
-    renitialiser(){
-        this.nom = '',
-        this.description = ''
+    renitialiser() {
+      (this.nom = ""), (this.description = "");
     },
     modifier() {
-      this.preloader = true
+      this.preloader = true;
       var departement = {
         nom: this.nom,
         description: this.description,
@@ -390,23 +394,31 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierDepartement/" + this.$route.params.id, departement)
+        .patch(
+          chemin + "/modifierDepartement/" + this.$route.params.id,
+          departement
+        )
         .then((response) => {
-            console.log(response.data);
+          console.log(response.data);
           if (response.data.state === true) {
-            this.preloader = false
-            this.success = true
-            this.message = 'Modification effectuée avec succès'
-            console.log("modification réussie reussie");
-            this.$router.push("/admin/departement")
+            this.preloader = false;
+            this.$swal({
+              html: "Département modifié",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/admin/departement");
+              }
+            });
           } else {
-            this.preloader = false
-            this.errors = true
-            this.message = response.data.message
+            this.preloader = false;
+            this.errors = true;
+            this.message = response.data.message;
             console.log("erreur");
           }
         });
-    }
-  }
+    },
+  },
 };
 </script>

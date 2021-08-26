@@ -50,7 +50,9 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="form-group">
-                <label>Maison d'assurance <span class="text-danger">*</span></label>
+                <label
+                  >Maison d'assurance <span class="text-danger">*</span></label
+                >
                 <input
                   class="form-control"
                   type="text"
@@ -58,8 +60,11 @@
                   required
                 />
               </div>
-                <div class="form-group">
-                <label>Pourcentage de l'assurance <span class="text-danger">*</span></label>
+              <div class="form-group">
+                <label
+                  >Pourcentage de l'assurance
+                  <span class="text-danger">*</span></label
+                >
                 <input
                   class="form-control"
                   type="text"
@@ -357,7 +362,7 @@ export default {
       preloader: false,
       nom: "",
       entreprise: "",
-      pourcentage : "",
+      pourcentage: "",
     };
   },
   components: {
@@ -365,13 +370,13 @@ export default {
   },
   methods: {
     renitialiser() {
-      (this.nom = ""), (this.entreprise = ""),(this.pourcentage = "");
+      (this.nom = ""), (this.entreprise = ""), (this.pourcentage = "");
     },
     ajouter() {
       if (
         this.nom === "" ||
         this.entreprise === "" ||
-        this.pourcentage === "" 
+        this.pourcentage === ""
       ) {
         // this.errors = true
         // this.message = "Veuillez saisir le nom du departement"
@@ -380,7 +385,7 @@ export default {
         var assurance = {
           nom: this.nom,
           entreprise: this.entreprise,
-          pourcentage : this.pourcentage
+          pourcentage: this.pourcentage,
         };
         console.log(assurance);
         axios
@@ -390,20 +395,22 @@ export default {
               Authorization: "Bearer " + localStorage.getItem("token"),
               "Access-Control-Allow-Origin": "*",
             },
-          })  
+          })
           .post(chemin + "/creationAssurance", assurance)
           .then((response) => {
             console.log(response.data);
             if (response.data.state === true) {
               this.preloader = false;
-              this.success = true;
-              this.message = response.data.message;
-              console.log("reussie");
-
-              this.nom = "";
-              this.description = "";
-              this.pourcentage = "";
-              this.$router.push("/admin/assurance");
+              this.$swal({
+                html: "Assurance ajoutée",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.success = true;
+                  this.$router.push("/admin/assurance");
+                }
+              })
             } else {
               this.preloader = false;
               this.errors = true;

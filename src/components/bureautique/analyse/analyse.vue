@@ -53,7 +53,10 @@
           <div class="col-md-12">
             <p>{{ message }}</p>
             <div class="table-responsive">
-              <table id="example" class="table table-striped custom-table mb-0 datatable">
+              <table
+                id="example"
+                class="table table-striped custom-table mb-0 datatable"
+              >
                 <thead>
                   <tr>
                     <th>Libelle</th>
@@ -375,56 +378,54 @@ import $ from "jquery";
 
 export default {
   mounted() {
-      this.preloader = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/listeDesExamens")
-        .then((response) => {
-          console.log("analyses :", response.data);
-            this.preloader = false;
-            this.analyses = response.data;
-            setTimeout(function() {
-            $("#example").DataTable({
-              pagingType: "full_numbers",
-              pageLength: 5,
-              processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
-              order: [],
-              language: {
-                décimal: "",
-                emptyTable: "Aucune donnée disponible dans le tableau",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
-                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
-                infoPostFix: "",
-                thousands: ",",
-                lengthMenu: "Afficher les entrées du _MENU_",
-                loadingRecords: "Loading...",
-                processing: "Processing...",
-                search: "Chercher :",
-                stateSave : true,
-                zeroRecords: "Aucun enregistrement correspondant trouvé",
-                paginate: {
-                  first: "Premier",
-                  last: "Dernier",
-                  next: "Suivant",
-                  previous: "Précédent",
-                },
-                aria: {
-                  sortAscending: ": activate to sort column ascending",
-                  sortDescending: ": activate to sort column descending",
-                },
+    this.preloader = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/listeDesExamens")
+      .then((response) => {
+        console.log("analyses :", response.data);
+        this.preloader = false;
+        this.analyses = response.data;
+        setTimeout(function() {
+          $("#example").DataTable({
+            pagingType: "full_numbers",
+            pageLength: 5,
+            processing: true,
+            order: [],
+            language: {
+              décimal: "",
+              emptyTable: "Aucune donnée disponible dans le tableau",
+              infoEmpty: "Showing 0 to 0 of 0 entries",
+              info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+              infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+              infoPostFix: "",
+              thousands: ",",
+              lengthMenu: "Afficher les entrées du _MENU_",
+              loadingRecords: "Loading...",
+              processing: "Processing...",
+              search: "Chercher :",
+              stateSave: true,
+              zeroRecords: "Aucun enregistrement correspondant trouvé",
+              paginate: {
+                first: "Premier",
+                last: "Dernier",
+                next: "Suivant",
+                previous: "Précédent",
               },
-            });
-          }, 1000);
-        });
+              aria: {
+                sortAscending: ": activate to sort column ascending",
+                sortDescending: ": activate to sort column descending",
+              },
+            },
+          });
+        }, 1000);
+      });
   },
   data() {
     return {
@@ -439,7 +440,7 @@ export default {
     loader,
   },
   methods: {
-    charger(){
+    charger() {
       this.preloader = true;
       axios
         .create({
@@ -452,8 +453,8 @@ export default {
         .get(chemin + "/listeDesExamens")
         .then((response) => {
           console.log("analyses :", response.data);
-            this.preloader = false;
-            this.analyses = response.data;
+          this.preloader = false;
+          this.analyses = response.data;
         });
     },
     modifier(pk) {
@@ -473,7 +474,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.charge();
+            this.$swal({
+              html: "Analyse désactivée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charge();
+              }
+            });
           } else {
             this.preloader = false;
           }
@@ -500,7 +509,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.charge();
+            this.$swal({
+              html: "Analyse activée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charge();
+              }
+            });
           } else {
             this.preloader = false;
           }

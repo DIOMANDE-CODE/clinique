@@ -405,13 +405,15 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.$router.push("/admin/profil");
-            console.log("reussie");
-
-            this.nom = "";
-            this.description = "";
+            this.$swal({
+                html: "Profil modifié",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/admin/profil");
+                }
+              });
           })
           .catch((err) => {
             this.preloader = false;

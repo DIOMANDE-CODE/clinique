@@ -184,8 +184,6 @@ export default {
               pagingType: "full_numbers",
               pageLength: 10,
               processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
               order: [],
               language: {
                 décimal: "",
@@ -199,7 +197,7 @@ export default {
                 loadingRecords: "Loading...",
                 processing: "Processing...",
                 search: "Chercher :",
-                stateSave : true,
+                stateSave: true,
                 zeroRecords: "Aucun enregistrement correspondant trouvé",
                 paginate: {
                   first: "Premier",
@@ -270,9 +268,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preload = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.charge();
+            this.$swal({
+              html: "Clinique désactivée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charge();
+              }
+            });
           } else {
             this.preload = false;
             this.errors = true;
@@ -301,9 +305,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preload = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.charge();
+            this.$swal({
+              html: "Clinique activée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charge();
+              }
+            });
           } else {
             this.preload = false;
             this.errors = true;

@@ -58,16 +58,12 @@
                   required
                 />
               </div>
-                <div class="form-group">
-                <label class="col-form-label "
-                  > Type <span class="text-danger">*</span>
+              <div class="form-group">
+                <label class="col-form-label ">
+                  Type <span class="text-danger">*</span>
                 </label>
                 <div class="col-md-12">
-                  <select
-                    required
-                    class="form-control clinique"
-                    v-model="type"
-                  >
+                  <select required class="form-control clinique" v-model="type">
                     <option value="checkbox">case à cocher</option>
                     <option value="text">texte</option>
                     >
@@ -350,7 +346,7 @@ export default {
       nom: "",
       type: "",
       categories: [],
-      message_success:""
+      message_success: "",
     };
   },
   created() {
@@ -381,7 +377,7 @@ export default {
         });
     },
     renitialiser() {
-      (this.libelle = ""),(this.type = "");
+      (this.libelle = ""), (this.type = "");
     },
     ajouter() {
       if (this.nom === "") {
@@ -406,18 +402,15 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message_success = "nouveau diagnostic ajouté";
-            console.log("reussie");
-
-            this.nom = "";
-            this.prix = "";
-            this.categorie = "";
-            this.type = "";
-            this.dosage = "";
-            this.quantite = "";
-
-            this.$router.push("/diagnostic")
+            this.$swal({
+              html: "Diagnostic ajouté",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/diagnostic");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

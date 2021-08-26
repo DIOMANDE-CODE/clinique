@@ -440,7 +440,7 @@ export default {
         this.nationnalite === "" ||
         this.nationnalite === "" ||
         this.telephone === "" ||
-        this.date === "" || 
+        this.date === "" ||
         this.addresse === "" ||
         this.situation === "" ||
         this.genre === "" ||
@@ -483,22 +483,15 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.preloader = false;
-          this.success = true;
-          this.message = response.data.message;
-          this.nom = "";
-          this.prenom = "";
-          this.nationnalite = "";
-          this.telephone = "";
-          this.date = "";
-          this.addresse = "";
-          this.situation = "";
-          this.genre = "";
-          this.email = "";
-          this.code = "";
-          this.role = "";
-          this.profile = [];
-
-          this.$router.push("/admin/employe")
+          this.$swal({
+            html: "Personnel ajouté",
+            icon: "success",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push("/admin/employe");
+            }
+          });
         })
         .catch((err) => {
           this.preloader = false;

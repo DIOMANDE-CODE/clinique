@@ -538,11 +538,15 @@ export default {
           console.log("reponse :",response.data);
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = "Modification effectuée avec succès";
-            this.$router.push('/admin/employe');
-
-            this.nom = user.nom;
+            this.$swal({
+            html: "Modification effectuée",
+            icon: "success",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push("/admin/employe");
+            }
+          });
           } else {
             this.preloader = false;
             this.errors = true;

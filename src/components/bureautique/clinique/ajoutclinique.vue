@@ -530,21 +530,29 @@ export default {
             this.preloader = true;
             if (response.data.state === true) {
               this.preloader = false;
-              this.success = true;
-              this.message = response.data.message;
-              (this.nom = ""),
-                (this.email = ""),
-                (this.numero_identifiant = ""),
-                (this.telephone = ""),
-                (this.telephone_urgence = ""),
-                (this.addresse_postale = ""),
-                (this.addresse_physique = ""),
-                (this.fax = ""),
-                (this.coche = []);
-              console.log("reussie");
-              this.$router.push("/admin/clinique");
-              this.nom = "";
-              this.description = "";
+              this.$swal({
+                html: "clinique ajoutée",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.success = true;
+                  this.message = response.data.message;
+                  (this.nom = ""),
+                    (this.email = ""),
+                    (this.numero_identifiant = ""),
+                    (this.telephone = ""),
+                    (this.telephone_urgence = ""),
+                    (this.addresse_postale = ""),
+                    (this.addresse_physique = ""),
+                    (this.fax = ""),
+                    (this.coche = []);
+                  console.log("reussie");
+                  this.$router.push("/admin/clinique");
+                  this.nom = "";
+                  this.description = "";
+                }
+              });
             } else {
               this.preloader = false;
               this.errors = true;

@@ -50,8 +50,15 @@
           <div class="col-lg-8 offset-lg-2">
             <form>
               <div class="form-group">
-                <label>Nom du departement <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="nom" required />
+                <label
+                  >Nom du departement <span class="text-danger">*</span></label
+                >
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="nom"
+                  required
+                />
               </div>
               <div class="form-group">
                 <label>Description</label>
@@ -67,11 +74,9 @@
                   class="btn btn-danger submit-btn"
                   v-on:click="renitialiser"
                 >
-                  Réinitialiser
-                </button>&nbsp;&nbsp;
-                <button 
-                  class="btn btn-success submit-btn"
-                  v-on:click="ajouter">
+                  Réinitialiser</button
+                >&nbsp;&nbsp;
+                <button class="btn btn-success submit-btn" v-on:click="ajouter">
                   creer
                 </button>
               </div>
@@ -355,48 +360,49 @@ export default {
       (this.nom = ""), (this.description = "");
     },
     ajouter() {
-      if (this.nom === ""){
+      if (this.nom === "") {
         // this.errors = true
         // this.message = "Veuillez saisir le nom du departement"
-      }
-      else {
+      } else {
         this.preloader = true;
-      var departement = {
-        nom: this.nom,
-        description: this.description,
-      };
-      console.log(departement);
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .post(chemin + "/creationDepartement", departement)
-        .then((response) => {
-          console.log(response.data);
-          if (response.data.state === true) {
-            this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            console.log("reussie");
-
-            this.nom = "";
-            this.description = "";
-            this.$router.push("/admin/departement")
-          } else {
+        var departement = {
+          nom: this.nom,
+          description: this.description,
+        };
+        console.log(departement);
+        axios
+          .create({
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .post(chemin + "/creationDepartement", departement)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.state === true) {
+              this.preloader = false;
+              this.$swal({
+                html: "Département ajouté",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/admin/departement");
+                }
+              });
+            } else {
+              this.preloader = false;
+              this.errors = true;
+              this.message = response.data.message;
+            }
+          })
+          .catch((err) => {
             this.preloader = false;
             this.errors = true;
-            this.message = response.data.message;
-          } 
-        })
-        .catch((err) => {
-          this.preloader = false;
-          this.errors = true;
-          console.log(err);
-        });
+            console.log(err);
+          });
       }
     },
     retourner() {

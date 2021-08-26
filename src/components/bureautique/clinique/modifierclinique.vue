@@ -101,7 +101,10 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Numero d'urgence <span class="text-danger">*</span></label>
+                    <label
+                      >Numero d'urgence
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -112,7 +115,10 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Adresse physique <span class="text-danger">*</span></label>
+                    <label
+                      >Adresse physique
+                      <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -125,7 +131,9 @@
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label>Adresse postale <span class="text-danger">*</span></label>
+                    <label
+                      >Adresse postale <span class="text-danger">*</span></label
+                    >
                     <input
                       class="form-control"
                       type="text"
@@ -245,7 +253,10 @@ export default {
         fax: this.fax,
       };
       console.log("la clinique:", clin);
-      console.log("route:", chemin + "/modifierClinique/" + this.$route.params.id);
+      console.log(
+        "route:",
+        chemin + "/modifierClinique/" + this.$route.params.id
+      );
       axios
         .create({
           headers: {
@@ -258,10 +269,15 @@ export default {
         .then((response) => {
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.$router.push("/admin/clinique");
-            console.log("modification réussie reussie");
+            this.$swal({
+              html: "Clinique modifiée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/admin/clinique");
+              }
+            });
           } else {
             this.preloader = false;
             this.errors = true;

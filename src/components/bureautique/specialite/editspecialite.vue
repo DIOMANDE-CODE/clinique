@@ -400,10 +400,16 @@ export default {
           console.log(response.data);
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.$router.push("/admin/specialite")
-            this.message = "Modification effectuée avec succès";
-            console.log("modification réussie reussie");
+            this.$swal({
+              html: "Service modifié",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.success = true;
+                this.$router.push("/admin/specialite");
+              }
+            })
           } else {
             this.preloader = false;
             this.errors = true;

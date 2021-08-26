@@ -52,7 +52,11 @@
         <div class="row">
           <div class="col-md-12">
             <div class="table-responsive">
-              <table id="example" class="table table-striped custom-table" style="width:100%;">
+              <table
+                id="example"
+                class="table table-striped custom-table"
+                style="width:100%;"
+              >
                 <thead>
                   <tr>
                     <th style="min-width:200px;">Noms</th>
@@ -78,7 +82,9 @@
                     <td>{{ employe.prenoms }}</td>
                     <td>{{ employe.genre }}</td>
                     <td>{{ employe.telephone }}</td>
-                    <td v-for="profil in employe.profile" :key="profil.id">{{ profil.titre }}</td>
+                    <td v-for="profil in employe.profile" :key="profil.id">
+                      {{ profil.titre }}
+                    </td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
                         <a
@@ -442,8 +448,6 @@ export default {
               pagingType: "full_numbers",
               pageLength: 10,
               processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
               order: [],
               language: {
                 décimal: "",
@@ -457,7 +461,7 @@ export default {
                 loadingRecords: "Loading...",
                 processing: "Processing...",
                 search: "Chercher :",
-                stateSave : true,
+                stateSave: true,
                 zeroRecords: "Aucun enregistrement correspondant trouvé",
                 paginate: {
                   first: "Premier",
@@ -544,7 +548,15 @@ export default {
         })
         .then(() => {
           this.preload = false;
-          this.charge();
+          this.$swal({
+            html: "Désactivation effectuée",
+            icon: "success",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.charge();
+            }
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -569,7 +581,15 @@ export default {
         })
         .then(() => {
           this.preload = false;
-          this.charge();
+          this.$swal({
+            html: "Activation effectuée",
+            icon: "success",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.charge();
+            }
+          });
         })
         .catch((err) => {
           this.preload = false;

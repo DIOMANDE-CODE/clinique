@@ -395,8 +395,6 @@ export default {
               pagingType: "full_numbers",
               pageLength: 10,
               processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
               order: [],
               language: {
                 décimal: "",
@@ -417,10 +415,6 @@ export default {
                   last: "Dernier",
                   next: "Suivant",
                   previous: "Précédent",
-                },
-                aria: {
-                  sortAscending: ": activate to sort column ascending",
-                  sortDescending: ": activate to sort column descending",
                 },
               },
             });

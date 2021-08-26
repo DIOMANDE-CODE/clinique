@@ -39,10 +39,49 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p style="text-decoration: underline">
+              <b>Traitements précédents</b>
+            </p>
+            <div class="table-responsive">
+              <table class="table table-striped custom-table">
+                <thead>
+                  <tr>
+                    <th>Traitements</th>
 
+                    <th colspan="3" style="position:relative; right:-10%;">
+                      Presecriptions
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Timing</th>
+                    <th>Dose</th>
+                    <th>Voie</th>
+                    <th>Heure</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                  >
+                    <td>djcddi</td>
+                    <td>djcddi</td>
+                    <td>djcddi</td>
+                    <td>djcddi</td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <br /><br />
+        <p style="text-decoration: underline">
+          <b>Faire un nouveau traitément</b>
+        </p>
+        <br /><br />
         <div class="content">
           <div class="row doctor-grid">
-            <p>{{ message_diagnostic }}</p>
             <div
               class="col-md-4 col-sm-4  col-lg-4"
               v-for="examen in traitements"
@@ -50,7 +89,7 @@
             >
               <div class="profile-widget">
                 <h4 class="doctor-name text-ellipsis">
-                  <a href="profile.html">{{ examen.libelle }}</a>
+                  <a>{{ examen.libelle }}</a>
                 </h4>
                 <br />
                 <div class="col-sm-12">
@@ -74,19 +113,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-form-label col-md-2">Service destinataire</label>
-            <div class="col-md-10">
-              <select class="form-control" v-model="destination">
-                <option
-                  :value="workflow.service.id"
-                  v-for="workflow in workflows"
-                  v-bind:key="workflow.id"
-                  >{{ workflow.service.nom }}</option
-                >
-              </select>
             </div>
           </div>
           <div class="m-t-20 text-center">
@@ -114,6 +140,7 @@ export default {
       // Data of constante
       file: "",
       traitements: [],
+      traitements_fait: [],
       workflows: [],
       liste_constantes: [],
       preloader: false,
@@ -144,6 +171,7 @@ export default {
   created() {
     this.charger_diagnostic();
     this.charger_workfow();
+    this.charger_traitement();
   },
   methods: {
     paye(id, result) {
@@ -167,6 +195,28 @@ export default {
           console.log(response.data);
           this.workflows = response.data.data;
           console.log("workflow :", this.workflows);
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    charger_traitement() {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/traitementsByDossier/" + this.$route.params.id)
+        .then((response) => {
+          console.log("traitements dossier :", response.data.traitements);
+          this.traitements_fait = response.data.traitements;
+          response.data.forEach((traitement) => {
+            console.log("traitement :", traitement);
+          });
         })
         .catch((err) => {
           this.preloader = false;
@@ -226,9 +276,17 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message = "Traitement effectué";
-            this.destination = "";
+            this.$swal({
+              html: "Traitement effectué",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.charger_diagnostic();
+                this.charger_workfow();
+                this.charger_traitement();
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

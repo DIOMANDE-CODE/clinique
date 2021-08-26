@@ -339,7 +339,7 @@ export default {
   },
   methods: {
     renitialiser() {
-      (this.nom = "");
+      this.nom = "";
     },
     ajouter() {
       if (this.nom === "") {
@@ -362,13 +362,16 @@ export default {
           .post(chemin + "/ajouterTraitementUrgence", traitement)
           .then((response) => {
             console.log(response.data);
-              this.preloader = false;
-              this.success = true;
-              this.message = "Une nouveau traitement ajoutée";
-              this.$router.push("/traitement");
-              console.log("reussie");
-
-              this.nom = "";
+            this.preloader = false;
+            this.$swal({
+              html: "Traitément ajouté",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/traitement");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

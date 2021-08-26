@@ -53,17 +53,13 @@
                 <label>Assurances <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="nom" />
               </div>
-                <div class="form-group">
+              <div class="form-group">
                 <label>Pourcentage <span class="text-danger">*</span></label>
                 <input class="form-control" type="text" v-model="pourcentage" />
               </div>
               <div class="form-group">
                 <label>Nom de l'entreprise</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="entreprise"
-                />
+                <input class="form-control" type="text" v-model="entreprise" />
               </div>
               <div class="m-t-20 text-center">
                 <button class="btn btn-success submit-btn">
@@ -342,9 +338,9 @@ export default {
       nom: "",
       entreprise: "",
       id: "",
-      pourcentage : "",
+      pourcentage: "",
     };
-  },    
+  },
   components: {
     loader,
   },
@@ -380,15 +376,15 @@ export default {
       this.$router.push("/admin/assurance");
     },
     renitialiser() {
-      (this.entreprise = ""), (this.nom = ""),(this.pourcentage = "");
+      (this.entreprise = ""), (this.nom = ""), (this.pourcentage = "");
     },
     modifier() {
-        console.log(this.id);
+      console.log(this.id);
       this.preloader = true;
       var assurances = {
         nom: this.nom,
         entreprise: this.entreprise,
-        pourcentage: this.pourcentage
+        pourcentage: this.pourcentage,
       };
       console.log(assurances);
       axios
@@ -399,15 +395,23 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .patch(chemin + "/modifierAssurance/" + this.$route.params.id, assurances)
+        .patch(
+          chemin + "/modifierAssurance/" + this.$route.params.id,
+          assurances
+        )
         .then((response) => {
-          console.log(response.data)
+          console.log(response.data);
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = "Modification effectuée avec succès";
-            console.log("modification réussie reussie");
-            this.$router.push("/admin/assurance");
+            this.$swal({
+              html: "Assurance modifiée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/admin/assurance");
+              }
+            });
           } else {
             this.preloader = false;
             this.errors = true;

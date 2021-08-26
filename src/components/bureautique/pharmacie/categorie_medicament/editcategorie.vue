@@ -351,33 +351,33 @@ export default {
     };
   },
   created() {
-      this.charger()
+    this.charger();
   },
   components: {
     loader,
   },
   methods: {
-    charger(){
-        axios
-          .create({
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
-          .get(chemin + "/categorieMedoc/" + this.$route.params.id)
-          .then((response) => {
-            console.log(response.data);
-              this.preloader = false;
-              this.nom = response.data.libelle;
-              this.description = response.data.specification;
-          })
-          .catch((err) => {
-            this.preloader = false;
-            this.errors = true;
-            console.log(err);
-          });
+    charger() {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/categorieMedoc/" + this.$route.params.id)
+        .then((response) => {
+          console.log(response.data);
+          this.preloader = false;
+          this.nom = response.data.libelle;
+          this.description = response.data.specification;
+        })
+        .catch((err) => {
+          this.preloader = false;
+          this.errors = true;
+          console.log(err);
+        });
     },
     renitialiser() {
       (this.nom = ""), (this.description = "");
@@ -404,15 +404,16 @@ export default {
           .put(chemin + "/categorieMedoc/" + this.$route.params.id, categorie)
           .then((response) => {
             console.log(response.data);
-              this.preloader = false;
-              this.success = true;
-              this.message = "Modification effectuée avec succès";
-              console.log("reussie");
-
-              this.nom = "";
-              this.description = "";
-
-              this.$router.push("/pharmacie/categorie")
+            this.preloader = false;
+            this.$swal({
+              html: "Catégorie modifiée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/pharmacie/categorie");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

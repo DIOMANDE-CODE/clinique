@@ -116,11 +116,8 @@
           </ul>
 
           <div class="tab-content">
-
-
             <!-- Script pour ajouter service -->
 
-            
             <div class="tab-pane show active" id="about-cont">
               <div class="row">
                 <div class="col-md-12">
@@ -474,33 +471,6 @@
                                     analyse.statut
                                   }}</span>
                                 </td>
-                                <!-- <td class="text-right">
-                                  <div class="dropdown dropdown-action">
-                                    <a
-                                      href="#"
-                                      class="action-icon dropdown-toggle"
-                                      data-toggle="dropdown"
-                                      aria-expanded="false"
-                                      ><i class="fa fa-ellipsis-v"></i
-                                    ></a>
-                                    <div
-                                      class="dropdown-menu dropdown-menu-right"
-                                    >
-                                      <a
-                                        v-if="analyse.statut === 'actif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="
-                                          supprimer_analyse(analyse.id)
-                                        "
-                                        ><i class="fa fa-trash-o m-r-5"></i
-                                        >supprimer l'analyse</a
-                                      >
-                                    </div>
-                                  </div>
-                                </td> -->
                               </tr>
                             </tbody>
                           </table>
@@ -511,7 +481,6 @@
                 </div>
               </div>
             </div>
-
 
             <!-- Assurance -->
 
@@ -607,33 +576,6 @@
                                     assurance.statut
                                   }}</span>
                                 </td>
-                                <!-- <td class="text-right">
-                                  <div class="dropdown dropdown-action">
-                                    <a
-                                      href="#"
-                                      class="action-icon dropdown-toggle"
-                                      data-toggle="dropdown"
-                                      aria-expanded="false"
-                                      ><i class="fa fa-ellipsis-v"></i
-                                    ></a>
-                                    <div
-                                      class="dropdown-menu dropdown-menu-right"
-                                    >
-                                      <a
-                                        v-if="assurance.statut === 'actif'"
-                                        class="dropdown-item "
-                                        href="#"
-                                        data-toggle="modal"
-                                        data-target="#delete_employee"
-                                        v-on:click="
-                                          supprimer_assurance(assurance.id)
-                                        "
-                                        ><i class="fa fa-trash-o m-r-5"></i
-                                        >supprimer l'assurance</a
-                                      >
-                                    </div>
-                                  </div>
-                                </td>-->
                               </tr>
                             </tbody>
                           </table>
@@ -962,7 +904,7 @@ export default {
     this.workflow();
   },
   methods: {
-    // fonction des chargements 
+    // fonction des chargements
     actualiser() {
       window.location.reload();
     },
@@ -1238,7 +1180,6 @@ export default {
               console.log("services not in :", this.services);
               console.log("departements not in :", this.departements);
             }
-            
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -1491,6 +1432,15 @@ export default {
       this.attribution_departements_services = this.attribution_departements_services.filter(
         (item) => item != this.attribution_departements_services[pk]
       );
+      this.$swal({
+        html: "Service détaché",
+        icon: "success",
+        confirmButtonText: `OK`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
       console.log("new liste :", this.attribution_departements_services);
     },
 
@@ -1558,9 +1508,15 @@ export default {
           console.log("result :", response);
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            console.log("reussie");
+            this.$swal({
+              html: "Nouveau service ajouté",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
           } else {
             this.preloader = false;
             this.errors = true;
@@ -1602,10 +1558,15 @@ export default {
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            this.sauvegarder = [];
-            console.log("reussie");
+            this.$swal({
+              html: "Nouveau workflow ajouté",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
           } else {
             this.preloader = false;
             this.errors = true;
@@ -1655,9 +1616,15 @@ export default {
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            console.log("reussie");
+            this.$swal({
+              html: "Nouvelle analyse ajoutée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
           } else {
             this.preloader = false;
             this.errors = true;
@@ -1707,9 +1674,15 @@ export default {
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
-            this.success = true;
-            this.message = response.data.message;
-            console.log("reussie");
+            this.$swal({
+              html: "Nouvelle assurance ajoutée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
+            });
           } else {
             this.preloader = false;
             this.errors = true;
@@ -1769,10 +1742,16 @@ export default {
           clinique_id: this.$route.params.id,
           departement_id: pk,
         })
-        .then((response) => {
-          window.location.reload();
-          console.log(response.data);
-          console.log("departement supprimé");
+        .then(() => {
+          this.$swal({
+            html: "Département supprimé",
+            icon: "success",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
         })
         .catch((err) => {
           this.preloader = false;

@@ -39,12 +39,12 @@
               LISTE D'ATTENTE
             </h4>
           </div>
-            <i
-              class="fa fa-rotate-right m-r-5"
-              style="cursor:pointer; color:green; position:relative; right:3%;"
-              v-on:click="actualiser"
-              alt="actualiser"
-            ></i>
+          <i
+            class="fa fa-rotate-right m-r-5"
+            style="cursor:pointer; color:green; position:relative; right:3%;"
+            v-on:click="actualiser"
+            alt="actualiser"
+          ></i>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -74,7 +74,7 @@
                       <h2>{{ employe.dossier.client.nom }}</h2>
                     </td>
                     <td>{{ employe.dossier.client.prenoms }}</td>
-                    <td>{{employe.status}}</td>
+                    <td>{{ employe.status }}</td>
                     <td>{{ employe.dossier.objet }}</td>
                     <td class="text-right">
                       <div class="dropdown dropdown-action">
@@ -378,37 +378,60 @@ import loader from "../../../components/loader.vue";
 
 export default {
   mounted() {
-      this.preload = true;
-      axios
-        .create({
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-        .get(chemin + "/getFile")
-        .then((response) => {
-          console.log(" liste d'attente :", response.data);
-          if (response.data.state === "true") {
-            this.preload = false;
-            this.patients = response.data.data;
-            setTimeout(function() {
-          $("#example").DataTable({
-            pagingType: "full_numbers",
-            pageLength: 5,
-            processing: true,
-            dom: "Bfrtip",
-            buttons: [],
-            "order": []
-          });
-        }, 1000);
-          } else {
-            this.preload = false;
-            this.message = "Aucun employés existants";
-            console.log("erreur de chargement");
-          }
-        })
+    this.preload = true;
+    axios
+      .create({
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .get(chemin + "/getFile")
+      .then((response) => {
+        console.log(" liste d'attente :", response.data);
+        if (response.data.state === "true") {
+          this.preload = false;
+          this.patients = response.data.data;
+          setTimeout(function() {
+            $("#example").DataTable({
+              pagingType: "full_numbers",
+              pageLength: 10,
+              processing: true,
+              order: [],
+              language: {
+                décimal: "",
+                emptyTable: "Aucune donnée disponible dans le tableau",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                infoFiltered: "(filtré à partir de _MAX_ entrées totales)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Afficher les entrées du _MENU_",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Chercher :",
+                stateSave: true,
+                zeroRecords: "Aucun enregistrement correspondant trouvé",
+                paginate: {
+                  first: "Premier",
+                  last: "Dernier",
+                  next: "Suivant",
+                  previous: "Précédent",
+                },
+                aria: {
+                  sortAscending: ": activate to sort column ascending",
+                  sortDescending: ": activate to sort column descending",
+                },
+              },
+            });
+          }, 1000);
+        } else {
+          this.preload = false;
+          this.message = "Aucun employés existants";
+          console.log("erreur de chargement");
+        }
+      });
   },
   data() {
     return {
@@ -431,7 +454,7 @@ export default {
     calendrier(pk) {
       this.$router.push("/employe/calendrier/" + pk);
     },
-       actualiser() {
+    actualiser() {
       window.location.reload();
     },
     activer(pk) {

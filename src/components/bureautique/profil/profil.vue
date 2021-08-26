@@ -419,8 +419,6 @@ export default {
               pagingType: "full_numbers",
               pageLength: 10,
               processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
               order: [],
               language: {
                 décimal: "",
@@ -435,7 +433,7 @@ export default {
                 processing: "Processing...",
                 search: "Chercher :",
                 zeroRecords: "Aucun enregistrement correspondant trouvé",
-                stateSave : true,
+                stateSave: true,
                 paginate: {
                   first: "Premier",
                   last: "Dernier",
@@ -510,8 +508,15 @@ export default {
         .delete(chemin + "/deleteProfil/" + pk)
         .then(() => {
           this.preload = false;
-          this.success = true;
-          this.charge();
+          this.$swal({
+            html: "Profil supprimé",
+            icon: "success",
+            confirmButtonText: `OK`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push("/admin/profil");
+            }
+          });
         })
         .catch((err) => {
           this.preload = false;

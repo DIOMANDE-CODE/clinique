@@ -424,13 +424,15 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message_success = "Modification effectuée avec succès";
-            console.log("reussie");
-            this.$router.push("/diagnostic/");
-            this.nom = "";
-            this.description = "";
-            this.charger();
+            this.$swal({
+              html: "Diagnostic modifié",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/diagnostic");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

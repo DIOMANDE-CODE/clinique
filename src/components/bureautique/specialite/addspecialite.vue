@@ -51,7 +51,12 @@
             <form>
               <div class="form-group">
                 <label>Nom du service <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" v-model="nom" required />
+                <input
+                  class="form-control"
+                  type="text"
+                  v-model="nom"
+                  required
+                />
               </div>
               <div class="form-group">
                 <label>Description</label>
@@ -67,8 +72,8 @@
                   class="btn btn-danger submit-btn"
                   v-on:click="renitialiser"
                 >
-                  Réinitialiser
-                </button>&nbsp;&nbsp;
+                  Réinitialiser</button
+                >&nbsp;&nbsp;
                 <button class="btn btn-success submit-btn" v-on:click="ajouter">
                   creer
                 </button>
@@ -406,12 +411,15 @@ export default {
           .then((response) => {
             if (response.data.state === true) {
               this.preloader = false;
-              this.success = true;
-              this.message = response.data.message;
-              console.log("reussie");
-              this.nom = "";
-              this.description = "";
-              this.$router.push("/admin/specialite");
+              this.$swal({
+                html: "Service ajouté",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/admin/specialite");
+                }
+              })
             } else {
               this.preloader = false;
               this.errors = true;

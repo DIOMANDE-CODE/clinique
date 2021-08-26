@@ -376,13 +376,15 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.preloader = false;
-            this.success = true;
-            this.message = "Une nouvelle constante ajoutée";
-            this.$router.push("/constante");
-            console.log("reussie");
-
-            this.nom = "";
-            this.type = "";
+            this.$swal({
+              html: "Constante ajoutée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/constante");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;
@@ -391,8 +393,8 @@ export default {
           });
       }
     },
-    modifier(pk){
-          this.$router.push("/edit/constante/" + pk)
+    modifier(pk) {
+      this.$router.push("/edit/constante/" + pk);
     },
     retourner() {
       this.$router.push("/constante");

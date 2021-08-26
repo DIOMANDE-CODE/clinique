@@ -379,15 +379,16 @@ export default {
           .post(chemin + "/ajouterCategorieMedoc", categorie)
           .then((response) => {
             console.log(response.data);
-              this.preloader = false;
-              this.success = true;
-              this.message = "Une nouvelle catégorie ajoutée";
-              this.$router.push("/pharmacie/categorie")
-              console.log("reussie");
-
-              this.nom = "";
-              this.description = "";
-
+            this.preloader = false;
+            this.$swal({
+              html: "Catégorie ajoutée",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/pharmacie/categorie");
+              }
+            });
           })
           .catch((err) => {
             this.preloader = false;

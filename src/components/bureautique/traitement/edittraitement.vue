@@ -377,10 +377,15 @@ export default {
         .then((response) => {
             console.log(response.data);
             this.preloader = false
-            this.success = true
-            this.$router.push("/traitement")
-            this.message = 'Modification effectuée avec succès'
-            console.log("modification réussie reussie");
+                this.$swal({
+              html: "Traitément modifié",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push("/traitement");
+              }
+            });
         });
     }
   }

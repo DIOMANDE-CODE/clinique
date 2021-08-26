@@ -401,8 +401,6 @@ export default {
               pagingType: "full_numbers",
               pageLength: 5,
               processing: true,
-              dom: "Bfrtip",
-              buttons: ["copy", "csv", "print"],
               order: [],
               language: {
                 décimal: "",
