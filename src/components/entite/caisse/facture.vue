@@ -361,7 +361,6 @@
                               }).format(consulte.prixAssurance)
                             }}
                           </td>
-                         
                           <td>
                             {{
                               new Intl.NumberFormat("de-DE", {
