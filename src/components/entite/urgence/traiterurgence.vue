@@ -290,7 +290,8 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
         })
-        .get(chemin + "/listeDesTraitementsUrgence")
+        // .get(chemin + "/listeDesTraitementsUrgence")
+        .get(chemin + "/listerMedoc")
         .then((response) => {
           console.log(response.data);
           this.medocs = response.data;
@@ -363,7 +364,7 @@ export default {
           console.log(response.data);
           this.preloader = false;
           this.success = true;
-          this.message = "Consultation terminée";
+          this.message = "Medicament(s) prescri";
           this.ordonnances = [];
         })
         .catch((err) => {

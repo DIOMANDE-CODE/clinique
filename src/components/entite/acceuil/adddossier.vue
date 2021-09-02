@@ -116,7 +116,7 @@
                 </div>
                 <div class="col-sm-6" v-if="checkedAssurance">
                   <div class="form-group">
-                    <label> Pourcentage <span class="text-danger">*</span></label>
+                    <label> Taux de couverture <span class="text-danger">*</span></label>
                     <input
                       class="form-control"
                       type="text"
@@ -183,7 +183,6 @@ import { chemin } from "../../../assets/js/chemin.js";
 export default {
   data() {
     return {
-      // Data of patient
       objet: "",
       assurance: "",
       assurance_nom: "",
@@ -210,6 +209,7 @@ export default {
       errors: false,
       checkedAssurance: false,
       message: "",
+      raison:null
     };
   },
   components: {
@@ -259,7 +259,7 @@ export default {
         this.checkedAssurance = false;
       }
     },
-    ajouter() {
+    async ajouter() {
       this.preloader = true;
       console.log(this.dossier);
       axios
@@ -282,12 +282,31 @@ export default {
               confirmButtonText: `Oui`,
               denyButtonText: `Non`,
             }).then((result) => {
+              
               if (result.isConfirmed) {
-                this.preloader = false;
-                this.dossier.confirm = true;
-                console.log("dossier :", this.dossier);
-                this.ajouter();
-                this.$router.push("/acceuil/profil/" + this.$route.params.id);
+                 this.$swal({
+                  input: 'textarea',
+                  inputLabel: 'Raison',
+                  inputPlaceholder: 'Ecrivez la raison ici...',
+                  inputAttributes: {
+                    'aria-label': 'Ecrivez la raison ici',
+                    'v-model':"raison"
+                  },
+                  showCancelButton: true,
+                  confirmButtonText: `Oui`,
+                }).then((result) => {
+                    console.log('oui',result)
+                    if (result.isConfirmed) {
+                        this.preloader = false;
+                        this.dossier.confirm = true;
+                        this.dossier.raison = result.value;
+                        console.log("dossier :", this.dossier);
+                        this.ajouter();
+                        this.$router.push("/acceuil/profil/" + this.$route.params.id);
+                    }
+                   
+                  });
+                
               }
             });
           } else {

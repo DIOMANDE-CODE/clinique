@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div class="page-wrapper">
+    <div class="page-wrapper" :style="'background-image:url('+bgImage+')'" style="height:800px;background-position: center;background-size: 100% ;background-repeat: no-repeat;">
       <div class="content">
+        <a href='https://fr.freepik.com/photos/main'></a>
         <div class="row">
           <div class="col-md-6 col-sm-6 col-lg-6 col-xl-4" v-if="admin">
             <router-link to="/admin/specialite"
@@ -250,7 +251,8 @@ export default {
       caisse: false,
       profiles:[],
       profil_id:[],
-      service_id:[]
+      service_id:[],
+      bgImage:null
     };
   },
   created() {
@@ -300,11 +302,35 @@ export default {
               this.admin = true;
             } else {
               response.data.data.profile.forEach(element => {
+                if (element.id == 4) {
+                  this.bgImage = 'bg/accueil.jpg'
+                }
+                if (element.id == 5) {
+                  this.bgImage = 'bg/constante.jpg'
+                }
+                if (element.id == 1) {
+                  this.bgImage = 'bg/medecin.jpg'
+                }
+                if (element.id == 2) {
+                  this.bgImage = 'bg/caisse.jpg'
+                }
+                if (element.id == 6) {
+                  this.bgImage = 'bg/labo.jpg'
+                }
+                if (element.id == 8) {
+                  this.bgImage = 'bg/pansement.jpg'
+                }
+                
                 this.profil_id.push(element.id)
               });
+
               response.data.data.service.forEach(element => {
                 this.service_id.push(element.id)
+                if (element.id == 7) {
+                  this.bgImage = 'bg/urgence.jpg'
+                }
               });
+
               const profil = response.data.data.profile[0].titre;
               const service = response.data.data.service[0].nom;
               switch (profil + "|" + service) {

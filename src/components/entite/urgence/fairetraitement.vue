@@ -40,44 +40,43 @@
           </button>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-12" style=" height : 500px; overflow-y: scroll;">
             <p style="text-decoration: underline">
               <b>Traitements précédents</b>
             </p>
-            <div class="table-responsive">
-              <table class="table table-striped custom-table">
-                <thead>
-                  <tr>
-                    <th>Traitements</th>
-
-                    <th colspan="3" style="position:relative; right:-10%;">
-                      Presecriptions
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>Timing</th>
-                    <th>Dose</th>
-                    <th>Voie</th>
-                    <th>Heure</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                  >
-                    <td>djcddi</td>
-                    <td>djcddi</td>
-                    <td>djcddi</td>
-                    <td>djcddi</td>
-                  </tr>
-                  
-                </tbody>
+            <div class="table-responsive" v-for="(traitement,index) in traitements_fait" :key="index" >
+              <table class="table table-striped custom-table table-bordered" >
+                <div>
+                  <thead>
+                    <tr>
+                      <th>Heures</th>
+                      <th class="text-center"  colspan="3" >
+                        H{{index}}
+                      </th>
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <th>Dose</th>
+                      <th>Voie</th>
+                      <th>heure</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr v-for="(trait,ind) in traitement[0]" :key="ind">
+                        <td>hjfhjfh</td>
+                        <td>{{trait.dose}}</td>
+                        <td>{{trait.voie}}</td>
+                        <td>{{trait.heure}}</td>
+                      </tr>
+                  </tbody>
+                </div>
               </table>
             </div>
           </div>
         </div>
         <br /><br />
         <p style="text-decoration: underline">
-          <b>Faire un nouveau traitément</b>
+          <b>Faire un nouveau traitement</b>
         </p>
         <br /><br />
         <div class="content">
@@ -125,6 +124,46 @@
             </button>
           </div>
         </div>
+        <hr> <hr>
+        <p style="text-decoration: underline">
+          <b>Prendre les constantes</b>
+        </p>
+        <br /><br />
+        <div class="content">
+          <div class="row doctor-grid">
+            <div
+              class="col-md-4 col-sm-4  col-lg-4"
+              v-for="examen in constantelist"
+              :key="examen.id"
+            >
+              <div class="profile-widget">
+                <h4 class="doctor-name text-ellipsis">
+                  <a>{{ examen.libelle }}</a>
+                </h4>
+                <br />
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>valeur </label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="examen.value"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="m-t-20 text-center">
+            <button
+              type="button"
+              class="btn btn-success submit-btn"
+              v-on:click="validerConstante"
+            >
+              Enregistrer
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -163,15 +202,18 @@ export default {
       activer_examens: false,
       activer_ordonnances: false,
       activer_pensements: false,
+      constantelist:[]
     };
   },
   components: {
     loader,
   },
   created() {
-    this.charger_diagnostic();
+    this.listeTraitementUrgence();
     this.charger_workfow();
     this.charger_traitement();
+    this.constante()
+    this.constanteByDossier()
   },
   methods: {
     paye(id, result) {
@@ -192,9 +234,27 @@ export default {
         })
         .get(chemin + "/getWorkflowService")
         .then((response) => {
-          console.log(response.data);
           this.workflows = response.data.data;
           console.log("workflow :", this.workflows);
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
+    },
+    constante() {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/listeDesConstantes")
+        .then((response) => {
+          this.constantelist = response.data
+          console.log('constante:',this.constantelist)
         })
         .catch((err) => {
           this.preloader = false;
@@ -212,8 +272,11 @@ export default {
         })
         .get(chemin + "/traitementsByDossier/" + this.$route.params.id)
         .then((response) => {
-          console.log("traitements dossier :", response.data.traitements);
-          this.traitements_fait = response.data.traitements;
+            console.log("traitements dossier :", response.data);
+          var result = Object.keys(response.data).map((key) => [response.data[key]]);
+          console.log("traitements dossier :", result);
+
+          this.traitements_fait = result;
           response.data.forEach((traitement) => {
             console.log("traitement :", traitement);
           });
@@ -223,7 +286,7 @@ export default {
           console.log(err);
         });
     },
-    charger_diagnostic() {
+    listeTraitementUrgence() {
       console.log("loading......................");
       axios
         .create({
@@ -235,7 +298,6 @@ export default {
         })
         .get(chemin + "/listeDesTraitementsUrgence")
         .then((response) => {
-          console.log("traitement dossier :", response.data);
           this.traitements = response.data;
           if (this.traitements.length === 0) {
             this.message_diagnostic = "Aucun n'examen pour ce patient";
@@ -282,7 +344,7 @@ export default {
               confirmButtonText: `OK`,
             }).then((result) => {
               if (result.isConfirmed) {
-                this.charger_diagnostic();
+                this.listeTraitementUrgence();
                 this.charger_workfow();
                 this.charger_traitement();
               }
@@ -293,6 +355,67 @@ export default {
             console.log(err);
           });
       }
+    },
+    validerConstante() {
+      console.log("destination :", this.destination);
+      console.log("examens :", this.constantelist);
+      this.preloader = true;
+      if (this.destination === "") {
+        this.preloader = false;
+        this.errors = true;
+        this.message = "Veuillez indiquer un destinataire";
+      } else {
+        axios
+          .create({
+            headers: {
+              "Content-Type": "application/json,multipart/form-data",
+              Authorization: "Bearer " + localStorage.getItem("token"),
+              "Access-Control-Allow-Origin": "*",
+            },
+          })
+          .post(chemin + "/ajouterConstanteDossier", {
+            dossier_id: this.$route.params.id,
+            traitements: this.traitements,
+          })
+          .then((response) => {
+            console.log(response.data);
+            this.preloader = false;
+            this.$swal({
+              html: "Traitement effectué",
+              icon: "success",
+              confirmButtonText: `OK`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.listeTraitementUrgence();
+                this.charger_workfow();
+                this.charger_traitement();
+              }
+            });
+          })
+          .catch((err) => {
+            this.preloader = false;
+            console.log(err);
+          });
+      }
+    },
+    constanteByDossier() {
+      axios
+        .create({
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+        .get(chemin + "/constantesByDossier/" + this.$route.params.id)
+        .then((response) => {
+            console.log("constantes dossier :", response.data);
+         
+        })
+        .catch((err) => {
+          this.preloader = false;
+          console.log(err);
+        });
     },
     valider(pk, ligne_id, solder) {
       if (solder === true) {

@@ -6,7 +6,7 @@
         <router-link to="/bureautique"
           ><a class="logo">
             <img src="../assets/img/logo.png" width="35" height="35" alt="" />
-            <span>LA LOCOMOTIVE</span>
+            <span>Centre du Diabete</span>
           </a></router-link
         >
       </div>
