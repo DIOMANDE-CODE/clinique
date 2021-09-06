@@ -367,7 +367,6 @@ export default {
           titre: this.nom,
           description: this.description,
         };
-        console.log(profil);
         axios
           .create({
             headers: {
@@ -378,7 +377,7 @@ export default {
           })
           .post(chemin + "/createProfile", profil)
           .then((response) => {
-            console.log(response.data);
+            
             if (response.data.state === true) {
               this.preloader = false;
               this.$swal({

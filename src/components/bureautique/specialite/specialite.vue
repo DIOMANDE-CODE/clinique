@@ -338,7 +338,6 @@ export default {
         nom: this.nom,
         description: this.description,
       };
-      console.log(service);
       axios
         .create({
           headers: {
@@ -353,7 +352,6 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
-            console.log("reussie");
             this.charge();
 
             this.nom = "";

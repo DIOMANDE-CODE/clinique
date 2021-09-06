@@ -120,6 +120,7 @@
                     <input
                       type="date"
                       class="form-control"
+                      :max="today"
                       v-model="date"
                       required
                     />
@@ -233,9 +234,9 @@
                 </div>
                 <div class="form-group col-sm-6" v-if="checkedAssurance">
                   <label class="col-form-label ">
-                    Nom de l'assurance<span class="text-danger">*</span>
+                    Maison d'assurance<span class="text-danger">*</span>
                   </label>
-                  <div class="col-md-12">
+                  <div class="col-md-12 p-0">
                     <select class="form-control" v-model="assurance_nom">
                       <option value="0" disabled
                         >Choisissez son assurance</option
@@ -257,6 +258,16 @@
                       class="form-control"
                       type="text"
                       v-model="matricule_assurance"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-6" v-if="checkedAssurance">
+                  <div class="form-group">
+                    <label> Taux de couverture<span class="text-danger">*</span></label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      v-model="pourcentage"
                     />
                   </div>
                 </div>
@@ -489,6 +500,9 @@
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
+import moment from "moment";
+moment.locale("fr");
+
 export default {
   data() {
     return {
@@ -517,6 +531,7 @@ export default {
       activite: "",
       instruction: "",
       matrimoniale: "",
+      pourcentage: "",
       assurances: [],
 
       preloader: false,
@@ -524,12 +539,17 @@ export default {
       errors: false,
       checkedAssurance: false,
       message: "",
+      today:null
     };
   },
   components: {
     loader,
   },
   mounted() {
+    this.today = new Date
+   let t =  moment(this.today).subtract(7, 'years').format("YYYY-MM-DD");
+    console.log(t)
+    this.today = t
     this.preloader = true;
     axios
       .create({
@@ -541,7 +561,7 @@ export default {
       })
       .get(chemin + "/listAssurances")
       .then((response) => {
-        console.log(response.data);
+        
         if (response.data.state === true) {
           this.preloader = false;
           this.assurances = response.data.data;
@@ -583,7 +603,6 @@ export default {
         (this.matrimoniale = "");
     },
     checkAssurance(pk) {
-      console.log("assurance value:", pk);
       if (pk === "1") {
         this.checkedAssurance = true;
       } else {
@@ -635,8 +654,8 @@ export default {
         etat_professionnel: this.activite,
         instruction: this.instruction,
         status_matrimonial: this.matrimoniale,
+        pourcentage: this.pourcentage,
       };
-      console.log("patient :", patient);
       axios
         .create({
           headers: {
@@ -647,33 +666,21 @@ export default {
         })
         .post(chemin + "/ajouterPatient", patient)
         .then((response) => {
-          console.log(response.data);
+          console.log(response.data)
           this.preloader = false;
-          this.success = true;
-          this.message = "Patient ajouté avec success";
-          this.nom = "";
-          this.prenom = "";
-          this.sexe = "";
-          this.date = "";
-          this.nationnalite = "";
-          this.lieu_naissance = "";
-          this.residence = "";
-          this.quartier = "";
-          this.fix = "";
-          this.telephone = "";
-          this.email = "";
-          this.assurance = "";
-          this.assurance_nom = "";
-          this.bon_assurance = "";
-          this.acte_assurance = "";
-          this.matricule_assurance = "";
-          this.objet = "";
-          this.profession = "";
-          this.formation = "";
-          this.activite = "";
-          this.instruction = "";
-          this.matrimoniale = "";
-          this.$router.push("/acceuil/profil/" + this.$route.params.id);
+          if (response.data.state) {
+              this.$swal({
+                html: "Patient enregistré",
+                confirmButtonText: `Oui`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  
+                  this.$router.push("/acceuil/profil/" + this.$route.params.id);
+                }
+              });
+          }
+          
+          
         })
         .catch((err) => {
           this.preloader = false;

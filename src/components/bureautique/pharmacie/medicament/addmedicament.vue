@@ -421,7 +421,7 @@ export default {
         })
         .get(chemin + "/listerCategorieMedoc")
         .then((response) => {
-          console.log(response.data);
+          
           this.categories = response.data;
         })
         .catch((err) => {
@@ -453,7 +453,6 @@ export default {
           prix: this.prix,
           quantity: this.quantite,
         };
-        console.log(medicament);
         axios
           .create({
             headers: {
@@ -464,7 +463,7 @@ export default {
           })
           .post(chemin + "/ajouterMedoc", medicament)
           .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false;
              this.$swal({
               html: "Médicament ajouté",

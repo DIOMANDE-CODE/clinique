@@ -139,7 +139,7 @@ export default {
       })
       .get(chemin + "/listeDesTraitementsUrgence")
       .then((response) => {
-        console.log(response.data);
+        
         this.preloader = false;
         this.constantes = response.data;
         setTimeout(function() {
@@ -221,7 +221,7 @@ export default {
         })
         .delete(chemin + "/traitementUrgence/" + pk)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.success = true;
           this.message = "Traitement supprimée avec succès";

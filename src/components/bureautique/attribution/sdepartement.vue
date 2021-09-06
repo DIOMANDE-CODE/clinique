@@ -174,8 +174,6 @@ export default {
         };
         send_data.push(data);
       });
-      console.log(send_data);
-      console.log(this.departement);
       axios
         .create({
           headers: {
@@ -188,7 +186,7 @@ export default {
           services: send_data,
         })
         .then((response) => {
-          console.log(response.data);
+          
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;

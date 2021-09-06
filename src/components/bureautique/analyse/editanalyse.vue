@@ -369,13 +369,11 @@ export default {
       (this.libelle = ""), (this.prix = "");
     },
     modifier() {
-      console.log(this.id);
       this.preloader = true;
       var analyse = {
         libelle: this.libelle,
         prix: this.prix,
       };
-      console.log(analyse);
       axios
         .create({
           headers: {
@@ -386,18 +384,20 @@ export default {
         })
         .put(chemin + "/examen/" + this.$route.params.id, analyse)
         .then((response) => {
-          console.log(response.data);
           this.preloader = false;
-          this.$swal({
-            html: "Analyse modifiée",
-            icon: "success",
-            confirmButtonText: `OK`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.success = true;
-              this.$router.push("/admin/analyse");
-            }
-          });
+          if (response.data.state) {
+              this.$swal({
+                html: "Analyse modifiée",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.success = true;
+                  this.$router.push("/admin/analyse");
+                }
+              });
+          }
+          
         });
     },
   },

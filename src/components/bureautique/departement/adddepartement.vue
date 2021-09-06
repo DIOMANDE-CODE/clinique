@@ -369,7 +369,6 @@ export default {
           nom: this.nom,
           description: this.description,
         };
-        console.log(departement);
         axios
           .create({
             headers: {
@@ -380,7 +379,7 @@ export default {
           })
           .post(chemin + "/creationDepartement", departement)
           .then((response) => {
-            console.log(response.data);
+            
             if (response.data.state === true) {
               this.preloader = false;
               this.$swal({

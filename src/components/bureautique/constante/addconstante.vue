@@ -363,7 +363,7 @@ export default {
           libelle: this.nom,
           type: this.type,
         };
-        console.log(constante);
+        
         axios
           .create({
             headers: {
@@ -374,7 +374,7 @@ export default {
           })
           .post(chemin + "/ajouterConstante", constante)
           .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false;
             this.$swal({
               html: "Constante ajoutée",

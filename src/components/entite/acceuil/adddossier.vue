@@ -227,7 +227,7 @@ export default {
       })
       .get(chemin + "/listAssurances")
       .then((response) => {
-        console.log(response.data);
+        
         if (response.data.state === true) {
           this.preloader = false;
           this.assurances = response.data.data;
@@ -252,7 +252,6 @@ export default {
         (this.bon_assurance = "");
     },
     checkAssurance(pk) {
-      console.log("assurance value:", pk);
       if (pk === "1") {
         this.checkedAssurance = true;
       } else {
@@ -261,7 +260,6 @@ export default {
     },
     async ajouter() {
       this.preloader = true;
-      console.log(this.dossier);
       axios
         .create({
           headers: {
@@ -272,7 +270,7 @@ export default {
         })
         .post(chemin + "/ajouterNouveauDossier", this.dossier)
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === false) {
             this.preloader = false;
             this.$swal({
@@ -295,12 +293,10 @@ export default {
                   showCancelButton: true,
                   confirmButtonText: `Oui`,
                 }).then((result) => {
-                    console.log('oui',result)
                     if (result.isConfirmed) {
                         this.preloader = false;
                         this.dossier.confirm = true;
                         this.dossier.raison = result.value;
-                        console.log("dossier :", this.dossier);
                         this.ajouter();
                         this.$router.push("/acceuil/profil/" + this.$route.params.id);
                     }

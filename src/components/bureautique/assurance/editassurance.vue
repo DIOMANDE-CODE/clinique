@@ -379,14 +379,12 @@ export default {
       (this.entreprise = ""), (this.nom = ""), (this.pourcentage = "");
     },
     modifier() {
-      console.log(this.id);
       this.preloader = true;
       var assurances = {
         nom: this.nom,
         entreprise: this.entreprise,
         pourcentage: this.pourcentage,
       };
-      console.log(assurances);
       axios
         .create({
           headers: {
@@ -400,7 +398,6 @@ export default {
           assurances
         )
         .then((response) => {
-          console.log(response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.$swal({

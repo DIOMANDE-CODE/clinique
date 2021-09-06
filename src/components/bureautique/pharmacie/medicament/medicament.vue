@@ -450,7 +450,6 @@ export default {
               },
           });
         }, 1000);
-        console.log('list:',response.data);
         this.preloader = false;
         this.medicaments = response.data;
       });
@@ -473,7 +472,7 @@ export default {
         })
         .delete(chemin + "/medoc/" + pk)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.success = true;
           this.message = "Médicament supprimée avec succès";

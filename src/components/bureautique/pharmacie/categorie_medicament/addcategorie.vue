@@ -367,7 +367,7 @@ export default {
           libelle: this.nom,
           specification: this.description,
         };
-        console.log(categorie);
+        
         axios
           .create({
             headers: {
@@ -378,17 +378,19 @@ export default {
           })
           .post(chemin + "/ajouterCategorieMedoc", categorie)
           .then((response) => {
-            console.log(response.data);
-            this.preloader = false;
-            this.$swal({
-              html: "Catégorie ajoutée",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/pharmacie/categorie");
-              }
-            });
+            if (response.data.state) {
+                this.preloader = false;
+                this.$swal({
+                  html: "Catégorie ajoutée",
+                  icon: "success",
+                  confirmButtonText: `OK`,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push("/pharmacie/categorie");
+                  }
+                });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;

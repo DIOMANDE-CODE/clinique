@@ -368,7 +368,7 @@ export default {
         })
         .get(chemin + "/categorieMedoc/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.nom = response.data.libelle;
           this.description = response.data.specification;
@@ -392,7 +392,7 @@ export default {
           libelle: this.nom,
           specification: this.description,
         };
-        console.log(categorie);
+        
         axios
           .create({
             headers: {
@@ -403,17 +403,19 @@ export default {
           })
           .put(chemin + "/categorieMedoc/" + this.$route.params.id, categorie)
           .then((response) => {
-            console.log(response.data);
-            this.preloader = false;
-            this.$swal({
-              html: "Catégorie modifiée",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/pharmacie/categorie");
-              }
-            });
+            if (response.data.state) {
+              this.preloader = false;
+              this.$swal({
+                html: "Catégorie modifiée",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/pharmacie/categorie");
+                }
+              });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;

@@ -374,7 +374,6 @@ export default {
         (this.fax = "");
     },
     suivant() {
-      console.log("cliquer");
       if (
         this.nom === "" ||
         this.numero_identifiant === "" ||
@@ -469,7 +468,6 @@ export default {
             id: "",
           };
 
-          console.log("item :", item);
           data.id = this.services[item - 1].id;
           send_attribution.id_services.push(data);
           send_attribution.nom_services.push(this.services[item - 1].nom);
@@ -477,27 +475,15 @@ export default {
 
         this.sauvegarder.push(send_attribution);
 
-        console.log("sauvegarder :", this.sauvegarder);
         this.attribution_departements_services.push(send_attribution);
-        console.log(
-          "attribution_departements_services :",
-          this.attribution_departements_services
-        );
-
-        console.log("send attribution :", send_attribution);
+        
         this.coche = [];
       }
     },
     effacer(pk) {
-      console.log("pk:", pk);
-      console.log(
-        "departements_services a supprimer:",
-        this.attribution_departements_services[pk]
-      );
       this.attribution_departements_services = this.attribution_departements_services.filter(
         (item) => item != this.attribution_departements_services[pk]
       );
-      console.log("new liste :", this.attribution_departements_services);
     },
     terminer() {
       this.message = "";
@@ -516,7 +502,7 @@ export default {
           fax: this.fax,
           departements_services: this.sauvegarder,
         };
-        console.log(clinique);
+        
         axios
           .create({
             headers: {
@@ -547,7 +533,6 @@ export default {
                     (this.addresse_physique = ""),
                     (this.fax = ""),
                     (this.coche = []);
-                  console.log("reussie");
                   this.$router.push("/admin/clinique");
                   this.nom = "";
                   this.description = "";

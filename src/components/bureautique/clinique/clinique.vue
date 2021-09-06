@@ -175,7 +175,7 @@ export default {
       })
       .get(chemin + "/listClinique")
       .then((response) => {
-        console.log(response.data);
+        
         if (response.data.state === true) {
           this.preloader = false;
           this.cliniques = response.data.data;
@@ -338,7 +338,7 @@ export default {
         adresse_postale: this.addresse_postale,
         fax: this.fax,
       };
-      console.log(clinique);
+      
       axios
         .create({
           headers: {
@@ -353,7 +353,6 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
-            console.log("reussie");
             this.charge();
 
             this.numero_identifiant = "";

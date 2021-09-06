@@ -252,11 +252,6 @@ export default {
         adresse_postale: this.addresse_postale,
         fax: this.fax,
       };
-      console.log("la clinique:", clin);
-      console.log(
-        "route:",
-        chemin + "/modifierClinique/" + this.$route.params.id
-      );
       axios
         .create({
           headers: {

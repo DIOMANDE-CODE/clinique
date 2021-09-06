@@ -398,7 +398,6 @@ export default {
           nom: this.nom,
           description: this.description,
         };
-        console.log(service);
         axios
           .create({
             headers: {

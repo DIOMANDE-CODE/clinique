@@ -439,7 +439,7 @@ export default {
       })
       .get(chemin + "/listeUtilisateur")
       .then((response) => {
-        console.log(response.data.data);
+        
         if (response.data.state === true) {
           this.preload = false;
           this.employes = response.data.data;
@@ -510,7 +510,7 @@ export default {
         })
         .get(chemin + "/listeUtilisateur")
         .then((response) => {
-          console.log(response.data.data);
+          
           if (response.data.state === true) {
             this.preload = false;
             this.employes = response.data.data;

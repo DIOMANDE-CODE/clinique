@@ -292,7 +292,6 @@ export default {
       this.$router.push("/acceuil");
     },
     voir(pk) {
-      console.log(pk);
       axios
         .create({
           headers: {
@@ -306,10 +305,8 @@ export default {
           const dossiers = response.data.dossiers;
           dossiers.forEach((dossier) => {
             if (dossier.id === pk) {
-              console.log("id du dossiers", dossier.assurance);
               this.assurances = dossier.assurance;
               this.num  = dossier.num;
-              console.log(" assurance :", dossier.assurance);
               if (this.assurance === 0) {
                 this.message_assurance = "Aucune assurance envoyée ce jour";
               }
@@ -334,7 +331,7 @@ export default {
         .get(chemin + `/patient/${this.$route.params.id}`)
         .then((response) => {
           this.preloader = false;
-          console.log(response.data);
+          
           this.matricule = response.data.matricule;
           this.nom = response.data.nom;
           this.prenom = response.data.prenoms;
@@ -358,7 +355,6 @@ export default {
           response.data.created_at = moment(response.data.created_at).format(
             "Do MMMM YYYY, H:mm:ss "
           );
-          console.log("dossiers :", this.dossiers);
           response.data.dossiers.forEach((element) => {
             element.created_at = moment(element.created_at).format(
               "Do MMMM YYYY, H:mm:ss "

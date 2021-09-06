@@ -156,7 +156,7 @@
               <router-link to="/pensement"
                 ><a
                   ><i class="fa fa-signing"></i>
-                  <span style="color:black;">Pensements</span></a
+                  <span style="color:black;">Pansements</span></a
                 ></router-link
               >
             </li>

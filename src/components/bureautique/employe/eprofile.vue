@@ -121,7 +121,7 @@ export default {
       this.$router.push("/admin/employe");
     },
     charger_info() {
-      console.log(chemin);
+      
       this.preloader = true
       axios
         .create({
@@ -134,7 +134,7 @@ export default {
         .get(chemin + `/utilisateur/${this.$route.params.id}`)
         .then((response) => {
           this.preloader = false;
-          console.log(response.data.data);
+          
           if (response.data.state === true) {
             this.nom = response.data.data.nom;
             this.telephone = response.data.data.telephone;

@@ -370,7 +370,7 @@ export default {
         })
         .get(chemin + "/listerCategorieMedoc")
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.categories = response.data;
           this.charger();
@@ -387,7 +387,7 @@ export default {
         })
         .get(chemin + "/diagnostic/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.nom = response.data.libelle;
           this.type = response.data.type;
@@ -411,7 +411,6 @@ export default {
           libelle: this.nom,
           type: this.type,
         };
-        console.log(diagnostic);
         axios
           .create({
             headers: {
@@ -422,7 +421,7 @@ export default {
           })
           .put(chemin + "/diagnostic/" + this.$route.params.id, diagnostic)
           .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false;
             this.$swal({
               html: "Diagnostic modifié",

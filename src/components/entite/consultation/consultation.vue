@@ -141,7 +141,6 @@ export default {
       })
       .get(chemin + "/getFile")
       .then((response) => {
-        console.log(" liste d'attente :", response.data);
         if (response.data.state === "true") {
           this.preload = false;
           this.patients = response.data.data;
@@ -202,7 +201,6 @@ export default {
   },
   methods: {
     voir_dm(pk) {
-      console.log(pk);
       this.$router.push("/consultation/dossier_medical/" + pk);
     },
     calendrier(pk) {

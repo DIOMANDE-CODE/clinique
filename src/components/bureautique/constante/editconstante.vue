@@ -377,7 +377,7 @@ export default {
       var constante = {
         libelle: this.nom,
       };
-      console.log(constante);
+      
       axios
         .create({
           headers: {
@@ -388,7 +388,7 @@ export default {
         })
         .put(chemin + "/constante/" + this.$route.params.id, constante)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
             this.$swal({
               html: "Constante modifiée",

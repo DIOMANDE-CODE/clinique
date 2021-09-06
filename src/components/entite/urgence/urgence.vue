@@ -100,7 +100,7 @@
                           <a
                             class="dropdown-item"
                             style="color:black; cursor:pointer"
-                            v-on:click="terminer(employe.id)"
+                            v-on:click="terminer(employe.dossier.id)"
                             v-bind:identifiant="identifiant"
                           >
                             Terminer</a
@@ -395,7 +395,6 @@ export default {
       })
       .get(chemin + "/getFile")
       .then((response) => {
-        console.log(" liste d'attente :", response.data);
         if (response.data.state === "true") {
           this.preload = false;
           this.patients = response.data.data;
@@ -472,7 +471,6 @@ export default {
         })
         .get(chemin + "/getFile")
         .then((response) => {
-          console.log(" liste d'attente :", response.data);
           if (response.data.state === "true") {
             this.preload = false;
             this.patients = response.data.data;
@@ -503,9 +501,11 @@ export default {
           status: "termine",
         })
         .then((response) => {
-          console.log(response.data);
           this.preloader = false;
-          Location.reload();
+          if (response.data.state) {
+            Location.reload();
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;

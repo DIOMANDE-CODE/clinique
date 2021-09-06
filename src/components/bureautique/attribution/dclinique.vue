@@ -151,7 +151,6 @@ export default {
                 this.departements.push(element);
               }
             })
-            console.log(this.departements);
           } else {
             this.preloader = false;
             console.log("erreur de chargement");
@@ -173,7 +172,6 @@ export default {
         };
         send_data.push(data);
       });
-       console.log(send_data);
       axios
         .create({
           headers: {
@@ -187,7 +185,7 @@ export default {
           departements: send_data,
         })
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;

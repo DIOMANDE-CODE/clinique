@@ -128,7 +128,6 @@ export default {
       })
       .get(chemin + "/listeFileAttentes")
       .then((response) => {
-        console.log(" liste d'attente :", response.data);
         this.patients = response.data;
         setTimeout(function() {
           $("#example").DataTable({

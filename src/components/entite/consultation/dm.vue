@@ -248,11 +248,10 @@ export default {
       this.$router.push("/consultation/diagnostic/" + pk);
     },
     voir(pk) {
-      console.log(pk);
       this.$router.push("/consultation/info_medical/" + pk);
     },
     charger_info() {
-      console.log(chemin);
+      
       this.preloader = true;
       axios
         .create({
@@ -265,7 +264,7 @@ export default {
         .get(chemin + `/patient/${this.$route.params.id}`)
         .then((response) => {
           this.preloader = false;
-          console.log(response.data);
+          
           this.dm = response.data;
           response.data.dossiers.forEach((element) => {
             element.created_at = moment(element.created_at).format(
@@ -276,7 +275,6 @@ export default {
             );
           });
           this.day = moment().format("Do MMMM YYYY");
-          console.log("dossiers medical :", response.data);
         })
         .catch((err) => {
           this.preload = false;

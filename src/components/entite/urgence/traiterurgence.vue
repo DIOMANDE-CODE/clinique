@@ -52,7 +52,7 @@
             <div class="col-lg-12">
               <div class="card-box">
                 <h4 class="card-title">
-                  Faire une ordonnance
+                  Faire une prescription
                 </h4>
                 <form action="#">
                   <div class="form-group">
@@ -271,7 +271,6 @@ export default {
       this.isOpen = false;
     },
     filterResults() {
-      console.log("djdkd", this.medocs[0].libelle);
       this.results = this.medocs.filter(
         (item) =>
           item.libelle.toLowerCase().indexOf(this.search.toLowerCase()) > -1
@@ -293,9 +292,7 @@ export default {
         // .get(chemin + "/listeDesTraitementsUrgence")
         .get(chemin + "/listerMedoc")
         .then((response) => {
-          console.log(response.data);
           this.medocs = response.data;
-          console.log("medoc :", this.medocs);
         })
         .catch((err) => {
           this.preloader = false;
@@ -303,7 +300,6 @@ export default {
         });
     },
     charger_workfow() {
-      console.log("workflow");
       axios
         .create({
           headers: {
@@ -314,10 +310,9 @@ export default {
         })
         .get(chemin + "/getWorkflowService")
         .then((response) => {
-          console.log(response.data);
+          
           this.workflows = response.data.data;
           this.charger_medicament();
-          console.log("workflow :", this.workflows);
         })
         .catch((err) => {
           this.preloader = false;
@@ -325,16 +320,12 @@ export default {
         });
     },
     prise_constante(id, val) {
-      console.log("constante id:", id);
-      console.log("constante value:", val);
-
       const valeur = {
         constante_id: id,
         value: val,
       };
 
       this.liste_constantes.push(valeur);
-      console.log("liste constante :", this.liste_constantes);
     },
     retourner() {
       this.$router.push("/urgence");
@@ -344,10 +335,6 @@ export default {
     },
     valider() {
       this.preloader = true;
-      console.log("diagnostics :", this.diagnostics);
-      console.log("examens :", this.examens);
-      console.log("pensements :", this.medocs);
-      console.log("destination id", this.destination);
       axios
         .create({
           headers: {
@@ -361,11 +348,13 @@ export default {
           ordonnances: this.ordonnances,
         })
         .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.success = true;
-          this.message = "Medicament(s) prescri";
-          this.ordonnances = [];
+          if (response.data.state) {
+              this.preloader = false;
+              this.success = true;
+              this.message = "Medicament(s) prescri";
+              this.ordonnances = [];
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;
@@ -373,7 +362,6 @@ export default {
         });
     },
     prescire() {
-      console.log("################################");
       this.detail = true;
       const prescription = {
         medicament_id: this.id,
@@ -382,8 +370,6 @@ export default {
         posologie: this.posologie,
       };
       this.ordonnances.push(prescription);
-      console.log("ordonnances or :", prescription);
-      console.log("ordonnances or :", this.ordonnances);
       this.search = "";
       this.quantite = "";
       this.posologie = "";

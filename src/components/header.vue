@@ -5,7 +5,7 @@
       <div class="header-left">
         <router-link to="/bureautique"
           ><a class="logo">
-            <img src="../assets/img/logo.png" width="35" height="35" alt="" />
+            <img src="logo.png" width="35" height="35" alt="" />
             <span>Centre du Diabete</span>
           </a></router-link
         >
@@ -55,10 +55,8 @@ export default {
   methods: {
     checktoken() {
       if (localStorage.getItem("token") === null) {
-        console.log("not token available");
         this.$router.push("/");
       } else {
-        console.log(localStorage.getItem("token"));
       }
     },
     deconnecter() {
@@ -76,7 +74,7 @@ export default {
         })
         .post(chemin + "/deconnexion")
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === true) {
             this.preloader = false;
             localStorage.removeItem("token");

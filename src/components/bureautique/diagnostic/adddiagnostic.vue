@@ -367,7 +367,7 @@ export default {
         })
         .get(chemin + "/listerCategorieMedoc")
         .then((response) => {
-          console.log(response.data);
+          
           this.categories = response.data;
         })
         .catch((err) => {
@@ -389,7 +389,6 @@ export default {
           libelle: this.nom,
           type: this.type,
         };
-        console.log(diagnostic);
         axios
           .create({
             headers: {
@@ -400,7 +399,7 @@ export default {
           })
           .post(chemin + "/ajouterDiagnostic", diagnostic)
           .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false;
             this.$swal({
               html: "Diagnostic ajouté",

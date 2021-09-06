@@ -393,7 +393,7 @@ export default {
       })
       .get(chemin + "/listerCategorieMedoc")
       .then((response) => {
-        console.log(response.data);
+        
         this.preloader = false;
         this.categories = response.data;
         setTimeout(function() {
@@ -456,7 +456,7 @@ export default {
         })
         .get(chemin + "/listerCategorieMedoc")
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.categories = response.data;
         });
@@ -479,7 +479,7 @@ export default {
         })
         .delete(chemin + "/categorieMedoc/" + pk)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.success = true;
           this.message = "Catégorie supprimée avec succès";

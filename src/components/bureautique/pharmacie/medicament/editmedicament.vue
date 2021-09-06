@@ -421,7 +421,7 @@ export default {
         })
         .get(chemin + "/listerCategorieMedoc")
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.categories = response.data;
           this.charger();
@@ -438,7 +438,7 @@ export default {
         })
         .get(chemin + "/medoc/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.nom = response.data.libelle;
           this.dosage = response.data.dosage;
@@ -470,7 +470,6 @@ export default {
           prix: this.prix,
           quantity: this.quantite,
         };
-        console.log(medicament);
         axios
           .create({
             headers: {
@@ -481,17 +480,19 @@ export default {
           })
           .put(chemin + "/medoc/" + this.$route.params.id, medicament)
           .then((response) => {
-            console.log(response.data);
-            this.preloader = false;
-            this.$swal({
-              html: "Médicament modifiée",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/pharmacie/medicament");
-              }
-            });
+            if (response.data.state) {
+                  this.preloader = false;
+                    this.$swal({
+                    html: "Médicament modifiée",
+                    icon: "success",
+                    confirmButtonText: `OK`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.$router.push("/pharmacie/medicament");
+                    }
+                  });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;

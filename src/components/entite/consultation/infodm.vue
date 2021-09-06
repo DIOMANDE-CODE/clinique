@@ -392,12 +392,9 @@ export default {
   },
   methods: {
     voir_examen(fiche) {
-      console.log("id :", fiche);
       this.fiche_examens = fiche;
     },
     terminer() {
-      console.log("destination :", this.destination);
-      console.log("examens :", this.examens);
       this.preloader = true;
       axios
         .create({
@@ -411,7 +408,7 @@ export default {
           status: "termine",
         })
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === "true") {
             this.preloader = false;
             this.$swal({
@@ -470,7 +467,6 @@ export default {
       this.isOpen = false;
     },
     filterResults() {
-      console.log("djdkd", this.medocs[0].libelle);
       this.results = this.medocs.filter(
         (item) =>
           item.libelle.toLowerCase().indexOf(this.search.toLowerCase()) > -1
@@ -491,9 +487,8 @@ export default {
         })
         .get(chemin + "/listerMedoc")
         .then((response) => {
-          console.log(response.data);
+          
           this.medocs = response.data;
-          console.log("medoc :", this.medocs);
         })
         .catch((err) => {
           this.preloader = false;
@@ -501,7 +496,6 @@ export default {
         });
     },
     charger_workfow() {
-      console.log("workflow");
       axios
         .create({
           headers: {
@@ -512,10 +506,9 @@ export default {
         })
         .get(chemin + "/getWorkflowService")
         .then((response) => {
-          console.log(response.data);
+          
           this.workflows = response.data.data;
           this.charger_medicament();
-          console.log("workflow :", this.workflows);
         })
         .catch((err) => {
           this.preloader = false;
@@ -523,7 +516,6 @@ export default {
         });
     },
     charger_diagnostic() {
-      console.log("loading......................");
       axios
         .create({
           headers: {
@@ -534,7 +526,6 @@ export default {
         })
         .get(chemin + "/dossiersByClient/" + this.$route.params.id)
         .then((response) => {
-          console.log("diagnostic list :", response.data.data.diagnostics);
           this.diagnostics = response.data.data.diagnostics;
           if (this.diagnostics.length === 0) {
             this.info_message_diagnostic = "aucun diagnostic fait à ce jour";
@@ -547,7 +538,6 @@ export default {
         });
     },
     charger_ordonnance() {
-      console.log("examen");
       axios
         .create({
           headers: {
@@ -558,7 +548,6 @@ export default {
         })
         .get(chemin + "/dossiersByClient/" + this.$route.params.id)
         .then((response) => {
-          console.log("ordonnance list :", response.data.data.ordonnances);
           let merge = [];
           response.data.data.ordonnances.forEach((ordo) => {
             ordo.medicaments.forEach((medoc) => {
@@ -566,7 +555,6 @@ export default {
             });
           });
           this.ordonnances = merge;
-          console.log("ordonnances :", this.ordonnances);
           if (this.ordonnances.length === 0) {
             this.message_info_ordonnance =
               "Aucune ordonnance prescrite fait ce jour";
@@ -579,8 +567,6 @@ export default {
         });
     },
     charger_examen() {
-      console.log("loading......................");
-      console.log("params :", this.$route.params);
 
       axios
         .create({
@@ -592,7 +578,6 @@ export default {
         })
         .get(chemin + "/dossiersByClient/" + this.$route.params.id)
         .then((response) => {
-          console.log("examens list :", response.data.data);
           this.dossier_id = response.data.data.client_id;
           this.examens = response.data.data.examens;
           if (this.examens.length === 0) {
@@ -606,7 +591,6 @@ export default {
         });
     },
     charger_pensement() {
-      console.log("loading......................");
       axios
         .create({
           headers: {
@@ -617,7 +601,6 @@ export default {
         })
         .get(chemin + "/dossiersByClient/" + this.$route.params.id)
         .then((response) => {
-          console.log("pensements list :", response.data.data);
           this.pensements = response.data.data.pensements;
           if (this.pensements.length === 0) {
             this.info_message_pensements = "Aucun pensement fait ce jour";
@@ -637,26 +620,18 @@ export default {
         });
     },
     prise_constante(id, val) {
-      console.log("constante id:", id);
-      console.log("constante value:", val);
-
       const valeur = {
         constante_id: id,
         value: val,
       };
 
       this.liste_constantes.push(valeur);
-      console.log("liste constante :", this.liste_constantes);
     },
     retourner() {
       this.$router.push("/consultation");
     },
     valider() {
       this.preloader = true;
-      console.log("diagnostics :", this.diagnostics);
-      console.log("examens :", this.examens);
-      console.log("pensements :", this.pensements);
-      console.log("destination id", this.destination);
       if (this.destination === "") {
         this.errors = true;
         this.message = "Veuillez indiquer un destinataire";
@@ -683,12 +658,14 @@ export default {
             destination_service_id: this.destination,
           })
           .then((response) => {
-            console.log(response.data);
-            this.preloader = false;
-            this.success = true;
-            this.message = "Consultation terminée";
-            this.ordonnances = [];
-            this.$router.push("/consultation");
+            if (response.data.state) {
+                this.preloader = false;
+                this.success = true;
+                this.message = "Consultation terminée";
+                this.ordonnances = [];
+                this.$router.push("/consultation");
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;
@@ -697,8 +674,7 @@ export default {
       }
     },
     prescire() {
-      console.log("################################");
-      this.detail = true;
+     this.detail = true;
       const prescription = {
         medicament_id: this.id,
         medicament: this.search,
@@ -706,8 +682,6 @@ export default {
         posologie: this.posologie,
       };
       this.ordonnances.push(prescription);
-      console.log("ordonnances or :", prescription);
-      console.log("ordonnances or :", this.ordonnances);
       this.search = "";
       this.quantite = "";
       this.posologie = "";

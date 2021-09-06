@@ -410,7 +410,6 @@ export default {
       })
       .get(chemin + "/getListeProfile")
       .then((response) => {
-        console.log(" getListeProfile :", response.data.data);
         if (response.data.state === true) {
           this.preload = false;
           this.profils = response.data.data;
@@ -481,7 +480,6 @@ export default {
         })
         .get(chemin + "/getListeProfile")
         .then((response) => {
-          console.log(" getListeProfile :", response.data.data);
           if (response.data.state === true) {
             this.preload = false;
             this.profils = response.data.data;

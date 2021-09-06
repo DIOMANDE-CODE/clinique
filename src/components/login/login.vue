@@ -70,22 +70,18 @@ export default {
       } else {
         axios.get(chemin + "/ping")
         .then((response) => {
-          console.log(response.data.state);
           if (response.data.state === true) {
             axios.post(chemin + "/connexion",{
               email:this.email,
               password:this.code
             })
             .then( response => {
-              console.log(response.data);
               if (response.data.state === false) {
                 this.preloader = false;
                 this.erreur = response.data.message;
               } 
               else {
                 this.preloader = false
-                console.log('token :',response.data.token);
-                console.log(('User info :',response.data.user));
                 localStorage.setItem('token',response.data.token);
                 this.$store.dispatch('setCurrentIdentifiant',response.data.user.id);
                 this.$router.push('/bureautique')

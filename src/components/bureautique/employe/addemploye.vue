@@ -431,9 +431,6 @@ export default {
         (this.profile = "");
     },
     inscrire() {
-      console.log("id service:", this.service);
-      console.log("id clinique:", this.clinique);
-      console.log("id departement", this.departement);
       if (
         this.nom === "" ||
         this.prenom === "" ||
@@ -470,7 +467,6 @@ export default {
         service_id: this.service,
         profile_id: this.profile,
       };
-      console.log("user information :", user);
       axios
         .create({
           headers: {
@@ -481,7 +477,7 @@ export default {
         })
         .post(chemin + "/inscription", user)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.$swal({
             html: "Personnel ajouté",
@@ -499,7 +495,6 @@ export default {
         });
     },
     charger_clinique() {
-      console.log(" id de la clinique ", this.clinique);
       axios
         .create({
           headers: {
@@ -523,7 +518,6 @@ export default {
         });
     },
     charger_departement() {
-      console.log("departement clinique id ", this.clinique);
       // this.preloader = true;
       axios
         .create({
@@ -535,7 +529,7 @@ export default {
         })
         .get(chemin + "/getDepartementsClinique/" + this.clinique)
         .then((response) => {
-          console.log(response.data.data);
+          
           this.departements = response.data.data;
           // if (response.data.state === true) {
           //   this.preloader = false;
@@ -550,7 +544,6 @@ export default {
         });
     },
     charger_service() {
-      console.log("service");
       axios
         .create({
           headers: {
@@ -564,7 +557,7 @@ export default {
             `/listeServicesDepartement/${this.clinique}/${this.departement}`
         )
         .then((response) => {
-          console.log(response.data);
+          
           this.services = response.data.data;
           // if (response.data.state === true) {
           //   this.preloader = false;
@@ -579,7 +572,6 @@ export default {
         });
     },
     listProfil() {
-      console.log("service");
       axios
         .create({
           headers: {
@@ -590,7 +582,7 @@ export default {
         })
         .get(chemin + `/getListeProfile`)
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === true) {
             this.preloader = false;
             this.profiles = response.data.data;
@@ -604,7 +596,6 @@ export default {
         });
     },
     selectClinique() {
-      console.log("##################################");
     },
   },
 };

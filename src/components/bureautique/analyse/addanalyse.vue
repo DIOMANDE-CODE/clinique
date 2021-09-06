@@ -371,7 +371,6 @@ export default {
           libelle: this.libelle,
           prix: this.prix,
         };
-        console.log(analyse);
         axios
           .create({
             headers: {
@@ -382,7 +381,6 @@ export default {
           })
           .post(chemin + "/ajouterExamen ", analyse)
           .then((response) => {
-            console.log(response.data);
             if (response.data.state === "true") {
               this.preloader = false;
               this.$swal({

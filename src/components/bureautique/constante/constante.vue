@@ -390,7 +390,7 @@ export default {
       })
       .get(chemin + "/listeDesConstantes")
       .then((response) => {
-        console.log(response.data);
+        
         this.preloader = false;
         this.constantes = response.data;
         setTimeout(function() {
@@ -454,7 +454,7 @@ export default {
       })
       .get(chemin + "/listeDesConstantes")
       .then((response) => {
-        console.log(response.data);
+        
         this.preloader = false;
         this.constantes = response.data;
       });
@@ -477,7 +477,7 @@ export default {
         })
         .delete(chemin + "/constante/" + pk)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.success = true;
           this.message = "Diagnostic supprimée avec succès";

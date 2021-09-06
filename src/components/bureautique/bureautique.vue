@@ -199,7 +199,7 @@
                   ><i class="fa fa-signing"></i
                 ></span>
                 <div class="dash-widget-info text-right">
-                  <span class="widget-title1"> Pensements </span>
+                  <span class="widget-title1"> Pansements </span>
                 </div>
               </div></router-link
             >

@@ -389,7 +389,6 @@ export default {
       })
       .get(chemin + "/listeDesExamens")
       .then((response) => {
-        console.log("analyses :", response.data);
         this.preloader = false;
         this.analyses = response.data;
         setTimeout(function() {
@@ -452,7 +451,6 @@ export default {
         })
         .get(chemin + "/listeDesExamens")
         .then((response) => {
-          console.log("analyses :", response.data);
           this.preloader = false;
           this.analyses = response.data;
         });

@@ -411,7 +411,7 @@ export default {
           statut: "inactif",
         })
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;

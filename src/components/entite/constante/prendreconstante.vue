@@ -130,7 +130,6 @@ export default {
   },
   methods: {
     charger_workfow() {
-      console.log("workflow");
       axios
         .create({
           headers: {
@@ -141,9 +140,8 @@ export default {
         })
         .get(chemin + "/getWorkflowService")
         .then((response) => {
-          console.log(response.data);
+          
           this.workflows = response.data.data;
-          console.log("workflow :", this.workflows);
         })
         .catch((err) => {
           this.preloader = false;
@@ -151,7 +149,6 @@ export default {
         });
     },
     charge() {
-      console.log("loading......................");
       axios
         .create({
           headers: {
@@ -162,7 +159,6 @@ export default {
         })
         .get(chemin + "/listeDesConstantes")
         .then((response) => {
-          console.log("constante list :", response.data);
           this.constantes = response.data;
           this.charger_workfow();
         })
@@ -172,8 +168,6 @@ export default {
         });
     },
     prise_constante(id, val) {
-      console.log("constante id:", id);
-      console.log("constante value:", val);
 
       const valeur = {
         constante_id: id,
@@ -181,7 +175,6 @@ export default {
       };
 
       this.liste_constantes.push(valeur);
-      console.log("liste constante :", this.liste_constantes);
     },
     retourner() {
       this.$router.push("/entite/constante");
@@ -190,14 +183,12 @@ export default {
       this.charge();
     },
     ajouter() {
-      console.log("destination id", this.destination);
       this.preloader = true;
       var constante_final = {
         dossier_id: this.$route.params.id,
         constantes: this.constantes,
         destination_service_id: this.destination,
       };
-      console.log("constante finale :", constante_final);
       axios
         .create({
           headers: {
@@ -208,7 +199,7 @@ export default {
         })
         .post(chemin + "/ajouterConstanteDossier", constante_final)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.$swal({
             html: "Transfert effectué",

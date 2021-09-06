@@ -171,13 +171,9 @@ export default {
   },
   methods: {
     paye(id, result) {
-      console.log("id :", id);
-      console.log("result :", result);
       solde = result;
-      console.log("achat :", solde);
     },
     charger_workfow() {
-      console.log("workflow");
       axios
         .create({
           headers: {
@@ -188,9 +184,8 @@ export default {
         })
         .get(chemin + "/getWorkflowService")
         .then((response) => {
-          console.log(response.data);
+          
           this.workflows = response.data.data;
-          console.log("workflow :", this.workflows);
         })
         .catch((err) => {
           this.preloader = false;
@@ -198,7 +193,6 @@ export default {
         });
     },
     charger_diagnostic() {
-      console.log("loading......................");
       axios
         .create({
           headers: {
@@ -209,7 +203,6 @@ export default {
         })
         .get(chemin + "/listeExamenByDossier/" + this.$route.params.id)
         .then((response) => {
-          console.log("examen dossier :", response.data);
           response.data.examens.forEach((element) => {
             if (element.pivot.assurance === 1) {
               element.pivot.assurance = true;
@@ -230,8 +223,6 @@ export default {
       this.file = e.target.files[0];
     },
     transferer() {
-      console.log("destination :", this.destination);
-      console.log("examens :", this.examens);
       this.preloader = true;
       if (this.destination === "") {
         this.preloader = false;
@@ -251,7 +242,7 @@ export default {
             destination_service_id: this.destination,
           })
           .then((response) => {
-            console.log(response.data);
+            
             if (response.data.state === "true") {
               this.preloader = false;
               this.$swal({
@@ -276,11 +267,9 @@ export default {
       }
     },
     valider(pk, ligneId, assurance) {
-      console.log("ligne id :", ligneId);
       if (assurance === true) {
         assurance = 1;
       }
-      console.log("purchased", this.achat);
       const data = new FormData();
       data.append("dossier_id", this.$route.params.id);
       data.append("purchased", pk);
@@ -291,7 +280,6 @@ export default {
         data.append("confirm", true);
         data.append("purchased", pk);
       }
-      console.log(pk, ligneId);
       this.preloader = true;
       if (this.destination === "") {
         this.errors = true;
@@ -312,14 +300,12 @@ export default {
           })
           .post(chemin + "/modifierExamenDossier", data)
           .then((response) => {
-            console.log("data :", data);
-            console.log(response.data);
+            
             if (response.data.state === "true") {
               this.preloader = false;
               this.success = true;
               this.message = "examen effectué";
               this.examens.forEach((exam) => {
-                console.log(exam);
                 this.examens = this.examens.filter(
                   (item) => item.id !== response.data.data.id
                 );

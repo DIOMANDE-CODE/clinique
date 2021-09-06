@@ -52,7 +52,7 @@
                   <ul class="list-unstyled">
                     <li>
                       <h5 class="mb-0">
-                        <strong>Date du jour : </strong> &nbsp;
+                        <strong>Date : </strong> &nbsp;
                         {{ new Date(factures.created_at).getDate() }}/{{
                           new Date(factures.created_at).getMonth() + 1
                         }}/{{ new Date(factures.created_at).getFullYear() }}
@@ -64,16 +64,16 @@
               <div class="row">
                 <div class="col-md-12" v-if="factures.pensements != 0">
                   <h4 class="m-b-10">
-                    <strong>Prestation en Pensements</strong>
+                    <strong>Prestation en Pansements</strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table table-striped custom-table">
                       <thead>
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
-                          <th class="text-center">Coût de initial</th>
-                          <th class="text-center">Coût de l'assurance</th>
-                          <th class="text-center">Coût du patient</th>
+                          <th class="text-center">Coût initial</th>
+                          <th class="text-center">Part assurance</th>
+                          <th class="text-center">Part patient</th>
                           <th class="text-right">Etat</th>
                         </tr>
                       </thead>
@@ -155,16 +155,16 @@
                 
                 <br /><br /><br /><br />
                 <div class="col-md-12" v-if="factures.examens != 0">
-                  <h4 class="m-b-10"><strong>Prestation en examens</strong></h4>
+                  <h4 class="m-b-10"><strong>Examen(s) demandé(s)</strong></h4>
 
                   <div class="table-responsive">
                     <table class="table table-striped custom-table">
                       <thead>
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
-                          <th class="text-center">Coût de initial</th>
-                          <th class="text-center">Coût de l'assurance</th>
-                          <th class="text-center">Coût du patient</th>
+                          <th class="text-center">Coût  initial</th>
+                          <th class="text-center">Part  assurance</th>
+                          <th class="text-center">Part patient</th>
                           <th class="text-right">Etat</th>
                         </tr>
                       </thead>
@@ -255,7 +255,7 @@
                           <th>Coût unitaire</th>
                           <th>Quantité</th>
                           <th>Coût total</th>
-                          <th class="text-right">Actions</th>
+                          <th class="text-right">Etat</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -329,7 +329,7 @@
                 </div>
                 <div class="col-md-12" v-if="factures.consultation != 0">
                   <h4 class="m-b-10">
-                    <strong>Autres prestation</strong>
+                    <strong>Autre(s) prestation(s)</strong>
                   </h4>
                   <div class="table-responsive">
                     <table class="table table-striped custom-table">
@@ -337,8 +337,8 @@
                         <tr>
                           <th style="min-width:200px;">Désignations</th>
                           <th>Coût initial</th>
-                          <th>Coût assurance</th>
-                          <th>Coût patient</th>
+                          <th>Part assurance</th>
+                          <th>Part patient</th>
                           <th class="text-right">Actions</th>
                         </tr>
                       </thead>
@@ -508,7 +508,6 @@ export default {
   },
   methods: {
     printfacture(test){
-      console.log(test)
       var printContents = document.getElementById(test).innerHTML;
       var originalContents = document.body.innerHTML;
       document.body.innerHTML = printContents;
@@ -519,7 +518,6 @@ export default {
       document.body.innerHTML = originalContents;
     },
     solderFacture(num_facture, dossierId) {
-      console.log("num facture",num_facture,"dossier", dossierId);
       this.preloader = true;
       axios
         .create({
@@ -535,10 +533,10 @@ export default {
           sold:1
         })
         .then((response) => {
-          this.sold = true
-          console.log(response)
-          this.charger_donnee();
-          
+            if (response.data.state) {
+              this.sold = true
+              this.charger_donnee();
+            }
           })
         .catch((err) => {
           this.preloader = false;
@@ -546,7 +544,6 @@ export default {
         });
     },
     payerConsulte(consulteId, dossierId) {
-      console.log("examen",consulteId,"dossier", dossierId);
       this.preloader = true;
       axios
         .create({
@@ -562,8 +559,10 @@ export default {
           purchased:1
         })
         .then((response) => {
-          console.log(response)
-          this.charger_donnee();
+          if (response.data.state) {
+              this.charger_donnee();
+          }
+          
           })
         .catch((err) => {
           this.preloader = false;
@@ -571,7 +570,6 @@ export default {
         });
     },
     payerPensement(pensementId, dossierId) {
-      console.log("examen",pensementId,"dossier", dossierId);
       this.preloader = true;
       axios
         .create({
@@ -587,24 +585,23 @@ export default {
           purchased:1
         })
         .then((response) => {
-          console.log(response)
-          this.charger_donnee();
+          if (response.data.state) {
+            this.charger_donnee();
+          }
+          
           })
         .catch((err) => {
           this.preloader = false;
           console.log(err);
         });
-      console.log(pensementId, dossierId);
       this.factures.pensementCost = this.factures.pensementCost - dossierId;
       this.pensements = this.pensements.filter(
         (item) => {
-          console.log(item.id);
           item.id != this.pensements[pensementId]
         }
       );
     },
     payerExamen(ExamenId, dossierId) {
-      console.log("examen",ExamenId,"dossier", dossierId);
       this.preloader = true;
       axios
         .create({
@@ -620,8 +617,9 @@ export default {
           purchased:1
         })
         .then((response) => {
-          console.log(response)
-          this.charger_donnee();
+          if (response.data.state) {
+              this.charger_donnee();
+          }
           })
         .catch((err) => {
           this.preloader = false;
@@ -629,7 +627,6 @@ export default {
         });
     },
     payerMedoc(medocId, ordoId) {
-      console.log("medoc Id",medocId,"ordonnance ID", ordoId);
       this.preloader = true;
       axios
         .create({
@@ -645,8 +642,9 @@ export default {
           purchased:1
         })
         .then((response) => {
-          console.log(response)
-          this.charger_donnee();
+            if (response.data.state) {
+              this.charger_donnee();
+            }
           })
         .catch((err) => {
           this.preloader = false;
@@ -654,17 +652,12 @@ export default {
         });
     },
     effacer_ordonnance(pk,prix) {
-      console.log(pk, prix);
-      console.log("ordonnances :", this.ordonnances);
       this.factures.ordornnanceCost = this.factures.ordornnanceCost - prix
       this.ordonnances = this.ordonnances.forEach((item) => {
         item.medicaments.filter((medoc) => {
-          console.log(medoc);
           medoc.id != this.ordonnances[pk]
-          console.log("ok");
         })
       });
-      // console.log(pk, prix);
       // this.prix_ordonnances_T = this.prix_ordonnances_T - prix;
       // this.ordonnances = this.ordonnances.filter(
       //   (item) => item != this.ordonnances[pk]
@@ -672,7 +665,6 @@ export default {
     },
     charger_donnee() {
       this.preloader = true;
-      console.log("workflow");
       axios
         .create({
           headers: {
@@ -683,7 +675,6 @@ export default {
         })
         .get(chemin + "/getDossierFacture/" + this.$route.params.id)
         .then((response) => {
-          console.log('facture',response.data)
           this.nom =
             response.data.client.nom + " " + response.data.client.prenoms;
           this.factures = response.data;
@@ -705,7 +696,6 @@ export default {
         });
     },
     charge() {
-      console.log("loading......................");
       axios
         .create({
           headers: {
@@ -716,7 +706,6 @@ export default {
         })
         .get(chemin + "/listeDesConstantes")
         .then((response) => {
-          console.log("constante list :", response.data);
           this.constantes = response.data;
           this.charger_workfow();
         })
@@ -726,14 +715,11 @@ export default {
         });
     },
     prise_constante(id, val) {
-      console.log("constante id:", id);
-      console.log("constante value:", val);
       const valeur = {
         constante_id: id,
         value: val,
       };
       this.liste_constantes.push(valeur);
-      console.log("liste constante :", this.liste_constantes);
     },
     retourner() {
       this.$router.push("/caisse");
@@ -742,14 +728,12 @@ export default {
       this.charge();
     },
     ajouter() {
-      console.log("destination id", this.destination);
       this.preloader = true;
       var constante_final = {
         dossier_id: this.$route.params.id,
         constantes: this.constantes,
         destination_service_id: this.destination,
       };
-      console.log("constante finale :", constante_final);
       axios
         .create({
           headers: {
@@ -760,11 +744,12 @@ export default {
         })
         .post(chemin + "/ajouterConstanteDossier", constante_final)
         .then((response) => {
-          console.log(response.data);
-          this.preloader = false;
-          this.success = true;
-          this.message = "Constante ajouté avec success";
-          this.charge();
+          if (response.data.state) {
+              this.preloader = false;
+              this.success = true;
+              this.message = "Constante ajouté avec success";
+              this.charge();
+          }
         })
         .catch((err) => {
           this.preloader = false;

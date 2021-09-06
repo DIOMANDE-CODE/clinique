@@ -389,7 +389,6 @@ export default {
       })
       .get(chemin + "/getFile")
       .then((response) => {
-        console.log(" liste d'attente :", response.data);
         if (response.data.state === "true") {
           this.preload = false;
           this.patients = response.data.data;

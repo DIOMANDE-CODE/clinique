@@ -102,7 +102,6 @@ export default {
         var traitement = {
           libelle: this.nom,
         };
-        console.log(traitement);
         axios
           .create({
             headers: {
@@ -113,17 +112,19 @@ export default {
           })
           .post(chemin + "/ajouterTraitementUrgence", traitement)
           .then((response) => {
-            console.log(response.data);
-            this.preloader = false;
-            this.$swal({
-              html: "Traitément ajouté",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/traitement");
-              }
-            });
+            if (response.data.state) {
+                this.preloader = false;
+                this.$swal({
+                  html: "Traitement ajouté",
+                  icon: "success",
+                  confirmButtonText: `OK`,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push("/traitement");
+                  }
+                });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;

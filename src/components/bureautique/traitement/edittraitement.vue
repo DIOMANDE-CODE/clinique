@@ -116,7 +116,7 @@ export default {
       var constante = {
         libelle: this.nom,
       };
-      console.log(constante);
+      
       axios
         .create({
           headers: {
@@ -127,7 +127,7 @@ export default {
         })
         .put(chemin + "/traitementUrgence/" + this.$route.params.id, constante)
         .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false
                 this.$swal({
               html: "Traitément modifié",

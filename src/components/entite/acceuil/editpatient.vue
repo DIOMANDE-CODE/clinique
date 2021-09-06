@@ -472,7 +472,7 @@ export default {
         })
         .get(chemin + "/patient/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
           this.nom = response.data.nom;
           this.prenom = response.data.prenoms;
@@ -562,7 +562,6 @@ export default {
         instruction: this.instruction,
         status_matrimonial: this.matrimoniale,
       };
-      console.log("patient :", patient);
       axios
         .create({
           headers: {
@@ -573,9 +572,9 @@ export default {
         })
         .put(chemin + "/patient/" + this.$route.params.id, patient)
         .then((response) => {
-          console.log(response.data);
+          
           this.preloader = false;
-          this.success = true;
+          this.success = response.data.state;
           this.message = "Patient modifé avec success";
           this.nom = "";
           this.prenom = "";

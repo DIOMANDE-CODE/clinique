@@ -89,7 +89,7 @@
                               class="fa fa-signing"
                               style="cursor:pointer"
                             ></i>
-                            Faire ses pensements</a
+                            Faire ses pansements</a
                           >
                         </div>
                       </div>
@@ -401,7 +401,6 @@ export default {
         })
         .get(chemin + "/getFile")
         .then((response) => {
-          console.log(" liste d'attente :", response.data);
           if (response.data.state === "true") {
             this.preload = false;
             this.patients = response.data.data;

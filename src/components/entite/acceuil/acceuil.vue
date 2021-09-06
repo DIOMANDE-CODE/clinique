@@ -156,7 +156,6 @@ export default {
           })  
           .get(chemin + "/listerPatients")
           .then((response) => {
-            console.log("Patients :",response.data);
             this.preload = false;
             this.clients = response.data;
             setTimeout(function() {

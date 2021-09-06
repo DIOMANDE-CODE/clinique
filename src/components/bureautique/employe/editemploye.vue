@@ -372,7 +372,6 @@ export default {
   },
   methods: {
     charger_service() {
-      console.log("service");
       axios
         .create({
           headers: {
@@ -386,7 +385,7 @@ export default {
             `/listeServicesDepartement/${this.clinique}/${this.departement}`
         )
         .then((response) => {
-          console.log(response.data);
+          
           this.services = response.data.data;
           // if (response.data.state === true) {
           //   this.preloader = false;
@@ -401,7 +400,6 @@ export default {
         });
     },
     charger_departement() {
-      console.log("departement clinique id ", this.clinique);
       // this.preloader = true;
       axios
         .create({
@@ -413,7 +411,7 @@ export default {
         })  
         .get(chemin + "/getDepartementsClinique/" + this.clinique)
         .then((response) => {
-          console.log(response.data.data);
+          
           this.departements = response.data.data;
           // if (response.data.state === true) {
           //   this.preloader = false;
@@ -431,7 +429,6 @@ export default {
       this.profile = [];
     },
     charger_clinique() {
-      console.log(" id de la clinique ", this.clinique);
       axios
         .create({
           headers: {
@@ -467,7 +464,6 @@ export default {
         .get(chemin + "/utilisateur/" + this.$route.params.id)
         .then((response) => {
           this.listProfil();
-          console.log("utilisateur :", response.data.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.nom = response.data.data.nom;
@@ -486,7 +482,6 @@ export default {
             const profiles = response.data.data.profile
             profiles.forEach((prof) => {
               this.profile.push(prof.id);
-              console.log((this.profile));
             })
           } else {
             this.preloader = false;
@@ -520,7 +515,6 @@ export default {
         profile_user_id: this.pivot,
       };
       user.pivot = this.pivot;
-      console.log(user);
       this.preloader = true;
       axios
         .create({
@@ -535,7 +529,6 @@ export default {
           user
         )
         .then((response) => {
-          console.log("reponse :",response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.$swal({
@@ -557,7 +550,6 @@ export default {
     },
 
     listProfil() {
-      console.log("service");
       axios
         .create({
           headers: {
@@ -568,7 +560,6 @@ export default {
         })
         .get(chemin + `/getListeProfile`)
         .then((response) => {
-          console.log("profil :", response.data);
           if (response.data.state === true) {
             this.preloader = false;
             this.profiles = response.data.data;

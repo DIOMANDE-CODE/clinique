@@ -217,7 +217,6 @@ export default {
         nom: this.nom,
         description: this.description,
       };
-      console.log(profil);
       axios
         .create({
           headers: {
@@ -233,7 +232,6 @@ export default {
             this.success = true;
             this.message = response.data.message;
             this.$router.push("/admin/specialite");
-            console.log("reussie");
 
             this.nom = "";
             this.description = "";

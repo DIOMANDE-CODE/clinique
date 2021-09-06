@@ -39,8 +39,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="row">
-          <div class="col-md-12" style=" height : 500px; overflow-y: scroll;">
+        <div class="row" style=" height : 500px; overflow-y: scroll;">
+          <div class="col-md-6" >
             <p style="text-decoration: underline">
               <b>Traitements précédents</b>
             </p>
@@ -63,9 +63,40 @@
                   </thead>
                   <tbody>
                       <tr v-for="(trait,ind) in traitement[0]" :key="ind">
-                        <td>hjfhjfh</td>
+                        <td>{{trait.libelle}}</td>
                         <td>{{trait.dose}}</td>
                         <td>{{trait.voie}}</td>
+                        <td>{{trait.heure}}</td>
+                      </tr>
+                  </tbody>
+                </div>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6" >
+            <p style="text-decoration: underline">
+              <b>valeurs des constantes précédents</b>
+            </p>
+            <div class="table-responsive" v-for="(traitement,index) in constantes_fait" :key="index" >
+              <table class="table table-striped custom-table table-bordered" >
+                <div>
+                  <thead>
+                    <tr>
+                      <th>Heures</th>
+                      <th class="text-center"  colspan="3" >
+                        H{{index}}
+                      </th>
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <th>Valeur</th>
+                      <th>heure</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr v-for="(trait,ind) in traitement[0]" :key="ind">
+                        <td>{{trait.libelle}}</td>
+                        <td>{{trait.value}}</td>
                         <td>{{trait.heure}}</td>
                       </tr>
                   </tbody>
@@ -114,15 +145,6 @@
               </div>
             </div>
           </div>
-          <div class="m-t-20 text-center">
-            <button
-              type="button"
-              class="btn btn-success submit-btn"
-              v-on:click="transferer"
-            >
-              Appliquer le traitement
-            </button>
-          </div>
         </div>
         <hr> <hr>
         <p style="text-decoration: underline">
@@ -133,12 +155,12 @@
           <div class="row doctor-grid">
             <div
               class="col-md-4 col-sm-4  col-lg-4"
-              v-for="examen in constantelist"
-              :key="examen.id"
+              v-for="constant in constantelist"
+              :key="constant.id"
             >
               <div class="profile-widget">
                 <h4 class="doctor-name text-ellipsis">
-                  <a>{{ examen.libelle }}</a>
+                  <a>{{ constant.libelle }}</a>
                 </h4>
                 <br />
                 <div class="col-sm-12">
@@ -147,7 +169,7 @@
                     <input
                       class="form-control"
                       type="text"
-                      v-model="examen.value"
+                      v-model="constant.value"
                     />
                   </div>
                 </div>
@@ -158,7 +180,7 @@
             <button
               type="button"
               class="btn btn-success submit-btn"
-              v-on:click="validerConstante"
+              v-on:click="storeTraitement"
             >
               Enregistrer
             </button>
@@ -202,7 +224,8 @@ export default {
       activer_examens: false,
       activer_ordonnances: false,
       activer_pensements: false,
-      constantelist:[]
+      constantelist:[],
+      constantes_fait: [],
     };
   },
   components: {
@@ -213,17 +236,13 @@ export default {
     this.charger_workfow();
     this.charger_traitement();
     this.constante()
-    this.constanteByDossier()
+    
   },
   methods: {
     paye(id, result) {
-      console.log("id :", id);
-      console.log("result :", result);
       solde = result;
-      console.log("achat :", solde);
     },
     charger_workfow() {
-      console.log("workflow");
       axios
         .create({
           headers: {
@@ -235,7 +254,6 @@ export default {
         .get(chemin + "/getWorkflowService")
         .then((response) => {
           this.workflows = response.data.data;
-          console.log("workflow :", this.workflows);
         })
         .catch((err) => {
           this.preloader = false;
@@ -254,7 +272,7 @@ export default {
         .get(chemin + "/listeDesConstantes")
         .then((response) => {
           this.constantelist = response.data
-          console.log('constante:',this.constantelist)
+          this.constanteByDossier()
         })
         .catch((err) => {
           this.preloader = false;
@@ -272,14 +290,22 @@ export default {
         })
         .get(chemin + "/traitementsByDossier/" + this.$route.params.id)
         .then((response) => {
-            console.log("traitements dossier :", response.data);
           var result = Object.keys(response.data).map((key) => [response.data[key]]);
-          console.log("traitements dossier :", result);
-
+          
+          result.forEach(element => {
+                element.forEach(element1 => {
+                      element1.forEach(element2 => {
+                          this.traitements.forEach(cons => {
+                            if (element2.traitement_id == cons.id) {
+                                element2.libelle = cons.libelle
+                                
+                              }
+                          });
+                      });
+                });
+              });
           this.traitements_fait = result;
-          response.data.forEach((traitement) => {
-            console.log("traitement :", traitement);
-          });
+         
         })
         .catch((err) => {
           this.preloader = false;
@@ -287,7 +313,6 @@ export default {
         });
     },
     listeTraitementUrgence() {
-      console.log("loading......................");
       axios
         .create({
           headers: {
@@ -314,9 +339,7 @@ export default {
     onFilesSelected(e) {
       this.file = e.target.files[0];
     },
-    transferer() {
-      console.log("destination :", this.destination);
-      console.log("examens :", this.examens);
+    storeTraitement() {
       this.preloader = true;
       if (this.destination === "") {
         this.preloader = false;
@@ -336,13 +359,15 @@ export default {
             traitements: this.traitements,
           })
           .then((response) => {
-            console.log(response.data);
+            
+            this.validerConstante()
             this.preloader = false;
             this.$swal({
               html: "Traitement effectué",
               icon: "success",
               confirmButtonText: `OK`,
             }).then((result) => {
+              
               if (result.isConfirmed) {
                 this.listeTraitementUrgence();
                 this.charger_workfow();
@@ -357,14 +382,7 @@ export default {
       }
     },
     validerConstante() {
-      console.log("destination :", this.destination);
-      console.log("examens :", this.constantelist);
       this.preloader = true;
-      if (this.destination === "") {
-        this.preloader = false;
-        this.errors = true;
-        this.message = "Veuillez indiquer un destinataire";
-      } else {
         axios
           .create({
             headers: {
@@ -375,10 +393,10 @@ export default {
           })
           .post(chemin + "/ajouterConstanteDossier", {
             dossier_id: this.$route.params.id,
-            traitements: this.traitements,
+            constantes: this.constantelist,
           })
           .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false;
             this.$swal({
               html: "Traitement effectué",
@@ -389,6 +407,7 @@ export default {
                 this.listeTraitementUrgence();
                 this.charger_workfow();
                 this.charger_traitement();
+                this.constanteByDossier()
               }
             });
           })
@@ -396,7 +415,6 @@ export default {
             this.preloader = false;
             console.log(err);
           });
-      }
     },
     constanteByDossier() {
       axios
@@ -409,8 +427,21 @@ export default {
         })
         .get(chemin + "/constantesByDossier/" + this.$route.params.id)
         .then((response) => {
-            console.log("constantes dossier :", response.data);
-         
+            var result = Object.keys(response.data).map((key) => [response.data[key]]);
+            
+              result.forEach(element => {
+                element.forEach(element1 => {
+                      element1.forEach(element2 => {
+                          this.constantelist.forEach(cons => {
+                            if (element2.constante_id == cons.id) {
+                                element2.libelle = cons.libelle
+                                
+                              }
+                          });
+                      });
+                });
+              });
+          this.constantes_fait = result;
         })
         .catch((err) => {
           this.preloader = false;
@@ -421,11 +452,8 @@ export default {
       if (solder === true) {
         solder = 1;
       }
-      console.log("purchased", this.achat);
 
-      console.log(pk, ligne_id);
       this.preloader = true;
-      console.log("image :", solder);
       if (this.destination === "") {
         this.errors = true;
         this.message = "Veuillez indiquer un destinataire";
@@ -447,13 +475,12 @@ export default {
             traitements: this.traitements,
           })
           .then((response) => {
-            console.log(response.data);
+            
             if (response.data.state === "true") {
               this.preloader = false;
               this.success = true;
               this.message = "examen effectué";
               this.examens.examens.forEach((exam) => {
-                console.log(exam);
                 this.examens.examens = this.examens.examens.filter(
                   (item) => item.id !== pk
                 );

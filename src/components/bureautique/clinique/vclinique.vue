@@ -844,7 +844,6 @@
 <script>
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
-import { identifiant } from "../../../assets/js/info.js";
 import loader from "../../../components/loader.vue";
 
 export default {
@@ -910,7 +909,6 @@ export default {
     },
     workflow() {
       this.list_workflow = true;
-      console.log("service workflow");
       axios
         .create({
           headers: {
@@ -921,14 +919,10 @@ export default {
         })
         .get(chemin + "/getWorkflow/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           var workflow = [];
-          console.log("response :", response.data);
-          console.log("response departements:", response.data);
           workflow = response.data;
-          console.log("workflows", workflow);
           this.workflow_final = workflow.data;
-          console.log("workflow final :", this.workflow_final);
         });
     },
 
@@ -939,10 +933,6 @@ export default {
 
     effacer_service_workflow_interne(source_id, destination_service_id) {
       this.prealoader = true;
-      console.log("liste departements services :", this.workflow_final[0]);
-      console.log("service supprimé");
-      console.log("id du service:", destination_service_id);
-      console.log("id du departement :", source_id);
 
       axios
         .create({
@@ -958,9 +948,11 @@ export default {
           source_service_id: source_id,
         })
         .then((response) => {
-          window.location.reload();
-          console.log(response.data);
-          console.log("service supprimé");
+          if (response.data.state) {
+              window.location.reload();
+          }
+          
+          
         })
         .catch((err) => {
           this.preloader = false;
@@ -971,7 +963,7 @@ export default {
     ajouter_workflow() {
       this.list_workflow = false;
       this.ajout_workflow = true;
-      console.log("ajouter");
+      
       axios
         .create({
           headers: {
@@ -982,7 +974,6 @@ export default {
         })
         .get(chemin + "/listService")
         .then((response) => {
-          console.log("service workflow :", response.data);
           if (response.data.state === true) {
             this.preloader = false;
             var donnee = response.data.data;
@@ -1014,10 +1005,8 @@ export default {
         })
         .get(chemin + "/listAnalyses")
         .then((response) => {
-          console.log("success");
           if (response.data.state === true) {
             this.preloader = false;
-            console.log("charger analyses :", response.data.data);
             var donnee = response.data.data;
             donnee.forEach((element) => {
               if (element.statut === "actif") {
@@ -1047,10 +1036,8 @@ export default {
         })
         .get(chemin + "/listAnalysesEmpty/" + this.$route.params.id)
         .then((response) => {
-          console.log("success");
           if (response.data.state === true) {
             this.preloader = false;
-            console.log("charger analyses :", response.data.data);
             var donnee = response.data.data;
             donnee.forEach((element) => {
               if (element.statut === "actif") {
@@ -1079,10 +1066,8 @@ export default {
         })
         .get(chemin + "/listAssurancesEmpty/" + this.$route.params.id)
         .then((response) => {
-          console.log("success");
           if (response.data.state === true) {
             this.preloader = false;
-            console.log("charger analyses :", response.data.data);
             var donnee = response.data.data;
             donnee.forEach((element) => {
               if (element.statut === "actif") {
@@ -1100,9 +1085,7 @@ export default {
         });
     },
     chargement() {
-      console.log("route :", this.$route.params.id);
       this.preloader = false;
-      console.log("loading.......");
       axios
         .create({
           headers: {
@@ -1113,7 +1096,7 @@ export default {
         })
         .get(chemin + "/clinique/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           if (response.data.state === true) {
             this.preloader = false;
             this.nom = response.data.data.nom;
@@ -1127,13 +1110,11 @@ export default {
             this.chargement_depart();
           } else {
             this.preloader = false;
-            console.log(response.data.response);
           }
         });
     },
     chargement_depart() {
       this.list_departement_service = true;
-      console.log("ca marche");
       axios
         .create({
           headers: {
@@ -1144,20 +1125,16 @@ export default {
         })
         .get(chemin + "/clinique/" + this.$route.params.id)
         .then((response) => {
-          console.log(response.data);
+          
           var departements = [];
-          console.log("response :", response.data);
-          console.log("response departements:", response.data.departements);
           departements = response.data.departements;
-          console.log("departements", departements);
           this.departements_final.push(departements);
-          console.log("departements final :", this.departements_final[0]);
+          
 
           this.charger_analyses();
         });
     },
     charger_departement_service() {
-      console.log("charger departements");
       axios
         .create({
           headers: {
@@ -1168,17 +1145,13 @@ export default {
         })
         .get(chemin + "/getDepartementsNotInClinique/" + this.$route.params.id)
         .then((response) => {
-          console.log("departements not in clinique :", response.data);
           if (response.data.state === true) {
             if (
               response.data.departements.state === true &&
               response.data.services.state === true
             ) {
-              console.log("all is true");
               this.departements = response.data.departements.data;
               this.services = response.data.services.data;
-              console.log("services not in :", this.services);
-              console.log("departements not in :", this.departements);
             }
           } else {
             this.preloader = false;
@@ -1202,7 +1175,7 @@ export default {
         .get(chemin + "/listAssurances")
         .then((response) => {
           if (response.data.state === true) {
-            console.log("charger assurances :", response.data.data);
+            
             this.preloader = false;
             var donnee = response.data.data;
             donnee.forEach((element) => {
@@ -1247,7 +1220,6 @@ export default {
 
     // fonction d'ajout
     ajouter_departement_service() {
-      console.log("departements cliquer");
       this.ajout_departement_service = true;
       this.list_departement_service = false;
     },
@@ -1255,7 +1227,6 @@ export default {
       this.ajout_service = true;
       this.list_departement_service = false;
       this.departement = pk;
-      console.log(pk);
       axios
         .create({
           headers: {
@@ -1270,7 +1241,7 @@ export default {
           this.erreur_message = "";
           if (response.data.state === true) {
             this.preloader = false;
-            console.log("charger not services :", response.data.data);
+            
             var donnee = response.data.data;
             donnee.forEach((element) => {
               if (element.statut === "actif") {
@@ -1285,13 +1256,13 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      console.log("ajouter");
+      
     },
     ajouter_analyse() {
       this.ajout_analyse = true;
       this.list_analyse = false;
       this.charger_analyses_empty();
-      console.log("cliquer");
+      
     },
     ajouter_assurance() {
       this.ajout_assurance = true;
@@ -1299,14 +1270,12 @@ export default {
     },
 
     modifier_clinique() {
-      console.log("modifier_clinique");
+      
       this.$router.push("/admin/modifier/" + this.$route.params.id);
     },
 
     desactiver_depart(pk) {
       this.preloader = true;
-      console.log(pk);
-      console.log(identifiant.id);
       axios
         .create({
           headers: {
@@ -1325,12 +1294,11 @@ export default {
             this.preloader = false;
             this.success = true;
             this.message = response.data.message;
-            console.log("desactiver");
+            
           } else {
             this.preloader = false;
             this.errors = true;
             this.message = response.data.message;
-            console.log("non desactiver");
           }
         })
         .catch((err) => {
@@ -1344,10 +1312,7 @@ export default {
     },
 
     attribuer() {
-      console.log("attribuer");
       this.terminer = true;
-      console.log(this.departements[this.departement]);
-      console.log(this.coche);
       var send_attribution = {
         id_departement: this.departements[this.departement].id,
         departement: this.departements[this.departement].nom,
@@ -1358,77 +1323,44 @@ export default {
         const data = {
           id: "",
         };
-        console.log("item :", item);
-        console.log("services :", this.services[item - 1].nom);
         data.id = this.services[item - 1].id;
         send_attribution.id_services.push(data);
         send_attribution.nom_services.push(this.services[item - 1].nom);
-        console.log("send attribution :", send_attribution);
-        // console.log("this.services[item - 1].nom ",this.services[item - 1].nom);
       });
 
       this.sauvegarder.push(send_attribution);
 
-      console.log("sauvegarder :", this.sauvegarder);
       this.attribution_departements_services.push(send_attribution);
-      console.log(
-        "attribution_departements_services :",
-        this.attribution_departements_services
-      );
-
-      console.log("send attribution :", send_attribution);
       this.coche = [];
     },
 
     attribuer_workflow() {
       this.terminer_workflow = true;
-      console.log("attribuer");
-      console.log(
-        "services source:",
-        this.services_workflow[this.service_source]
-      );
-      console.log(" services coche : ", this.coche);
       var send_attribution = {
         source_id: this.services_workflow[this.service_source].id,
         service_source: this.services_workflow[this.service_source].nom,
         destination_service_id: [],
         nom_services: [],
       };
-      console.log("services :", this.services_workflow);
       this.coche.forEach((item) => {
         const data = {
           id: "",
         };
-        console.log("item foreach:", item);
-        console.log("services :", this.services_workflow[item - 1]);
         data.id = this.services_workflow[item - 1].id;
         send_attribution.destination_service_id.push(data);
         send_attribution.nom_services.push(
           this.services_workflow[item - 1].nom
         );
-        console.log("send attribution :", send_attribution);
-        // console.log("this.services[item - 1].nom ",this.services[item - 1].nom);
       });
 
       this.sauvegarder_workflow.push(send_attribution);
 
-      console.log("sauvegarder :", this.sauvegarder_workflow);
       this.attribution_departements_services_workflow.push(send_attribution);
-      console.log(
-        "attribution_departements_services :",
-        this.attribution_departements_services_workflow
-      );
-
-      console.log("send attribution :", send_attribution);
+     
       this.coche = [];
     },
 
     effacer(pk) {
-      console.log("pk:", pk);
-      console.log(
-        "departements_services a supprimer:",
-        this.attribution_departements_services[pk]
-      );
       this.attribution_departements_services = this.attribution_departements_services.filter(
         (item) => item != this.attribution_departements_services[pk]
       );
@@ -1441,11 +1373,9 @@ export default {
           window.location.reload();
         }
       });
-      console.log("new liste :", this.attribution_departements_services);
     },
 
     effacer_workflow(pk) {
-      console.log("departement id :", pk);
       axios
         .create({
           headers: {
@@ -1459,9 +1389,10 @@ export default {
           departement_id: pk,
         })
         .then((response) => {
-          window.location.reload();
-          console.log(response.data);
-          console.log("departement supprimé");
+          if (response.data.result) {
+               window.location.reload();
+          }
+         
         })
         .catch((err) => {
           this.preloader = false;
@@ -1471,9 +1402,6 @@ export default {
 
     terminer_ajout_service() {
       const service_ajoute = [];
-      console.log("ajout services");
-      console.log("id du departement ajout service:", this.departement);
-      console.log("service coché:", this.coche);
       var send_attribution = {
         id_departement: this.departement,
         id_services: [],
@@ -1483,17 +1411,15 @@ export default {
           id: "",
         };
         data.id = service;
-        console.log("service :", data);
         send_attribution.id_services.push(data);
       });
-      console.log(send_attribution);
       service_ajoute.push(send_attribution);
 
       var ajout_service = {
         clinique_id: this.$route.params.id,
         departements_services: service_ajoute,
       };
-      console.log(ajout_service);
+  
       axios
         .create({
           headers: {
@@ -1505,7 +1431,6 @@ export default {
         .post(chemin + "/addCliniqueDepartementService", ajout_service)
         .then((response) => {
           this.preloader = true;
-          console.log("result :", response);
           if (response.data.state === true) {
             this.preloader = false;
             this.$swal({
@@ -1531,19 +1456,13 @@ export default {
     },
 
     terminer_departement_service() {
-      console.log("id de la clinique", this.$route.params.id);
-      console.log(
-        "id du departement :",
-        this.departements[this.departement].id
-      );
-      console.log("liste complete :", this.sauvegarder);
+      
 
       var service_departement = {
         clinique_id: this.$route.params.id,
         departements_services: this.sauvegarder,
       };
 
-      console.log(service_departement);
       axios
         .create({
           headers: {
@@ -1554,7 +1473,6 @@ export default {
         })
         .post(chemin + "/addCliniqueDepartementService", service_departement)
         .then((response) => {
-          console.log(" response data :", response.data);
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
@@ -1581,18 +1499,14 @@ export default {
     },
 
     terminer_analyse() {
-      console.log("id de la clinique", this.$route.params.id);
-      console.log("sauvegarder", this.coche);
       var analyse_ajouter = [];
       this.coche.forEach((item) => {
         const data = {
           id: "",
         };
-        console.log("item :", item);
         data.id = item;
         analyse_ajouter.push(data);
       });
-      console.log(analyse_ajouter);
       this.coche = [];
 
       var analyse = {
@@ -1600,8 +1514,6 @@ export default {
         analyses: analyse_ajouter,
       };
 
-      console.log("analyse: ", analyse);
-      console.log(analyse);
       axios
         .create({
           headers: {
@@ -1612,7 +1524,6 @@ export default {
         })
         .post(chemin + "/attributionAnalysesClinique", analyse)
         .then((response) => {
-          console.log(" response data :", response.data);
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
@@ -1639,18 +1550,14 @@ export default {
     },
 
     terminer_assurance() {
-      console.log("id de la clinique", this.$route.params.id);
-      console.log("sauvegarder", this.coche);
       var assurance_ajouter = [];
       this.coche.forEach((item) => {
         const data = {
           id: "",
         };
-        console.log("item :", item);
         data.id = item;
         assurance_ajouter.push(data);
       });
-      console.log(assurance_ajouter);
       this.coche = [];
 
       var assurance = {
@@ -1658,8 +1565,6 @@ export default {
         assurances: assurance_ajouter,
       };
 
-      console.log("analyse: ", assurance);
-      console.log(assurance);
       axios
         .create({
           headers: {
@@ -1670,7 +1575,6 @@ export default {
         })
         .post(chemin + "/attributionAssurancesClinique", assurance)
         .then((response) => {
-          console.log(" response data :", response.data);
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
@@ -1699,10 +1603,7 @@ export default {
     // fonction pour effacer
     effacer_service(service_id, departement_id) {
       this.prealoader = true;
-      console.log("liste departements services :", this.departements_final[0]);
-      console.log("service supprimé");
-      console.log("id du service:", service_id);
-      console.log("id du departement :", departement_id);
+
 
       axios
         .create({
@@ -1718,9 +1619,10 @@ export default {
           service_id: service_id,
         })
         .then((response) => {
-          window.location.reload();
-          console.log(response.data);
-          console.log("service supprimé");
+          if (response.data.result) {
+              window.location.reload();
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;
@@ -1729,7 +1631,6 @@ export default {
     },
 
     effacer_departement(pk) {
-      console.log("departement id :", pk);
       axios
         .create({
           headers: {
@@ -1760,15 +1661,12 @@ export default {
     },
 
     terminer_ajout_workflow() {
-      console.log("id de la clinique", this.$route.params.id);
-      console.log("liste complete :", this.sauvegarder_workflow);
 
       var workflow = {
         clinique_id: this.$route.params.id,
         source_service_id: this.sauvegarder_workflow,
       };
 
-      console.log(workflow);
       axios
         .create({
           headers: {
@@ -1779,15 +1677,12 @@ export default {
         })
         .post(chemin + "/createWorkflow", workflow)
         .then((response) => {
-          console.log(" response data :", response.data);
           this.preloader = true;
           if (response.data.state === true) {
             this.preloader = false;
             this.success = true;
-            console.log("success");
             this.message = response.data.message;
             this.sauvegarder = [];
-            console.log("reussie");
           } else {
             this.preloader = false;
             this.errors = true;
@@ -1802,7 +1697,6 @@ export default {
     },
 
     supprimer_analyse(pk) {
-      console.log("analyse id :", pk);
       axios
         .create({
           headers: {
@@ -1817,9 +1711,10 @@ export default {
           statut: "inactif",
         })
         .then((response) => {
-          window.location.reload();
-          console.log(response.data);
-          console.log("analyse supprimé");
+          if (response.data.state) {
+            window.location.reload();
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;
@@ -1828,7 +1723,6 @@ export default {
     },
 
     supprimer_assurance(pk) {
-      console.log("assurance id :", pk);
       axios
         .create({
           headers: {
@@ -1842,9 +1736,11 @@ export default {
           assurance_id: pk,
         })
         .then((response) => {
-          window.location.reload();
-          console.log(response.data);
-          console.log("assurance supprimé");
+          if (response.data.result) {
+              window.location.reload();
+          }
+          
+          
         })
         .catch((err) => {
           this.preloader = false;

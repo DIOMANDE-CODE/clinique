@@ -251,254 +251,6 @@
           </div>
         </div>
       </div>
-      <div class="notification-box">
-        <div class="msg-sidebar notifications msg-noti">
-          <div class="topnav-dropdown-header">
-            <span>Messages</span>
-          </div>
-          <div class="drop-scroll msg-list-scroll" id="msg_list">
-            <ul class="list-box">
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">R</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">Richard Miles </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item new-message">
-                    <div class="list-left">
-                      <span class="avatar">J</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">John Doe</span>
-                      <span class="message-time">1 Aug</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">T</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author"> Tarah Shropshire </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">M</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">Mike Litorus</span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">C</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author"> Catherine Manseau </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">D</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author"> Domenic Houston </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">B</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author"> Buster Wigton </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">R</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author"> Rolland Webber </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">C</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author"> Claire Mapes </span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">M</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">Melita Faucher</span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">J</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">Jeffery Lalor</span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">L</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">Loren Gatlin</span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <div class="list-item">
-                    <div class="list-left">
-                      <span class="avatar">T</span>
-                    </div>
-                    <div class="list-body">
-                      <span class="message-author">Tarah Shropshire</span>
-                      <span class="message-time">12:28 AM</span>
-                      <div class="clearfix"></div>
-                      <span class="message-content"
-                        >Lorem ipsum dolor sit amet, consectetur
-                        adipiscing</span
-                      >
-                    </div>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="topnav-dropdown-footer">
-            <a href="chat.html">See all messages</a>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -536,12 +288,10 @@ export default {
         })
         .get(chemin + "/getListeModule")
         .then((response) => {
-          console.log("Modules du système charger module:", response.data.data);
           this.preload = false;
           if (response.data.state === true) {
             this.modules = response.data.data;
             this.modules.forEach((module) => {
-              console.log("module", module);
               module.read_permission = false;
               module.write_permission = false;
               module.create_permission = false;
@@ -565,7 +315,6 @@ export default {
     },
 
     charger_permission() {
-      console.log("charger_permission");
       axios
         .create({
           headers: {
@@ -576,16 +325,10 @@ export default {
         })
         .get(chemin + `/utilisateur/${this.$route.params.id}`)
         .then((response) => {
-          console.log(
-            "Permission du système :",
-            response.data.data.permissions
-          );
+          
           const droits = response.data.data.permissions;
           this.modules.forEach((module) => {
-            console.log("list of modules :", module);
             droits.forEach((permission) => {
-              console.log("permission", permission.pivot);
-              console.log("module write_permission :", permission.pivot.write);
                 this.preload = false;
               if (module.id === permission.id) {
                 if (permission.pivot.read === 1) {
@@ -619,7 +362,6 @@ export default {
             
             });
           });
-          console.log("new modules :", this.modules);
         })
         .catch((err) => {
           console.log(err);
@@ -630,8 +372,6 @@ export default {
       this.$router.push("/admin/employe");
     },
     attribuer() {
-      console.log("attribuer");
-      console.log("envoie api :", this.modules);
       this.preload = true;
       axios
         .create({
@@ -645,60 +385,16 @@ export default {
           modules: this.modules,
         })
         .then((response) => {
-          this.success = true;
-          this.message = "Attribution effectué avec success"
-          console.log("response :", response.data);
-          console.log("success");
-          this.preload = false;
+          if (response.data.state) {
+            this.success = true;
+            this.message = "Attribution effectué avec success"
+            this.preload = false;
+          }
+          
         })
         .catch((err) => {
           console.log(err);
         });
-    },
-
-    switchValueReadChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit read :", access);
-    },
-
-    switchValueWriteChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit write:", access);
-    },
-
-    switchValueCreateChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit create :", access);
-    },
-
-    switchValueDeleteChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit delete :", access);
-    },
-
-    switchValueAssignChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit assign :", access);
-    },
-
-    switchValueImportChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit import :", access);
-    },
-
-    switchValueTransfertChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit transfert :", access);
-    },
-
-    switchValueExportChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit export :", access);
-    },
-
-    switchValueUpdateChange(pk, access) {
-      console.log("id du module :", pk);
-      console.log("valeur du droit update :", access);
     },
   },
 };

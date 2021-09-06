@@ -368,11 +368,9 @@ export default {
       })
       .get(chemin + "/profil/" + this.$route.params.id)
       .then((response) => {
-        console.log("profil response :", response.data);
         this.preloader = false;
         this.nom = response.data.data.titre;
         this.description = response.data.data.description;
-        console.log(this.nom, this.description);
       })
       .catch((err) => {
         console.log(err);
@@ -392,7 +390,6 @@ export default {
           titre: this.nom,
           description: this.description,
         };
-        console.log(profil);
         axios
           .create({
             headers: {
@@ -403,7 +400,7 @@ export default {
           })
           .put(chemin + "/profil/" + this.$route.params.id, profil)
           .then((response) => {
-            console.log(response.data);
+            
             this.preloader = false;
             this.$swal({
                 html: "Profil modifié",
