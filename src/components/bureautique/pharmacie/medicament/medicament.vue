@@ -472,11 +472,13 @@ export default {
         })
         .delete(chemin + "/medoc/" + pk)
         .then((response) => {
-          
           this.preloader = false;
-          this.success = true;
-          this.message = "Médicament supprimée avec succès";
-          this.charge();
+          if (response.data.state) {
+              this.success = true;
+              this.message = "Médicament supprimée avec succès";
+              this.charge();
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;

@@ -201,14 +201,17 @@ export default {
         .then((response) => {
           
           this.preloader = false;
-          this.$swal({
-            html: "Transfert effectué",
-            confirmButtonText: `Oui`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.$router.push("/entite/constante");
-            }
-          });
+          if (response.data.state) {
+              this.$swal({
+                html: "Transfert effectué",
+                confirmButtonText: `Oui`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/entite/constante");
+                }
+              });
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;

@@ -400,17 +400,20 @@ export default {
           })
           .put(chemin + "/profil/" + this.$route.params.id, profil)
           .then((response) => {
-            
             this.preloader = false;
-            this.$swal({
-                html: "Profil modifié",
-                icon: "success",
-                confirmButtonText: `OK`,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.$router.push("/admin/profil");
-                }
-              });
+            if (response.data.state) {
+                  this.$swal({
+                    html: "Profil modifié",
+                    icon: "success",
+                    confirmButtonText: `OK`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.$router.push("/admin/profil");
+                    }
+                  });
+            }
+            
+            
           })
           .catch((err) => {
             this.preloader = false;

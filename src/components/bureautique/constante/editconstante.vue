@@ -388,8 +388,8 @@ export default {
         })
         .put(chemin + "/constante/" + this.$route.params.id, constante)
         .then((response) => {
-          
           this.preloader = false;
+          if (response.data.state) {
             this.$swal({
               html: "Constante modifiée",
               icon: "success",
@@ -399,6 +399,8 @@ export default {
                 this.$router.push("/constante");
               }
             });
+          }
+          
         });
     },
   },

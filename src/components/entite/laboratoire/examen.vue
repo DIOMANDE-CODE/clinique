@@ -126,7 +126,6 @@
 </template>
 
 <script>
-var solde = "";
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
@@ -160,6 +159,7 @@ export default {
       activer_examens: false,
       activer_ordonnances: false,
       activer_pensements: false,
+      solde:null
     };
   },
   components: {
@@ -171,7 +171,7 @@ export default {
   },
   methods: {
     paye(id, result) {
-      solde = result;
+      this.solde = result;
     },
     charger_workfow() {
       axios
@@ -305,7 +305,7 @@ export default {
               this.preloader = false;
               this.success = true;
               this.message = "examen effectué";
-              this.examens.forEach((exam) => {
+              this.examens.forEach(() => {
                 this.examens = this.examens.filter(
                   (item) => item.id !== response.data.data.id
                 );

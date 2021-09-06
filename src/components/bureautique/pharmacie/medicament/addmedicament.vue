@@ -463,17 +463,20 @@ export default {
           })
           .post(chemin + "/ajouterMedoc", medicament)
           .then((response) => {
-            
             this.preloader = false;
-             this.$swal({
-              html: "Médicament ajouté",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/pharmacie/medicament");
-              }
-            });
+            if (response.data.state) {
+                
+                this.$swal({
+                  html: "Médicament ajouté",
+                  icon: "success",
+                  confirmButtonText: `OK`,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push("/pharmacie/medicament");
+                  }
+                });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;

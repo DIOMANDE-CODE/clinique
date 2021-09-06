@@ -477,11 +477,14 @@ export default {
         })
         .delete(chemin + "/constante/" + pk)
         .then((response) => {
-          
           this.preloader = false;
-          this.success = true;
-          this.message = "Diagnostic supprimée avec succès";
-          this.charge();
+          if (response.data.state) {
+              
+            this.success = true;
+            this.message = "Diagnostic supprimée avec succès";
+            this.charge();
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;

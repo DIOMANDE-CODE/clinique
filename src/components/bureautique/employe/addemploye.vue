@@ -477,17 +477,20 @@ export default {
         })
         .post(chemin + "/inscription", user)
         .then((response) => {
-          
           this.preloader = false;
-          this.$swal({
-            html: "Personnel ajouté",
-            icon: "success",
-            confirmButtonText: `OK`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.$router.push("/admin/employe");
-            }
-          });
+          if (response.data.state) {
+              this.$swal({
+                html: "Personnel ajouté",
+                icon: "success",
+                confirmButtonText: `OK`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/admin/employe");
+                }
+              });
+          }
+          
+          
         })
         .catch((err) => {
           this.preloader = false;

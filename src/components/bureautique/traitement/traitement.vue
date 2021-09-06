@@ -223,9 +223,12 @@ export default {
         .then((response) => {
           
           this.preloader = false;
-          this.success = true;
-          this.message = "Traitement supprimée avec succès";
-          this.charge();
+          if (response.data.state) {
+              this.success = true;
+              this.message = "Traitement supprimée avec succès";
+              this.charge();
+          }
+          
         })
         .catch((err) => {
           this.preloader = false;

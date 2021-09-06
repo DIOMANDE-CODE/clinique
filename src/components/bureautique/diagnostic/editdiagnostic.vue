@@ -423,15 +423,18 @@ export default {
           .then((response) => {
             
             this.preloader = false;
-            this.$swal({
-              html: "Diagnostic modifié",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/diagnostic");
-              }
-            });
+            if (response.data.state) {
+                this.$swal({
+                  html: "Diagnostic modifié",
+                  icon: "success",
+                  confirmButtonText: `OK`,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push("/diagnostic");
+                  }
+                });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;

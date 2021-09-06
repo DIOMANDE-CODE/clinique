@@ -84,7 +84,6 @@
 </template>
 
 <script>
-var solde = "";
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
@@ -115,6 +114,7 @@ export default {
       activer_examens: false,
       activer_ordonnances: false,
       activer_pensements: false,
+      solde:null
     };
   },
   components: {
@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     paye(id, result) {
-      solde = result;
+      this.solde = result;
     },
     charger_workfow() {
       axios
@@ -248,46 +248,6 @@ export default {
           this.preloader = false;
           console.log(err);
         });
-    },
-    valider(pk, ligne_id, solder) {
-      const data = new FormData();
-      data.append("dossier_id", this.$route.params.id);
-      data.append("purchased", pk);
-      data.append("id", ligne_id);
-      data.append("resultat", pk);
-
-      this.preloader = true;
-      {
-        axios
-          .create({
-            headers: {
-              "Content-Type": "application/json,multipart/form-data",
-              Authorization: "Bearer " + localStorage.getItem("token"),
-              "Access-Control-Allow-Origin": "*",
-            },
-          })
-          .post(chemin + "/modifierExamenDossier", data)
-          .then((response) => {
-            
-            if (response.data.state === "true") {
-              this.preloader = false;
-              this.success = true;
-              this.message = "examen effectué";
-              this.examens.examens.forEach((exam) => {
-                this.examens.examens = this.examens.examens.filter(
-                  (item) => item.id !== pk
-                );
-              });
-            } else {
-              this.errors = true;
-              this.message = "examen non enregistré";
-            }
-          })
-          .catch((err) => {
-            this.preloader = false;
-            console.log(err);
-          });
-      }
     },
   },
 };

@@ -127,17 +127,20 @@ export default {
         })
         .put(chemin + "/traitementUrgence/" + this.$route.params.id, constante)
         .then((response) => {
+          this.preloader = false
+            if (response.data.state) {
+                  
+                    this.$swal({
+                      html: "Traitément modifié",
+                      icon: "success",
+                      confirmButtonText: `OK`,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.$router.push("/traitement");
+                      }
+                    });
+            }
             
-            this.preloader = false
-                this.$swal({
-              html: "Traitément modifié",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push("/traitement");
-              }
-            });
         });
     }
   }

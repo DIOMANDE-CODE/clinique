@@ -191,7 +191,6 @@
   </div>
 </template>
 <script>
-var solde = "";
 import loader from "../../loader.vue";
 import axios from "axios";
 import { chemin } from "../../../assets/js/chemin.js";
@@ -226,6 +225,7 @@ export default {
       activer_pensements: false,
       constantelist:[],
       constantes_fait: [],
+      solde:null
     };
   },
   components: {
@@ -240,7 +240,7 @@ export default {
   },
   methods: {
     paye(id, result) {
-      solde = result;
+      this.solde = result;
     },
     charger_workfow() {
       axios
@@ -362,18 +362,21 @@ export default {
             
             this.validerConstante()
             this.preloader = false;
-            this.$swal({
-              html: "Traitement effectué",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              
-              if (result.isConfirmed) {
-                this.listeTraitementUrgence();
-                this.charger_workfow();
-                this.charger_traitement();
-              }
-            });
+            if (response.data.state) {
+                this.$swal({
+                  html: "Traitement effectué",
+                  icon: "success",
+                  confirmButtonText: `OK`,
+                }).then((result) => {
+                  
+                  if (result.isConfirmed) {
+                    this.listeTraitementUrgence();
+                    this.charger_workfow();
+                    this.charger_traitement();
+                  }
+                });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;
@@ -398,18 +401,21 @@ export default {
           .then((response) => {
             
             this.preloader = false;
-            this.$swal({
-              html: "Traitement effectué",
-              icon: "success",
-              confirmButtonText: `OK`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.listeTraitementUrgence();
-                this.charger_workfow();
-                this.charger_traitement();
-                this.constanteByDossier()
-              }
-            });
+            if (response.data.state) {
+                  this.$swal({
+                    html: "Traitement effectué",
+                    icon: "success",
+                    confirmButtonText: `OK`,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.listeTraitementUrgence();
+                      this.charger_workfow();
+                      this.charger_traitement();
+                      this.constanteByDossier()
+                    }
+                  });
+            }
+            
           })
           .catch((err) => {
             this.preloader = false;
@@ -480,7 +486,7 @@ export default {
               this.preloader = false;
               this.success = true;
               this.message = "examen effectué";
-              this.examens.examens.forEach((exam) => {
+              this.examens.examens.forEach(() => {
                 this.examens.examens = this.examens.examens.filter(
                   (item) => item.id !== pk
                 );

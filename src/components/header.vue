@@ -56,8 +56,7 @@ export default {
     checktoken() {
       if (localStorage.getItem("token") === null) {
         this.$router.push("/");
-      } else {
-      }
+      } 
     },
     deconnecter() {
       this.preloader = true;
