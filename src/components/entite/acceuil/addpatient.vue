@@ -675,7 +675,7 @@ export default {
               }).then((result) => {
                 if (result.isConfirmed) {
                   
-                  this.$router.push("/acceuil/profil/" + this.$route.params.id);
+                  this.$router.push("/acceuil");
                 }
               });
           }
